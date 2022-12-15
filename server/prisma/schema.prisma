@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+enum Permission {
+  ADMIN
+  EMPLOYEE
+}
+
+enum Status {
+  ACCEPTED
+  PENDING
+  REJECTED
+}
+
+enum Type_of_leave {
+  SICK_LEAVE
+  ANNUAL_LEAVE
+  MATERNITY_LEAVE
+  PATERNITY_LEAVE
+  COMPENSATORY_LEAVE
+  UNPAID_LEAVE
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String        @id @default(uuid())
+  firstName     String        @db.VarChar(100)
+  lastName      String        @db.VarChar(50)
+  email         String        @unique @db.VarChar(100)
+  password      String        @db.VarChar(255)
+  salary        Int
+  permission    Permission
+  date_of_birth String        @db.VarChar(40)
+  created_at    DateTime      @default(now())
+  updated_at    DateTime      @updatedAt
+  time_reports  Time_report[]
+  leaves        Leave[]
+  role          Role          @relation(fields: [roleId], references: [id])
+  roleId        String
+  department    Department    @relation(fields: [departmentId], references: [id])
+  departmentId  String
+  addresses     Address[]
+  noticeId      String
+  notice        Notice?
+  projects      Project[]
+}
+
+model Notice {
+  id          String   @id @default(uuid())
+  created_at  DateTime @default(now())
+  description String?
+  status      Status   @default(PENDING)
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String   @unique
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String   @unique @db.VarChar(255)
+  created_at  DateTime @default(now())
+  start_date  DateTime
+  deadline    DateTime
+  description String?  @db.VarChar(1020)
+  users       User[]
+}
+
+model Address {
+  id           String     @id @default(uuid())
+  country      String     @db.VarChar(255)
+  city         String     @db.VarChar(255)
+  zip          String     @db.VarChar(255)
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId String
+  Users        User[]
+}
+
+model Department {
+  id         String    @id @default(uuid())
+  name       String    @unique @db.VarChar(255)
+  budget     Int
+  created_at DateTime  @default(now())
+  users      User[]
+  addreses   Address[]
+}
+
+model Time_report {
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  from       DateTime
+  to         DateTime
+  status     Status   @default(PENDING)
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+}
+
+model Role {
+  id         String   @id @default(uuid())
+  name       String   @unique @db.VarChar(255)
+  created_at DateTime @default(now())
+  users      User[]
+}
+
+model Leave {
+  id            String        @id @default(uuid())
+  type_of_leave Type_of_leave
+  created_at    DateTime      @default(now())
+  from          DateTime
+  to            DateTime
+  status        Status        @default(PENDING)
+  user          User          @relation(fields: [userId], references: [id])
+  userId        String
+}
