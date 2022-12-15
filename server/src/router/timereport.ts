@@ -15,5 +15,7 @@ router.put('/:id', (req, res) => {
 router.post('/', (req, res) => {
   res.json({ message: 'post timereport' });
 });
-
+router.delete('/:id', (req, res) => {
+  res.json({ message: 'delete timereport by id' });
+});
 export default router;

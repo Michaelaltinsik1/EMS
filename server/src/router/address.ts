@@ -16,4 +16,8 @@ router.post('/', (req, res) => {
   res.json({ message: 'post address' });
 });
 
+router.delete('/:id', (req, res) => {
+  res.json({ message: 'delete address by id' });
+});
+
 export default router;
