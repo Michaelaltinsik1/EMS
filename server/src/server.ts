@@ -7,14 +7,19 @@ import projectRouter from './router/project';
 import roleRouter from './router/role';
 import timereportRouter from './router/timereport';
 import userRouter from './router/user';
+import cors from 'cors';
 
 const app = express();
-
+app.use(cors());
+app.use(express.json()); //enables a client send the server json
+app.use(express.urlencoded({ extended: true })); // url query to object
 app.get('/', (req, res) => {
   console.log('logg in');
   res.status(200);
   res.json({ message: 'Sign in please' });
 });
+
+//add middleware here to check if logged in
 
 app.use('/addresses', addressRouter);
 app.use('/departments', departmentRouter);
