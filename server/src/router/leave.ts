@@ -1,21 +1,59 @@
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
+import prisma from '../db';
 
-const router = Router();
+const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
-router.get('/', (req, res) => {
-  res.json({ message: 'get all leaves' });
-});
-router.get('/:id', (req, res) => {
-  res.json({ message: 'get leave by id' });
-});
-router.put('/:id', (req, res) => {
-  res.json({ message: 'update leave by id' });
-});
+export const getAllLeaves = async (req: Request, res: Response) => {
+  const leaves = await prisma.leave.findMany();
+  res.json({ data: leaves });
+};
+export const getLeavesByUserId = async (req: Request, res: Response) => {
+  const leaves = await prisma.leave.findMany({
+    where: {
+      userId: req.params.userId,
+    },
+  });
+  res.json({ data: leaves });
+};
+export const updateLeaveById = async (req: Request, res: Response) => {
+  const leave = await prisma.leave.update({
+    where: {
+      id: req.params.id,
+    },
+    data: {
+      status: req.body.status,
+    },
+  });
+  res.json({ data: leave });
+};
+export const postNewLeave = async (req: Request, res: Response) => {
+  const leave = await prisma.leave.create({
+    data: {
+      type_of_leave: req.body.type_of_leave,
+      from: req.body.from,
+      to: req.body.to,
+      userId: req.params.userId,
+    },
+  });
+  res.json({ data: leave });
+};
+export const deleteLeaveById = async (req: Request, res: Response) => {
+  const leave = await prisma.leave.delete({
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.json({ data: leave });
+};
 
-router.post('/', (req, res) => {
-  res.json({ message: 'post leave' });
-});
-router.delete('/:id', (req, res) => {
-  res.json({ message: 'delete leave by id' });
-});
+router.get('/admin', getAllLeaves);
+
+router.get('/', getLeavesByUserId);
+
+router.put('/:id', updateLeaveById);
+
+router.post('/', postNewLeave);
+
+router.delete('/:id', deleteLeaveById);
+
 export default router;

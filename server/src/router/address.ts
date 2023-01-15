@@ -1,6 +1,6 @@
 import { Router } from 'express';
 
-const router = Router();
+const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
 router.get('/', (req, res) => {
   res.json({ message: 'get all addresses' });

@@ -1,21 +1,59 @@
-import { Router } from 'express';
+import { Request, Response, Router } from 'express';
+import prisma from '../db';
 
-const router = Router();
+const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
-router.get('/', (req, res) => {
-  res.json({ message: 'get all notices' });
-});
-router.get('/:id', (req, res) => {
-  res.json({ message: 'get notice by id' });
-});
-router.put('/:id', (req, res) => {
-  res.json({ message: 'update notice by id' });
-});
+export const getAllNotices = async (req: Request, res: Response) => {
+  const notices = await prisma.notice.findMany();
+  res.json({ data: notices });
+};
+export const getUserNoticeById = async (req: Request, res: Response) => {
+  const notice = await prisma.notice.findUnique({
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.json({ data: notice });
+};
 
-router.post('/', (req, res) => {
-  res.json({ message: 'post notice' });
-});
-router.delete('/:id', (req, res) => {
-  res.json({ message: 'delete notice by id' });
-});
+export const updateNoticeById = async (req: Request, res: Response) => {
+  const notice = await prisma.notice.update({
+    where: {
+      id: req.params.id,
+    },
+    data: {
+      status: req.body.status,
+    },
+  });
+  res.json({ data: notice });
+};
+
+export const postNewNotice = async (req: Request, res: Response) => {
+  const notice = await prisma.notice.create({
+    data: {
+      description: req.body.description,
+      userId: req.params.userId,
+    },
+  });
+  res.json({ data: notice });
+};
+
+export const deleteNotice = async (req: Request, res: Response) => {
+  const notice = await prisma.notice.delete({
+    where: {
+      id: req.params.id,
+    },
+  });
+  res.json({ data: notice });
+};
+router.get('/', getAllNotices);
+
+router.get('/:id', getUserNoticeById);
+
+router.put('/:id', updateNoticeById);
+
+router.post('/', postNewNotice);
+
+router.delete('/:id', deleteNotice);
+
 export default router;

@@ -48,9 +48,8 @@ model User {
   department    Department    @relation(fields: [departmentId], references: [id])
   departmentId  String
   addresses     Address[]
-  noticeId      String
-  notice        Notice?
   projects      Project[]
+  notice        Notice?
 }
 
 model Notice {
@@ -73,22 +72,22 @@ model Project {
 }
 
 model Address {
-  id           String     @id @default(uuid())
-  country      String     @db.VarChar(255)
-  city         String     @db.VarChar(255)
-  zip          String     @db.VarChar(255)
-  department   Department @relation(fields: [departmentId], references: [id])
-  departmentId String
+  id           String      @id @default(uuid())
+  country      String      @db.VarChar(255)
+  city         String      @db.VarChar(255)
+  zip          String      @db.VarChar(255)
+  department   Department? @relation(fields: [departmentId], references: [id])
+  departmentId String?     @unique
   Users        User[]
 }
 
 model Department {
-  id         String    @id @default(uuid())
-  name       String    @unique @db.VarChar(255)
+  id         String   @id @default(uuid())
+  name       String   @unique @db.VarChar(255)
   budget     Int
-  created_at DateTime  @default(now())
+  created_at DateTime @default(now())
   users      User[]
-  addresses  Address[]
+  addresses  Address?
 }
 
 model Time_report {
