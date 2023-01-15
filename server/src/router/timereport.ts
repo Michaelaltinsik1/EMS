@@ -49,13 +49,9 @@ export const deleteTimeReport = async (req: Request, res: Response) => {
 };
 
 router.get('/admin', getAllTimeReports);
-
 router.get('/', getTimeReportsByUserId);
-
 router.put('/:id', updateTimeReportById);
-
 router.post('/', postNewTimeReport);
-
 router.delete('/:id', deleteTimeReport);
 
 export default router;

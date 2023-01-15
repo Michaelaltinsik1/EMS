@@ -76,13 +76,9 @@ export const deleteProjectById = async (req: Request, res: Response) => {
 // };
 
 router.get('/', getAllProjects);
-
 router.put('/:id', updateProjectById);
-
 router.put('/:id/addemployee', addEmployeeToProject);
-
 router.post('/', postNewProject);
-
 router.delete('/:id', deleteProjectById);
 
 export default router;

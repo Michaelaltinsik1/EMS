@@ -47,13 +47,9 @@ export const deleteNotice = async (req: Request, res: Response) => {
   res.json({ data: notice });
 };
 router.get('/', getAllNotices);
-
 router.get('/:id', getUserNoticeById);
-
 router.put('/:id', updateNoticeById);
-
 router.post('/', postNewNotice);
-
 router.delete('/:id', deleteNotice);
 
 export default router;

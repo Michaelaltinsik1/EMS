@@ -53,12 +53,11 @@ export const deleteRoleById = async (req: Request, res: Response) => {
 //   res.json({ message: 'get all role' });
 // });
 router.get('/', getAllRoles);
+router.put('/:id', updateRoleById);
+router.post('/', postNewRole);
+router.delete('/:id', deleteRoleById);
 
 // router.get('/:id', (req, res) => {
 //   res.json({ message: 'get role by id' });
 // });
-router.put('/:id', updateRoleById);
-
-router.post('/', postNewRole);
-router.delete('/:id', deleteRoleById);
 export default router;

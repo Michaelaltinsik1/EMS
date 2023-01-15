@@ -47,13 +47,9 @@ export const deleteLeaveById = async (req: Request, res: Response) => {
 };
 
 router.get('/admin', getAllLeaves);
-
 router.get('/', getLeavesByUserId);
-
 router.put('/:id', updateLeaveById);
-
 router.post('/', postNewLeave);
-
 router.delete('/:id', deleteLeaveById);
 
 export default router;

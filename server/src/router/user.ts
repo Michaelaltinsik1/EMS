@@ -47,6 +47,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
   res.json({ data: users });
 };
 
+//Check if email is string and not empty
 export const signIn = async (req: Request, res: Response) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -69,6 +70,7 @@ export const signIn = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {}; //maybe not needed signin?
 
+//Check that id is string and not empty
 export const updateUserAddressById = async (req: Request, res: Response) => {
   const address = await prisma.address.update({
     where: {
@@ -82,7 +84,7 @@ export const updateUserAddressById = async (req: Request, res: Response) => {
   });
   res.json({ data: address });
 };
-
+//Check that id is string and not empty
 export const updateUserById = async (req: Request, res: Response) => {
   const user = prisma.user.update({
     where: {
@@ -109,8 +111,9 @@ export const updateUserById = async (req: Request, res: Response) => {
   //     zip: req.body.zip,
   //   },
   // });
+  res.json({ data: user });
 };
-
+//Check that id is string and not empty
 export const deleteUserById = async (req: Request, res: Response) => {
   const user = prisma.user.delete({
     where: {
