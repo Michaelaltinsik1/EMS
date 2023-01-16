@@ -14,7 +14,10 @@ enum Type_of_leave {
   COMPENSATORY_LEAVE = 'COMPENSATORY_LEAVE',
   UNPAID_LEAVE = 'UNPAID_LEAVE',
 }
-
+enum Permission {
+  ADMIN = 'ADMIN',
+  EMPLOYEE = 'EMPLOYEE',
+}
 export const validateStatus = (
   req: Request,
   res: Response,
@@ -22,7 +25,7 @@ export const validateStatus = (
 ) => {
   if (Object.values(Status).includes(req.body.status)) {
   } else {
-    req.body.errors = { msg: 'Status is invalid', param: 'status' };
+    req.body.errors = { msg: 'Invalid status', param: 'status' };
   }
   next();
 };
@@ -34,7 +37,19 @@ export const validateLeaveType = (
 ) => {
   if (Object.values(Type_of_leave).includes(req.body.type_of_leave)) {
   } else {
-    req.body.errors = { msg: 'Leave is invalid', param: 'type_of_leave' };
+    req.body.errors = { msg: 'Invalid leave', param: 'type_of_leave' };
+  }
+  next();
+};
+
+export const validatePermission = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (Object.values(Permission).includes(req.body.permission)) {
+  } else {
+    req.body.errors = { msg: 'Invalid permission', param: 'permission' };
   }
   next();
 };
