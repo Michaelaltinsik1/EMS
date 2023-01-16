@@ -70,23 +70,8 @@ export const signIn = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {}; //maybe not needed signin?
 
-//Check that id is string and not empty
-export const updateUserAddressById = async (req: Request, res: Response) => {
-  const address = await prisma.address.update({
-    where: {
-      id: req.body.id,
-    },
-    data: {
-      country: req.body.country,
-      city: req.body.city,
-      zip: req.body.zip,
-    },
-  });
-  res.json({ data: address });
-};
-//Check that id is string and not empty
 export const updateUserById = async (req: Request, res: Response) => {
-  const user = prisma.user.update({
+  const user = await prisma.user.update({
     where: {
       id: req.body.id,
     },
@@ -97,20 +82,20 @@ export const updateUserById = async (req: Request, res: Response) => {
       permission: req.body.permission,
       roleId: req.body.roleId,
       departmentId: req.body.departmentId,
+      addresses: {
+        update: {
+          where: {
+            id: req.body.addressId,
+          },
+          data: {
+            country: req.body.country,
+            city: req.body.city,
+            zip: req.body.zip,
+          },
+        },
+      },
     },
   });
-  // const address = await prisma.address.update({
-  //   const id = prisma.address.find
-
-  //   where: {
-  //     id: req.body.id,
-  //   },
-  //   data: {
-  //     country: req.body.country,
-  //     city: req.body.city,
-  //     zip: req.body.zip,
-  //   },
-  // });
   res.json({ data: user });
 };
 //Check that id is string and not empty
@@ -124,15 +109,10 @@ export const deleteUserById = async (req: Request, res: Response) => {
 };
 
 router.get('/', getAllUsers);
-router.get('/:id', (req, res) => {
-  res.json({ message: 'get user by id' });
-});
-router.put('/:id', (req, res) => {
-  res.json({ message: 'update user by id' });
-});
+// router.get('/:id', (req, res) => {
+//   res.json({ message: 'get user by id' });
+// });
+router.put('/', updateUserById);
 router.post('/', createNewUser);
-
-router.delete('/:id', (req, res) => {
-  res.json({ message: 'delete user by id' });
-});
+router.delete('/:id', deleteUserById);
 export default router;

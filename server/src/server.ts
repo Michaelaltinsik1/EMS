@@ -20,9 +20,9 @@ app.get('/', (req: Request, res: Response) => {
   res.status(200);
   res.json({ message: 'Sign in please' });
 });
-
+//app.use('/users/:userId/addresses', protectRoutes, addressRouter); //not needed
 //add middleware here to check if logged in
-app.use('/users/:userId/addresses', protectRoutes, addressRouter); //not needed
+app.use('/users/:userId/addresses', addressRouter); //not needed
 app.use('/users/:userId/departments', departmentRouter);
 app.use('/users/:userId/leaves', leaveRouter);
 // app.use('/users/:userId/users/:userId/notices', noticeRouter);
