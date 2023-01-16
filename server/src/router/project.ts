@@ -1,6 +1,6 @@
 import { Request, Response, Router } from 'express';
 import prisma from '../db';
-
+import { body, validationResult } from 'express-validator';
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
 export const postNewProject = async (req: Request, res: Response) => {
@@ -10,7 +10,7 @@ export const postNewProject = async (req: Request, res: Response) => {
       start_date: req.body.start_date,
       deadline: req.body.deadline,
       description: req.body.description,
-      users: req.body.users,
+      // users: req.body.users,
     },
   });
   res.json({ data: project });
@@ -26,18 +26,24 @@ export const getAllProjects = async (req: Request, res: Response) => {
 };
 
 export const updateProjectById = async (req: Request, res: Response) => {
-  const project = await prisma.project.update({
-    where: {
-      id: req.params.id,
-    },
-    data: {
-      name: req.body.name,
-      start_date: req.body.start_date,
-      deadline: req.body.deadline,
-      description: req.body.description,
-    },
-  });
-  res.json({ data: project });
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400);
+    res.json({ errors: errors.array() });
+  } else {
+    const project = await prisma.project.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        name: req.body.name,
+        start_date: req.body.start_date,
+        deadline: req.body.deadline,
+        description: req.body.description,
+      },
+    });
+    res.json({ data: project });
+  }
 };
 
 export const addEmployeeToProject = async (req: Request, res: Response) => {
@@ -76,9 +82,23 @@ export const deleteProjectById = async (req: Request, res: Response) => {
 // };
 
 router.get('/', getAllProjects);
-router.put('/:id', updateProjectById);
+router.put(
+  '/:id',
+  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('start_date').isISO8601().toDate().withMessage('Invalid start date'),
+  body('deadline').isISO8601().toDate().withMessage('Invalid deadline'),
+  body('description').isString().withMessage('Invalid description'),
+  updateProjectById
+);
 router.put('/:id/addemployee', addEmployeeToProject);
-router.post('/', postNewProject);
+router.post(
+  '/',
+  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('start_date').isISO8601().toDate().withMessage('Invalid start date'),
+  body('deadline').isISO8601().toDate().withMessage('Invalid deadline'),
+  body('description').isString().withMessage('Invalid description'),
+  postNewProject
+);
 router.delete('/:id', deleteProjectById);
 
 export default router;

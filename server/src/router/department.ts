@@ -1,21 +1,32 @@
 import { Request, Response, Router } from 'express';
+import { body, validationResult } from 'express-validator';
 import prisma from '../db';
 
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
 //Validate name and budget, check name is string and not empty and thay budget is an number
 export const createNewDepartment = async (req: Request, res: Response) => {
-  const department = await prisma.department.create({
-    data: {
-      name: req.body.name,
-      budget: req.body.budget,
-    },
-    include: {
-      users: true,
-      addresses: true,
-    },
-  });
-  res.json({ data: department });
+  const errors = validationResult(req);
+  if (!errors.isEmpty() || req.body.errors) {
+    res.status(400);
+    let errorMessages = errors.array();
+    if (req.body.errors) {
+      errorMessages.push(req.body.errors);
+    }
+    res.json({ errors: errorMessages });
+  } else {
+    const department = await prisma.department.create({
+      data: {
+        name: req.body.name,
+        budget: Number(req.body.budget),
+      },
+      include: {
+        users: true,
+        addresses: true,
+      },
+    });
+    res.json({ data: department });
+  }
 };
 export const getAllDepartments = async (req: Request, res: Response) => {
   const departments = await prisma.department.findMany({
@@ -27,22 +38,35 @@ export const getAllDepartments = async (req: Request, res: Response) => {
   res.json({ data: departments });
 };
 
+/**
+ * Might need validation for address change
+ */
 export const updateDepartmentById = async (req: Request, res: Response) => {
-  const department = await prisma.department.update({
-    where: {
-      id: req.params.id,
-    },
-    data: {
-      name: req.body.name,
-      budget: req.body.budget,
-      addresses: req.body.addresses,
-    },
-    include: {
-      users: true,
-      addresses: true,
-    },
-  });
-  res.json({ data: department });
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400);
+    let errorMessages = errors.array();
+    if (req.body.errors) {
+      errorMessages.push(req.body.errors);
+    }
+    res.json({ errors: errorMessages });
+  } else {
+    const department = await prisma.department.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        name: req.body.name,
+        budget: req.body.budget,
+        addresses: req.body.addresses,
+      },
+      include: {
+        users: true,
+        addresses: true,
+      },
+    });
+    res.json({ data: department });
+  }
 };
 
 export const deleteDepartmentById = async (req: Request, res: Response) => {
@@ -59,8 +83,19 @@ export const deleteDepartmentById = async (req: Request, res: Response) => {
 };
 
 router.get('/', getAllDepartments);
-router.put('/:id', updateDepartmentById);
-router.post('/', createNewDepartment);
+
+router.put(
+  '/:id',
+  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('budget').isInt().withMessage('Invalid budget'),
+  updateDepartmentById
+);
+router.post(
+  '/',
+  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('budget').isInt().withMessage('Invalid budget'),
+  createNewDepartment
+);
 router.delete('/:id', deleteDepartmentById);
 
 // router.post('/', (req, res) => {

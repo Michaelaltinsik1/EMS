@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import prisma from '../db';
-
+import { validateStatus } from '../middleware/customMiddleware';
+import { body, validationResult } from 'express-validator';
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
 export const getAllTimeReports = async (req: Request, res: Response) => {
@@ -19,26 +20,41 @@ export const getTimeReportsByUserId = async (req: Request, res: Response) => {
 };
 
 export const updateTimeReportById = async (req: Request, res: Response) => {
-  const timeReport = await prisma.time_report.update({
-    where: {
-      id: req.params.id,
-    },
-    data: {
-      status: req.body.status,
-    },
-  });
-  res.json({ data: timeReport });
+  let errorsToLog = {
+    errors: [],
+  };
+  if (req.body.errors) {
+    res.status(400);
+    errorsToLog.errors.push(req.body.errors);
+    res.json(errorsToLog);
+  } else {
+    const timeReport = await prisma.time_report.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        status: req.body.status,
+      },
+    });
+    res.json({ data: timeReport });
+  }
 };
 
 export const postNewTimeReport = async (req: Request, res: Response) => {
-  const timeReport = await prisma.time_report.create({
-    data: {
-      from: req.body.from,
-      to: req.body.to,
-      userId: req.params.userId,
-    },
-  });
-  res.json({ data: timeReport });
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400);
+    res.json({ errors: errors.array() });
+  } else {
+    const timeReport = await prisma.time_report.create({
+      data: {
+        from: req.body.from,
+        to: req.body.to,
+        userId: req.params.userId,
+      },
+    });
+    res.json({ data: timeReport });
+  }
 };
 
 export const deleteTimeReport = async (req: Request, res: Response) => {
@@ -50,8 +66,13 @@ export const deleteTimeReport = async (req: Request, res: Response) => {
 
 router.get('/admin', getAllTimeReports);
 router.get('/', getTimeReportsByUserId);
-router.put('/:id', updateTimeReportById);
-router.post('/', postNewTimeReport);
+router.put('/:id', validateStatus, updateTimeReportById);
+router.post(
+  '/',
+  body('to').isISO8601().toDate().withMessage('Invalid To date'),
+  body('from').isISO8601().toDate().withMessage('Invalid From date'),
+  postNewTimeReport
+);
 router.delete('/:id', deleteTimeReport);
 
 export default router;
