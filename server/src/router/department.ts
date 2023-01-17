@@ -101,6 +101,7 @@ export const updateDepartmentById = async (
       res.json({ data: department });
     } catch (e) {
       //P2025 Record to update not found.
+      //P2002 unique constraint failed
       if (e.code === 'P2025' || e.code === 'P2002') {
         e.type = ErrorTypes.INPUT;
       } else {
@@ -128,7 +129,6 @@ export const deleteDepartmentById = async (
     });
     res.json({ data: department });
   } catch (e) {
-    console.log(e);
     //P2025 Record to delete does not exist
     if (e.code === 'P2025') {
       e.type = ErrorTypes.INPUT;
