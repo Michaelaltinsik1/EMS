@@ -84,19 +84,33 @@ export const deleteProjectById = async (req: Request, res: Response) => {
 router.get('/', getAllProjects);
 router.put(
   '/:id',
-  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('name')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid name'),
   body('start_date').isISO8601().toDate().withMessage('Invalid start date'),
   body('deadline').isISO8601().toDate().withMessage('Invalid deadline'),
-  body('description').isString().withMessage('Invalid description'),
+  body('description')
+    .isString()
+    .optional()
+    .isLength({ max: 1020 })
+    .withMessage('Invalid description'),
   updateProjectById
 );
 router.put('/:id/addemployee', addEmployeeToProject);
 router.post(
   '/',
-  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('name')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid name'),
   body('start_date').isISO8601().toDate().withMessage('Invalid start date'),
   body('deadline').isISO8601().toDate().withMessage('Invalid deadline'),
-  body('description').isString().withMessage('Invalid description'),
+  body('description')
+    .isString()
+    .optional()
+    .isLength({ max: 1020 })
+    .withMessage('Invalid description'),
   postNewProject
 );
 router.delete('/:id', deleteProjectById);

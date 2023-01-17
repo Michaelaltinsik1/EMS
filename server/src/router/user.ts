@@ -80,7 +80,7 @@ export const signIn = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserByEmail = async (req: Request, res: Response) => {}; //maybe not needed signin?
+//export const getUserByEmail = async (req: Request, res: Response) => {}; //maybe not needed signin?
 
 export const updateUserById = async (req: Request, res: Response) => {
   const errors = validationResult(req);
@@ -169,28 +169,31 @@ router.put(
   body('id').isUUID().withMessage('Invalid id'),
   body('firstName')
     .isString()
-    .isLength({ min: 3 })
+    .isLength({ min: 3, max: 100 })
     .withMessage('Invalid first name'),
   body('lastName')
     .isString()
-    .isLength({ min: 3 })
+    .isLength({ min: 3, max: 100 })
     .withMessage('Invalid last name'),
   body('salary').isInt().withMessage('Invalid salary'),
-  body('date_of_birth').isISO8601().toDate().withMessage('Invalid To date'),
+  body('date_of_birth')
+    .isString()
+    .isLength({ min: 10, max: 40 })
+    .withMessage('Invalid To date'),
   body('roleId').isUUID().withMessage('Invalid id'),
   body('departmentId').isUUID().withMessage('Invalid id'),
   body('addressId').isUUID().withMessage('Invalid id'),
   body('country')
     .isString()
-    .isLength({ min: 2 })
+    .isLength({ min: 2, max: 255 })
     .withMessage('Must be at least 2 characters long'),
   body('city')
     .isString()
-    .isLength({ min: 2 })
+    .isLength({ min: 2, max: 255 })
     .withMessage('Must be at least 2 characters long'),
   body('zip')
     .isString()
-    .isLength({ min: 2 })
+    .isLength({ min: 2, max: 255 })
     .withMessage('Must be at least 2 characters long'),
   validatePermission,
   updateUserById
@@ -206,15 +209,16 @@ router.post(
   body('id').isUUID().withMessage('Invalid id'),
   body('firstName')
     .isString()
-    .isLength({ min: 3 })
+    .isLength({ min: 3, max: 100 })
     .withMessage('Invalid first name'),
   body('lastName')
     .isString()
-    .isLength({ min: 3 })
+    .isLength({ min: 3, max: 100 })
     .withMessage('Invalid last name'),
-  body('email').isEmail().withMessage('Invalid email'),
+  body('email').isEmail().isLength({ max: 255 }).withMessage('Invalid email'),
   body('password')
     .isStrongPassword()
+    .isLength({ max: 255 })
     .withMessage(
       'Invalid password. Requires minimum of 8 characters, minimum 1 lowercase, minimum 1 uppercase, minimum 1 special character '
     ),
@@ -222,9 +226,18 @@ router.post(
   body('roleId').isUUID().withMessage('Invalid id'),
   body('notice').optional().isUUID().withMessage('Invalid id'),
   body('departmentId').isUUID().withMessage('Invalid id'),
-  body('country').isString().isLength({ min: 2 }).withMessage('Invalid input'),
-  body('city').isString().isLength({ min: 2 }).withMessage('Invalid input'),
-  body('zip').isString().isLength({ min: 2 }).withMessage('Invalid input'),
+  body('country')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
+  body('city')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
+  body('zip')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
   validatePermission,
   createNewUser
 );

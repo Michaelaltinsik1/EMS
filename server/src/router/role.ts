@@ -67,12 +67,18 @@ export const deleteRoleById = async (req: Request, res: Response) => {
 router.get('/', getAllRoles);
 router.put(
   '/:id',
-  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('name')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid name'),
   updateRoleById
 );
 router.post(
   '/',
-  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('name')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid name'),
   postNewRole
 );
 router.delete('/:id', deleteRoleById);

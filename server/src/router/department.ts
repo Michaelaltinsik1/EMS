@@ -86,13 +86,19 @@ router.get('/', getAllDepartments);
 
 router.put(
   '/:id',
-  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('name')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid name'),
   body('budget').isInt().withMessage('Invalid budget'),
   updateDepartmentById
 );
 router.post(
   '/',
-  body('name').isString().isLength({ min: 2 }).withMessage('Invalid name'),
+  body('name')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid name'),
   body('budget').isInt().withMessage('Invalid budget'),
   createNewDepartment
 );

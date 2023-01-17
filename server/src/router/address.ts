@@ -109,16 +109,34 @@ router.get(
 router.put(
   '/',
   body('id').isUUID().withMessage('Invalid id'),
-  body('country').isString().isLength({ min: 2 }).withMessage('Invalid input'),
-  body('city').isString().isLength({ min: 2 }).withMessage('Invalid input'),
-  body('zip').isString().isLength({ min: 2 }).withMessage('Invalid input'),
+  body('country')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
+  body('city')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
+  body('zip')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
   updateUserAddressById
 );
 router.post(
   '/',
-  body('country').isString().isLength({ min: 2 }).withMessage('Invalid input'),
-  body('city').isString().isLength({ min: 2 }).withMessage('Invalid input'),
-  body('zip').isString().isLength({ min: 2 }).withMessage('Invalid input'),
+  body('country')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
+  body('city')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
+  body('zip')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
   postNewAddress
 );
 router.delete(
