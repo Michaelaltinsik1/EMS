@@ -23,7 +23,7 @@ export const getAddresses = async (
     res.json({ data: address });
   } catch (e) {
     e.type = ErrorTypes.SERVER;
-    next();
+    next(e);
   }
 };
 
@@ -116,8 +116,8 @@ export const updateUserAddressById = async (
       });
       res.json({ data: address });
     } catch (e) {
-      console.log(e);
-      if (e.meta.cause === 'Record to update not found.') {
+      //P2025 Record to update not found.
+      if (e.code === 'P2025') {
         e.type = ErrorTypes.INPUT;
       } else {
         e.type = ErrorTypes.SERVER;
@@ -149,7 +149,8 @@ export const deleteAddress = async (
       });
       res.json({ data: address });
     } catch (e) {
-      if (e.meta.cause === 'Record to delete does not exist.') {
+      //Record to delete does not exist
+      if (e.code === 'P2025') {
         e.type = ErrorTypes.INPUT;
       } else {
         e.type = ErrorTypes.SERVER;

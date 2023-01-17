@@ -1,11 +1,20 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import prisma from '../db';
 
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
+enum ErrorTypes {
+  AUTH = 'Auth',
+  INPUT = 'Input',
+  SERVER = 'Server',
+}
 //Validate name and budget, check name is string and not empty and thay budget is an number
-export const createNewDepartment = async (req: Request, res: Response) => {
+export const createNewDepartment = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty() || req.body.errors) {
     res.status(400);
@@ -15,33 +24,56 @@ export const createNewDepartment = async (req: Request, res: Response) => {
     }
     res.json({ errors: errorMessages });
   } else {
-    const department = await prisma.department.create({
-      data: {
-        name: req.body.name,
-        budget: Number(req.body.budget),
-      },
+    try {
+      const department = await prisma.department.create({
+        data: {
+          name: req.body.name,
+          budget: Number(req.body.budget),
+        },
+        include: {
+          users: true,
+          addresses: true,
+        },
+      });
+      res.json({ data: department });
+    } catch (e) {
+      //P2002 unique constraint failed
+      if (e.code === 'P2002') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
+  }
+};
+export const getAllDepartments = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const departments = await prisma.department.findMany({
       include: {
         users: true,
         addresses: true,
       },
     });
-    res.json({ data: department });
+    res.json({ data: departments });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
   }
-};
-export const getAllDepartments = async (req: Request, res: Response) => {
-  const departments = await prisma.department.findMany({
-    include: {
-      users: true,
-      addresses: true,
-    },
-  });
-  res.json({ data: departments });
 };
 
 /**
  * Might need validation for address change
  */
-export const updateDepartmentById = async (req: Request, res: Response) => {
+export const updateDepartmentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
@@ -51,14 +83,43 @@ export const updateDepartmentById = async (req: Request, res: Response) => {
     }
     res.json({ errors: errorMessages });
   } else {
-    const department = await prisma.department.update({
+    try {
+      const department = await prisma.department.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          name: req.body.name,
+          budget: req.body.budget,
+          addresses: req.body.addresses,
+        },
+        include: {
+          users: true,
+          addresses: true,
+        },
+      });
+      res.json({ data: department });
+    } catch (e) {
+      //P2025 Record to update not found.
+      if (e.code === 'P2025') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
+  }
+};
+
+export const deleteDepartmentById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const department = await prisma.department.delete({
       where: {
         id: req.params.id,
-      },
-      data: {
-        name: req.body.name,
-        budget: req.body.budget,
-        addresses: req.body.addresses,
       },
       include: {
         users: true,
@@ -66,20 +127,16 @@ export const updateDepartmentById = async (req: Request, res: Response) => {
       },
     });
     res.json({ data: department });
+  } catch (e) {
+    console.log(e);
+    //Record to delete does not exist
+    if (e.code === 'P2025') {
+      e.type = ErrorTypes.INPUT;
+    } else {
+      e.type = ErrorTypes.SERVER;
+    }
+    next(e);
   }
-};
-
-export const deleteDepartmentById = async (req: Request, res: Response) => {
-  const department = await prisma.department.delete({
-    where: {
-      id: req.params.id,
-    },
-    include: {
-      users: true,
-      addresses: true,
-    },
-  });
-  res.json({ data: department });
 };
 
 router.get('/', getAllDepartments);

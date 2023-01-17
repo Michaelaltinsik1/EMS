@@ -1,6 +1,11 @@
 import { Request, Response, Router } from 'express';
 import prisma from '../db';
 import { body, validationResult } from 'express-validator';
+enum ErrorTypes {
+  AUTH = 'Auth',
+  INPUT = 'Input',
+  SERVER = 'Server',
+}
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
 export const postNewRole = async (req: Request, res: Response) => {

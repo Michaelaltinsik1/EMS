@@ -3,6 +3,11 @@ import prisma from '../db';
 import { comparePassword, createJWT, hashPassword } from '../utils/auth';
 import { body, validationResult } from 'express-validator';
 import { validatePermission } from '../middleware/customMiddleware';
+enum ErrorTypes {
+  AUTH = 'Auth',
+  INPUT = 'Input',
+  SERVER = 'Server',
+}
 const router = Router();
 
 export const createNewUser = async (req: Request, res: Response) => {

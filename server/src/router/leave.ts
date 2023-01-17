@@ -8,6 +8,11 @@ import {
 
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
+enum ErrorTypes {
+  AUTH = 'Auth',
+  INPUT = 'Input',
+  SERVER = 'Server',
+}
 // router.use(validateStatus);
 
 export const getAllLeaves = async (req: Request, res: Response) => {
