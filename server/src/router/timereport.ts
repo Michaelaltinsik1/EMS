@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import prisma from '../db';
 import { validateStatus } from '../middleware/customMiddleware';
 import { body, validationResult } from 'express-validator';
@@ -9,22 +9,44 @@ enum ErrorTypes {
 }
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
-export const getAllTimeReports = async (req: Request, res: Response) => {
-  const timeReports = await prisma.time_report.findMany();
+export const getAllTimeReports = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const timeReports = await prisma.time_report.findMany();
 
-  res.json({ data: timeReports });
+    res.json({ data: timeReports });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
 };
 
-export const getTimeReportsByUserId = async (req: Request, res: Response) => {
-  const timeReports = await prisma.time_report.findMany({
-    where: {
-      userId: req.params.userId,
-    },
-  });
-  res.json({ data: timeReports });
+export const getTimeReportsByUserId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const timeReports = await prisma.time_report.findMany({
+      where: {
+        userId: req.params.userId,
+      },
+    });
+    res.json({ data: timeReports });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
 };
 
-export const updateTimeReportById = async (req: Request, res: Response) => {
+export const updateTimeReportById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let errorsToLog = {
     errors: [],
   };
@@ -33,40 +55,72 @@ export const updateTimeReportById = async (req: Request, res: Response) => {
     errorsToLog.errors.push(req.body.errors);
     res.json(errorsToLog);
   } else {
-    const timeReport = await prisma.time_report.update({
-      where: {
-        id: req.params.id,
-      },
-      data: {
-        status: req.body.status,
-      },
-    });
-    res.json({ data: timeReport });
+    try {
+      const timeReport = await prisma.time_report.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          status: req.body.status,
+        },
+      });
+      res.json({ data: timeReport });
+    } catch (e) {
+      if (e.code === 'P2025') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
   }
 };
 
-export const postNewTimeReport = async (req: Request, res: Response) => {
+export const postNewTimeReport = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
     res.json({ errors: errors.array() });
   } else {
-    const timeReport = await prisma.time_report.create({
-      data: {
-        from: req.body.from,
-        to: req.body.to,
-        userId: req.params.userId,
-      },
-    });
-    res.json({ data: timeReport });
+    try {
+      const timeReport = await prisma.time_report.create({
+        data: {
+          from: req.body.from,
+          to: req.body.to,
+          userId: req.params.userId,
+        },
+      });
+      res.json({ data: timeReport });
+    } catch (e) {
+      e.type = ErrorTypes.SERVER;
+      next(e);
+    }
   }
 };
 
-export const deleteTimeReport = async (req: Request, res: Response) => {
-  const timeReport = await prisma.time_report.delete({
-    where: { id: req.params.id },
-  });
-  res.json({ data: timeReport });
+export const deleteTimeReport = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const timeReport = await prisma.time_report.delete({
+      where: { id: req.params.id },
+    });
+    res.json({ data: timeReport });
+  } catch (e) {
+    //Record to delete does not exist
+    if (e.code === 'P2025') {
+      e.type = ErrorTypes.INPUT;
+    } else {
+      e.type = ErrorTypes.SERVER;
+    }
+    next(e);
+  }
 };
 
 router.get('/admin', getAllTimeReports);
