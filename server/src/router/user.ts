@@ -60,25 +60,25 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 //Check if email is string and not empty
-export const signIn = async (req: Request, res: Response) => {
-  const user = await prisma.user.findUnique({
-    where: {
-      email: req.body.email,
-    },
-    include: {
-      projects: true,
-      time_reports: true,
-      leaves: true,
-      addresses: true,
-    },
-  });
-  const isValid = await comparePassword(req.body.password, user.password);
-  if (!isValid) {
-    res.status(401);
-    res.json({ error: 'Password is invalid' });
-    return;
-  }
-};
+// export const signIn = async (req: Request, res: Response) => {
+//   const user = await prisma.user.findUnique({
+//     where: {
+//       email: req.body.email,
+//     },
+//     include: {
+//       projects: true,
+//       time_reports: true,
+//       leaves: true,
+//       addresses: true,
+//     },
+//   });
+//   const isValid = await comparePassword(req.body.password, user.password);
+//   if (!isValid) {
+//     res.status(401);
+//     res.json({ error: 'Password is invalid' });
+//     return;
+//   }
+// };
 
 //export const getUserByEmail = async (req: Request, res: Response) => {}; //maybe not needed signin?
 
@@ -160,6 +160,40 @@ export const deleteUserById = async (req: Request, res: Response) => {
   }
 };
 
+export const changePassword = async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400);
+    res.json({ errors: errors.array() });
+  } else {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+    console.log(user);
+    let isMatch = await comparePassword(
+      req.body.currentPassword,
+      user.password
+    );
+    // const isMatch = comparePassword(req.body.password, user.password);
+    console.log('match: ', isMatch);
+    if (isMatch) {
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          password: await hashPassword(req.body.newPassword),
+        },
+      });
+      res.json({ data: updatedUser });
+    } else {
+      res.json({ errors: 'Invalid password' });
+    }
+  }
+};
+
 router.get('/', getAllUsers);
 router.get('/:id', (req, res) => {
   res.json({ message: 'get user by id' });
@@ -204,6 +238,24 @@ router.put(
   body('addressId').isUUID().withMessage('Invalid id'),
   connectExisitingAddress
 );
+
+router.put(
+  '/:id/change-password',
+  body('currentPassword')
+    .isStrongPassword()
+    .isLength({ max: 255 })
+    .withMessage(
+      'Invalid password. Requires minimum of 8 characters, minimum 1 lowercase, minimum 1 uppercase, minimum 1 special character '
+    ),
+  body('newPassword')
+    .isStrongPassword()
+    .isLength({ max: 255 })
+    .withMessage(
+      'Invalid password. Requires minimum of 8 characters, minimum 1 lowercase, minimum 1 uppercase, minimum 1 special character '
+    ),
+  changePassword
+);
+
 router.post(
   '/',
   body('id').isUUID().withMessage('Invalid id'),
