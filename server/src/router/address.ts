@@ -1,63 +1,37 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../db';
 import { body, validationResult } from 'express-validator';
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
-export const getAddresses = async (req: Request, res: Response) => {
-  const address = await prisma.address.findMany({
-    include: {
-      Users: true,
-    },
-  });
+enum ErrorTypes {
+  AUTH = 'Auth',
+  INPUT = 'Input',
+  SERVER = 'Server',
+}
 
-  res.json({ data: address });
-};
-
-export const getAddressById = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400);
-    let errorMessages = errors.array();
-    if (req.body.errors) {
-      errorMessages.push(req.body.errors);
-    }
-    res.json({ errors: errorMessages });
-  } else {
-    const address = await prisma.address.findUnique({
-      where: {
-        id: req.body.id,
-      },
-    });
-    res.json({ data: address });
-  }
-};
-
-export const postNewAddress = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400);
-    let errorMessages = errors.array();
-    if (req.body.errors) {
-      errorMessages.push(req.body.errors);
-    }
-    res.json({ errors: errorMessages });
-  } else {
-    const address = await prisma.address.create({
-      data: {
-        country: req.body.country,
-        city: req.body.city,
-        zip: req.body.zip,
-      },
+export const getAddresses = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const address = await prisma.address.findMany({
       include: {
-        department: true,
         Users: true,
       },
     });
     res.json({ data: address });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next();
   }
 };
 
-export const updateUserAddressById = async (req: Request, res: Response) => {
+export const getAddressById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
@@ -67,21 +41,25 @@ export const updateUserAddressById = async (req: Request, res: Response) => {
     }
     res.json({ errors: errorMessages });
   } else {
-    const address = await prisma.address.update({
-      where: {
-        id: req.body.id,
-      },
-      data: {
-        country: req.body.country,
-        city: req.body.city,
-        zip: req.body.zip,
-      },
-    });
-    res.json({ data: address });
+    try {
+      const address = await prisma.address.findUnique({
+        where: {
+          id: req.body.id,
+        },
+      });
+      res.json({ data: address });
+    } catch (e) {
+      e.type = ErrorTypes.SERVER;
+      next(e);
+    }
   }
 };
 
-export const deleteAddress = async (req: Request, res: Response) => {
+export const postNewAddress = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
@@ -91,18 +69,99 @@ export const deleteAddress = async (req: Request, res: Response) => {
     }
     res.json({ errors: errorMessages });
   } else {
-    const address = await prisma.address.delete({
-      where: {
-        id: req.body.id,
-      },
-    });
-    res.json({ data: address });
+    try {
+      const address = await prisma.address.create({
+        data: {
+          country: req.body.country,
+          city: req.body.city,
+          zip: req.body.zip,
+        },
+        include: {
+          department: true,
+          Users: true,
+        },
+      });
+      res.json({ data: address });
+    } catch (e) {
+      e.type = ErrorTypes.SERVER;
+      next(e);
+    }
+  }
+};
+
+export const updateUserAddressById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400);
+    let errorMessages = errors.array();
+    if (req.body.errors) {
+      errorMessages.push(req.body.errors);
+    }
+    res.json({ errors: errorMessages });
+  } else {
+    try {
+      const address = await prisma.address.update({
+        where: {
+          id: req.body.id,
+        },
+        data: {
+          country: req.body.country,
+          city: req.body.city,
+          zip: req.body.zip,
+        },
+      });
+      res.json({ data: address });
+    } catch (e) {
+      console.log(e);
+      if (e.meta.cause === 'Record to update not found.') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
+  }
+};
+
+export const deleteAddress = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400);
+    let errorMessages = errors.array();
+    if (req.body.errors) {
+      errorMessages.push(req.body.errors);
+    }
+    res.json({ errors: errorMessages });
+  } else {
+    try {
+      const address = await prisma.address.delete({
+        where: {
+          id: req.body.id,
+        },
+      });
+      res.json({ data: address });
+    } catch (e) {
+      if (e.meta.cause === 'Record to delete does not exist.') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
   }
 };
 
 router.get('/', getAddresses);
 router.get(
-  '/:id',
+  '/getAddressById',
   body('id').isUUID().withMessage('Invalid id'),
   getAddressById
 );

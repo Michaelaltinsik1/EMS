@@ -171,13 +171,10 @@ export const changePassword = async (req: Request, res: Response) => {
         id: req.params.id,
       },
     });
-    console.log(user);
     let isMatch = await comparePassword(
       req.body.currentPassword,
       user.password
     );
-    // const isMatch = comparePassword(req.body.password, user.password);
-    console.log('match: ', isMatch);
     if (isMatch) {
       const updatedUser = await prisma.user.update({
         where: {

@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import addressRouter from './router/address';
 import departmentRouter from './router/department';
 import leaveRouter from './router/leave';
@@ -16,6 +16,12 @@ import {
 } from './utils/auth';
 import prisma from './db';
 import { body, validationResult } from 'express-validator';
+
+enum ErrorTypes {
+  AUTH = 'Auth',
+  INPUT = 'Input',
+  SERVER = 'Server',
+}
 
 const app = express();
 app.use(cors());
@@ -78,5 +84,18 @@ app.use('/users/:userId/projects', projectRouter);
 app.use('/users/:userId/roles', roleRouter);
 app.use('/users/:userId/timereports', timereportRouter);
 app.use('/users', userRouter);
+
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  if (err.type === ErrorTypes.AUTH) {
+    res.status(401);
+    res.json({ errors: [{ msg: 'Unauthorized' }] });
+  } else if ((err.type = ErrorTypes.INPUT)) {
+    res.status(400);
+    res.json({ errors: [{ msg: 'Invalid input' }] });
+  } else {
+    res.status(500);
+    res.json({ errors: [{ msg: 'Server issue!' }] });
+  }
+});
 
 export default app;
