@@ -101,7 +101,7 @@ export const updateDepartmentById = async (
       res.json({ data: department });
     } catch (e) {
       //P2025 Record to update not found.
-      if (e.code === 'P2025') {
+      if (e.code === 'P2025' || e.code === 'P2002') {
         e.type = ErrorTypes.INPUT;
       } else {
         e.type = ErrorTypes.SERVER;

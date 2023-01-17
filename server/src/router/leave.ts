@@ -1,4 +1,4 @@
-import e, { Request, Response, Router } from 'express';
+import e, { NextFunction, Request, Response, Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import prisma from '../db';
 import {
@@ -15,19 +15,41 @@ enum ErrorTypes {
 }
 // router.use(validateStatus);
 
-export const getAllLeaves = async (req: Request, res: Response) => {
-  const leaves = await prisma.leave.findMany();
-  res.json({ data: leaves });
+export const getAllLeaves = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const leaves = await prisma.leave.findMany();
+    res.json({ data: leaves });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
 };
-export const getLeavesByUserId = async (req: Request, res: Response) => {
-  const leaves = await prisma.leave.findMany({
-    where: {
-      userId: req.params.userId,
-    },
-  });
-  res.json({ data: leaves });
+export const getLeavesByUserId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const leaves = await prisma.leave.findMany({
+      where: {
+        userId: req.params.userId,
+      },
+    });
+    res.json({ data: leaves });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
 };
-export const updateLeaveById = async (req: Request, res: Response) => {
+export const updateLeaveById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let errorsToLog = {
     errors: [],
   };
@@ -36,18 +58,31 @@ export const updateLeaveById = async (req: Request, res: Response) => {
     errorsToLog.errors.push(req.body.errors);
     res.json(errorsToLog);
   } else {
-    const leave = await prisma.leave.update({
-      where: {
-        id: req.params.id,
-      },
-      data: {
-        status: req.body.status,
-      },
-    });
-    res.json({ data: leave });
+    try {
+      const leave = await prisma.leave.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          status: req.body.status,
+        },
+      });
+      res.json({ data: leave });
+    } catch (e) {
+      if (e.code === 'P2025') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
   }
 };
-export const postNewLeave = async (req: Request, res: Response) => {
+export const postNewLeave = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty() || req.body.errors) {
     res.status(400);
@@ -57,24 +92,43 @@ export const postNewLeave = async (req: Request, res: Response) => {
     }
     res.json({ errors: errorMessages });
   } else {
-    const leave = await prisma.leave.create({
-      data: {
-        type_of_leave: req.body.type_of_leave,
-        from: req.body.from,
-        to: req.body.to,
-        userId: req.params.userId,
+    try {
+      const leave = await prisma.leave.create({
+        data: {
+          type_of_leave: req.body.type_of_leave,
+          from: req.body.from,
+          to: req.body.to,
+          userId: req.params.userId,
+        },
+      });
+      res.json({ data: leave });
+    } catch (e) {
+      e.type = ErrorTypes.SERVER;
+      next(e);
+    }
+  }
+};
+export const deleteLeaveById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const leave = await prisma.leave.delete({
+      where: {
+        id: req.params.id,
       },
     });
     res.json({ data: leave });
+  } catch (e) {
+    //Record to delete does not exist
+    if (e.code === 'P2025') {
+      e.type = ErrorTypes.INPUT;
+    } else {
+      e.type = ErrorTypes.SERVER;
+    }
+    next(e);
   }
-};
-export const deleteLeaveById = async (req: Request, res: Response) => {
-  const leave = await prisma.leave.delete({
-    where: {
-      id: req.params.id,
-    },
-  });
-  res.json({ data: leave });
 };
 
 router.get('/admin', getAllLeaves);
