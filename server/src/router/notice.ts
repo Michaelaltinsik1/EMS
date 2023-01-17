@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import prisma from '../db';
 import { validateStatus } from '../middleware/customMiddleware';
 import { body, validationResult } from 'express-validator';
@@ -10,20 +10,42 @@ enum ErrorTypes {
 }
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
-export const getAllNotices = async (req: Request, res: Response) => {
-  const notices = await prisma.notice.findMany();
-  res.json({ data: notices });
+export const getAllNotices = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const notices = await prisma.notice.findMany();
+    res.json({ data: notices });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
 };
-export const getUserNoticeById = async (req: Request, res: Response) => {
-  const notice = await prisma.notice.findUnique({
-    where: {
-      id: req.params.id,
-    },
-  });
-  res.json({ data: notice });
+export const getUserNoticeById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const notice = await prisma.notice.findUnique({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json({ data: notice });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
 };
 
-export const updateNoticeById = async (req: Request, res: Response) => {
+export const updateNoticeById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   let errorsToLog = {
     errors: [],
   };
@@ -32,41 +54,74 @@ export const updateNoticeById = async (req: Request, res: Response) => {
     errorsToLog.errors.push(req.body.errors);
     res.json(errorsToLog);
   } else {
-    const notice = await prisma.notice.update({
-      where: {
-        id: req.params.id,
-      },
-      data: {
-        status: req.body.status,
-      },
-    });
-    res.json({ data: notice });
+    try {
+      const notice = await prisma.notice.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          status: req.body.status,
+        },
+      });
+      res.json({ data: notice });
+    } catch (e) {
+      //P2025 Record to update does not exist
+      if (e.code === 'P2025') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
   }
 };
 
-export const postNewNotice = async (req: Request, res: Response) => {
+export const postNewNotice = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
     res.json({ errors: errors.array() });
   } else {
-    const notice = await prisma.notice.create({
-      data: {
-        description: req.body.description,
-        userId: req.params.userId,
-      },
-    });
-    res.json({ data: notice });
+    try {
+      const notice = await prisma.notice.create({
+        data: {
+          description: req.body.description,
+          userId: req.params.userId,
+        },
+      });
+      res.json({ data: notice });
+    } catch (e) {
+      e.type = ErrorTypes.SERVER;
+      next(e);
+    }
   }
 };
 
-export const deleteNotice = async (req: Request, res: Response) => {
-  const notice = await prisma.notice.delete({
-    where: {
-      id: req.params.id,
-    },
-  });
-  res.json({ data: notice });
+export const deleteNotice = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const notice = await prisma.notice.delete({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json({ data: notice });
+  } catch (e) {
+    //Record to delete does not exist
+    if (e.code === 'P2025') {
+      e.type = ErrorTypes.INPUT;
+    } else {
+      e.type = ErrorTypes.SERVER;
+    }
+    next(e);
+  }
 };
 router.get('/', getAllNotices);
 router.get('/:id', getUserNoticeById);

@@ -129,7 +129,7 @@ export const deleteDepartmentById = async (
     res.json({ data: department });
   } catch (e) {
     console.log(e);
-    //Record to delete does not exist
+    //P2025 Record to delete does not exist
     if (e.code === 'P2025') {
       e.type = ErrorTypes.INPUT;
     } else {
