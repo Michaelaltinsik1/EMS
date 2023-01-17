@@ -35,31 +35,46 @@ app.use(express.urlencoded({ extended: true })); // url query to object
 //app.use('/users/:userId/addresses', protectRoutes, addressRouter); //not needed
 //add middleware here to check if logged in
 
-export const signIn = async (req: Request, res: Response) => {
+export const signIn = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
     res.json({ errors: errors.array() });
   } else {
-    const user = await prisma.user.findUnique({
-      where: {
-        email: req.body.email,
-      },
-      include: {
-        projects: true,
-        time_reports: true,
-        leaves: true,
-        addresses: true,
-      },
-    });
-    const isValid = await comparePassword(req.body.password, user.password);
-    if (!isValid) {
-      res.status(401);
-      res.json({ error: 'Password is invalid' });
-      return;
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          email: req.body.email,
+        },
+        include: {
+          projects: true,
+          time_reports: true,
+          leaves: true,
+          addresses: true,
+        },
+      });
+      if (user) {
+        const isValid = await comparePassword(req.body.password, user.password);
+        if (!isValid) {
+          res.status(401);
+          res.json({ error: 'Invalid password' });
+          return;
+        }
+        const token = createJWT(user);
+        res.json({ token });
+      } else {
+        res.status(401);
+        res.json({ error: 'Invalid email address' });
+        return;
+      }
+    } catch (e) {
+      e.type = ErrorTypes.SERVER;
+      next(e);
     }
-    const token = createJWT(user);
-    res.json({ token });
   }
 };
 
