@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import prisma from '../db';
 import { body, validationResult } from 'express-validator';
 
@@ -9,74 +9,139 @@ enum ErrorTypes {
 }
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
-export const postNewProject = async (req: Request, res: Response) => {
-  const project = await prisma.project.create({
-    data: {
-      name: req.body.name,
-      start_date: req.body.start_date,
-      deadline: req.body.deadline,
-      description: req.body.description,
-      // users: req.body.users,
-    },
-  });
-  res.json({ data: project });
-};
-
-export const getAllProjects = async (req: Request, res: Response) => {
-  const projects = await prisma.project.findMany({
-    include: {
-      users: true,
-    },
-  });
-  res.json({ data: projects });
-};
-
-export const updateProjectById = async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    res.status(400);
-    res.json({ errors: errors.array() });
-  } else {
-    const project = await prisma.project.update({
-      where: {
-        id: req.params.id,
-      },
+export const postNewProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const project = await prisma.project.create({
       data: {
         name: req.body.name,
         start_date: req.body.start_date,
         deadline: req.body.deadline,
         description: req.body.description,
+        // users: req.body.users,
       },
     });
     res.json({ data: project });
+  } catch (e) {
+    //P2002 unique constraint failed
+    if (e.code === 'P2002') {
+      e.type = ErrorTypes.INPUT;
+    } else {
+      e.type = ErrorTypes.SERVER;
+    }
+    next(e);
   }
 };
 
-export const addEmployeeToProject = async (req: Request, res: Response) => {
-  console.log(req.params.userId);
-  const project = await prisma.project.update({
-    where: {
-      id: req.params.id,
-    },
-    data: {
-      users: {
-        connect: {
-          id: req.params.userId,
-        },
+export const getAllProjects = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const projects = await prisma.project.findMany({
+      include: {
+        users: true,
       },
-    },
-  });
-
-  res.json({ data: project });
+    });
+    res.json({ data: projects });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
 };
 
-export const deleteProjectById = async (req: Request, res: Response) => {
-  const project = prisma.project.delete({
-    where: {
-      id: req.params.id,
-    },
-  });
-  res.json({ data: project });
+export const updateProjectById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    res.status(400);
+    res.json({ errors: errors.array() });
+  } else {
+    try {
+      const project = await prisma.project.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          name: req.body.name,
+          start_date: req.body.start_date,
+          deadline: req.body.deadline,
+          description: req.body.description,
+        },
+      });
+      res.json({ data: project });
+    } catch (e) {
+      //P2025 Record to update not found.
+      //P2002 unique constraint failed.
+      if (e.code === 'P2025' || e.code === 'P2002') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
+  }
+};
+
+export const addEmployeeToProject = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const project = await prisma.project.update({
+      where: {
+        id: req.params.id,
+      },
+      data: {
+        users: {
+          connect: {
+            id: req.params.userId,
+          },
+        },
+      },
+    });
+
+    res.json({ data: project });
+  } catch (e) {
+    //P2025 Record to update not found.
+    if (e.code === 'P2025') {
+      e.type = ErrorTypes.INPUT;
+    } else {
+      e.type = ErrorTypes.SERVER;
+    }
+    next(e);
+  }
+};
+
+export const deleteProjectById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const project = prisma.project.delete({
+      where: {
+        id: req.params.id,
+      },
+    });
+    res.json({ data: project });
+  } catch (e) {
+    //P2025 Record to delete not found.
+    if (e.code === 'P2025') {
+      e.type = ErrorTypes.INPUT;
+    } else {
+      e.type = ErrorTypes.SERVER;
+    }
+    next(e);
+  }
 };
 
 // export const getProjectWithEmployee = async (req, res) => {
