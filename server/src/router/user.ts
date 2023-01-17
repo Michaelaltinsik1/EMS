@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import prisma from '../db';
 import { comparePassword, createJWT, hashPassword } from '../utils/auth';
 import { body, validationResult } from 'express-validator';
@@ -10,7 +10,11 @@ enum ErrorTypes {
 }
 const router = Router();
 
-export const createNewUser = async (req: Request, res: Response) => {
+export const createNewUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty() || req.body.errors) {
     res.status(400);
@@ -20,26 +24,55 @@ export const createNewUser = async (req: Request, res: Response) => {
     }
     res.json({ errors: errorMessages });
   } else {
-    const user = await prisma.user.create({
-      data: {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        password: await hashPassword(req.body.password),
-        salary: req.body.salary,
-        permission: req.body.permission,
-        date_of_birth: req.body.date_of_birth,
-        roleId: req.body.roleId,
-        departmentId: req.body.departmentId,
-        notice: req.body.notice,
-        addresses: {
-          create: {
-            country: req.body.country,
-            city: req.body.city,
-            zip: req.body.zip,
+    try {
+      const user = await prisma.user.create({
+        data: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          email: req.body.email,
+          password: await hashPassword(req.body.password),
+          salary: req.body.salary,
+          permission: req.body.permission,
+          date_of_birth: req.body.date_of_birth,
+          roleId: req.body.roleId,
+          departmentId: req.body.departmentId,
+          notice: req.body.notice,
+          addresses: {
+            create: {
+              country: req.body.country,
+              city: req.body.city,
+              zip: req.body.zip,
+            },
           },
         },
-      },
+        include: {
+          projects: true,
+          time_reports: true,
+          leaves: true,
+          addresses: true,
+        },
+      });
+      const token = createJWT(user);
+      res.json({ token });
+    } catch (e) {
+      //P2002 unique constraint failed
+      if (e.code === 'P2002') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
+  }
+};
+
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const users = await prisma.user.findMany({
       include: {
         projects: true,
         time_reports: true,
@@ -47,21 +80,11 @@ export const createNewUser = async (req: Request, res: Response) => {
         addresses: true,
       },
     });
-    const token = createJWT(user);
-    res.json({ token });
+    res.json({ data: users });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
   }
-};
-
-export const getAllUsers = async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany({
-    include: {
-      projects: true,
-      time_reports: true,
-      leaves: true,
-      addresses: true,
-    },
-  });
-  res.json({ data: users });
 };
 
 //Check if email is string and not empty
@@ -87,7 +110,11 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 //export const getUserByEmail = async (req: Request, res: Response) => {}; //maybe not needed signin?
 
-export const updateUserById = async (req: Request, res: Response) => {
+export const updateUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty() || req.body.errors) {
     res.status(400);
@@ -97,101 +124,150 @@ export const updateUserById = async (req: Request, res: Response) => {
     }
     res.json({ errors: errorMessages });
   } else {
-    const user = await prisma.user.update({
-      where: {
-        id: req.body.id,
-      },
-      data: {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        salary: req.body.salary,
-        permission: req.body.permission,
-        roleId: req.body.roleId,
-        departmentId: req.body.departmentId,
-        addresses: {
-          update: {
-            where: {
-              id: req.body.addressId,
-            },
-            data: {
-              country: req.body.country,
-              city: req.body.city,
-              zip: req.body.zip,
+    try {
+      const user = await prisma.user.update({
+        where: {
+          id: req.body.id,
+        },
+        data: {
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          salary: req.body.salary,
+          permission: req.body.permission,
+          roleId: req.body.roleId,
+          departmentId: req.body.departmentId,
+          addresses: {
+            update: {
+              where: {
+                id: req.body.addressId,
+              },
+              data: {
+                country: req.body.country,
+                city: req.body.city,
+                zip: req.body.zip,
+              },
             },
           },
         },
-      },
-    });
-    res.json({ data: user });
+      });
+      res.json({ data: user });
+    } catch (e) {
+      if (e.code === 'P2025') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
   }
 };
 
-export const connectExisitingAddress = async (req: Request, res: Response) => {
+export const connectExisitingAddress = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
     res.json({ errors: errors.array() });
   } else {
-    const user = await prisma.user.update({
-      where: {
-        id: req.body.id,
-      },
-      data: {
-        addresses: {
-          connect: { id: req.body.addressId },
+    try {
+      const user = await prisma.user.update({
+        where: {
+          id: req.body.id,
         },
-      },
-      include: {
-        addresses: true,
-      },
-    });
-    res.json({ data: user });
+        data: {
+          addresses: {
+            connect: { id: req.body.addressId },
+          },
+        },
+        include: {
+          addresses: true,
+        },
+      });
+      res.json({ data: user });
+    } catch (e) {
+      if (e.code === 'P2025') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
   }
 };
 
 //Check that id is string and not empty
-export const deleteUserById = async (req: Request, res: Response) => {
+export const deleteUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
     res.json({ errors: errors.array() });
   } else {
-    const user = prisma.user.delete({
-      where: {
-        id: req.body.id,
-      },
-    });
-    res.json({ data: user });
+    try {
+      const user = prisma.user.delete({
+        where: {
+          id: req.body.id,
+        },
+      });
+      res.json({ data: user });
+    } catch (e) {
+      if (e.code === 'P2025') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
+    }
   }
 };
 
-export const changePassword = async (req: Request, res: Response) => {
+export const changePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     res.status(400);
     res.json({ errors: errors.array() });
   } else {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: req.params.id,
-      },
-    });
-    let isMatch = await comparePassword(
-      req.body.currentPassword,
-      user.password
-    );
-    if (isMatch) {
-      const updatedUser = await prisma.user.update({
+    try {
+      const user = await prisma.user.findUnique({
         where: {
           id: req.params.id,
         },
-        data: {
-          password: await hashPassword(req.body.newPassword),
-        },
       });
-      res.json({ data: updatedUser });
-    } else {
-      res.json({ errors: 'Invalid password' });
+      let isMatch = await comparePassword(
+        req.body.currentPassword,
+        user.password
+      );
+      if (isMatch) {
+        const updatedUser = await prisma.user.update({
+          where: {
+            id: req.params.id,
+          },
+          data: {
+            password: await hashPassword(req.body.newPassword),
+          },
+        });
+        res.json({ data: updatedUser });
+      } else {
+        res.json({ errors: 'Invalid password' });
+      }
+    } catch (e) {
+      //Record to update does not exist
+      if (e.code === 'P2025') {
+        e.type = ErrorTypes.INPUT;
+      } else {
+        e.type = ErrorTypes.SERVER;
+      }
+      next(e);
     }
   }
 };
