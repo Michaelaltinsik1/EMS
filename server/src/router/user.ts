@@ -1,8 +1,14 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import prisma from '../db';
-import { comparePassword, createJWT, hashPassword } from '../utils/auth';
+import {
+  comparePassword,
+  createJWT,
+  hashPassword,
+  protectRoutes,
+} from '../utils/auth';
 import { body, validationResult } from 'express-validator';
 import { validatePermission } from '../middleware/customMiddleware';
+import { PermissionType } from '../enums/enums';
 enum ErrorTypes {
   AUTH = 'Auth',
   INPUT = 'Input',
@@ -210,7 +216,7 @@ export const deleteUserById = async (
     res.json({ errors: errors.array() });
   } else {
     try {
-      const user = prisma.user.delete({
+      const user = await prisma.user.delete({
         where: {
           id: req.body.id,
         },
@@ -336,7 +342,7 @@ router.put(
 
 router.post(
   '/',
-  body('id').isUUID().withMessage('Invalid id'),
+  // body('id').isUUID().withMessage('Invalid id'),
   body('firstName')
     .isString()
     .isLength({ min: 3, max: 100 })
@@ -369,10 +375,11 @@ router.post(
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid input'),
   validatePermission,
+  protectRoutes(PermissionType.ADMIN),
   createNewUser
 );
 router.delete(
-  '/:id',
+  '/',
   body('id').isUUID().withMessage('Invalid id'),
   deleteUserById
 );

@@ -17,6 +17,8 @@ import {
 import prisma from './db';
 import { body, validationResult } from 'express-validator';
 
+import { PermissionType } from './enums/enums';
+
 enum ErrorTypes {
   AUTH = 'Auth',
   INPUT = 'Input',
