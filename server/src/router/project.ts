@@ -146,12 +146,22 @@ export const deleteProjectById = async (
   }
 };
 
-// export const getProjectWithEmployee = async (req, res) => {
-//   const projects = await prisma.project.findMany({
-//     where:{
-//       users
-//     }
-//   });
+// export const getProjectsWithEmployeeID = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const projects = await prisma.project.findMany({
+//       where: {
+
+//       },
+//     });
+//     res.json({ data: projects });
+//   } catch (e) {
+//     e.type = ErrorTypes.SERVER;
+//     next(e);
+//   }
 // };
 
 /**
@@ -160,6 +170,11 @@ export const deleteProjectById = async (
  */
 
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllProjects);
+// router.get(
+//   '/:id',
+//   protectRoutes(PermissionType.EMPLOYEE),
+//   getProjectsWithEmployeeID
+// );
 router.put(
   '/:id',
   body('name')

@@ -278,10 +278,33 @@ export const changePassword = async (
   }
 };
 
+export const getProjectsByUserId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const projects = await prisma.user.findUnique({
+      where: {
+        id: req.params.id,
+      },
+      include: {
+        projects: true,
+      },
+    });
+    if (projects) {
+      res.json({ data: projects?.projects });
+    } else {
+      res.json({ data: null });
+    }
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
+};
+
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllUsers);
-router.get('/:id', (req, res) => {
-  res.json({ message: 'get user by id' });
-});
+router.get('/:id', protectRoutes(PermissionType.EMPLOYEE), getProjectsByUserId);
 router.put(
   '/',
   body('id').isUUID().withMessage('Invalid id'),
