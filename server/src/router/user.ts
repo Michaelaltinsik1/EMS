@@ -278,7 +278,7 @@ export const changePassword = async (
   }
 };
 
-router.get('/', getAllUsers);
+router.get('/', protectRoutes(PermissionType.ADMIN), getAllUsers);
 router.get('/:id', (req, res) => {
   res.json({ message: 'get user by id' });
 });
@@ -314,12 +314,14 @@ router.put(
     .isLength({ min: 2, max: 255 })
     .withMessage('Must be at least 2 characters long'),
   validatePermission,
+  protectRoutes(PermissionType.ADMIN),
   updateUserById
 );
 router.put(
   '/connect',
   body('id').isUUID().withMessage('Invalid id'),
   body('addressId').isUUID().withMessage('Invalid id'),
+  protectRoutes(PermissionType.EMPLOYEE),
   connectExisitingAddress
 );
 
@@ -337,6 +339,7 @@ router.put(
     .withMessage(
       'Invalid password. Requires minimum of 8 characters, minimum 1 lowercase, minimum 1 uppercase, minimum 1 special character '
     ),
+  protectRoutes(PermissionType.EMPLOYEE),
   changePassword
 );
 
@@ -381,6 +384,7 @@ router.post(
 router.delete(
   '/',
   body('id').isUUID().withMessage('Invalid id'),
+  protectRoutes(PermissionType.ADMIN),
   deleteUserById
 );
 export default router;

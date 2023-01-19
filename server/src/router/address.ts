@@ -2,6 +2,8 @@ import { Router, Request, Response, NextFunction } from 'express';
 import prisma from '../db';
 import { body, validationResult } from 'express-validator';
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
+import { protectRoutes } from '../utils/auth';
+import { PermissionType } from '../enums/enums';
 
 enum ErrorTypes {
   AUTH = 'Auth',
@@ -160,10 +162,11 @@ export const deleteAddress = async (
   }
 };
 
-router.get('/', getAddresses);
+router.get('/', protectRoutes(PermissionType.ADMIN), getAddresses);
 router.get(
   '/getAddressById',
   body('id').isUUID().withMessage('Invalid id'),
+  protectRoutes(PermissionType.ADMIN),
   getAddressById
 );
 router.put(
@@ -181,6 +184,7 @@ router.put(
     .isString()
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid input'),
+  protectRoutes(PermissionType.EMPLOYEE),
   updateUserAddressById
 );
 router.post(
@@ -197,11 +201,13 @@ router.post(
     .isString()
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid input'),
+  protectRoutes(PermissionType.ADMIN),
   postNewAddress
 );
 router.delete(
   '/',
   body('id').isUUID().withMessage('Invalid id'),
+  protectRoutes(PermissionType.ADMIN),
   deleteAddress
 );
 

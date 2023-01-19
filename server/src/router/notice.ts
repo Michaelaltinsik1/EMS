@@ -2,7 +2,8 @@ import { NextFunction, Request, Response, Router } from 'express';
 import prisma from '../db';
 import { validateStatus } from '../middleware/customMiddleware';
 import { body, validationResult } from 'express-validator';
-
+import { protectRoutes } from '../utils/auth';
+import { PermissionType } from '../enums/enums';
 enum ErrorTypes {
   AUTH = 'Auth',
   INPUT = 'Input',
@@ -123,14 +124,20 @@ export const deleteNotice = async (
     next(e);
   }
 };
-router.get('/', getAllNotices);
-router.get('/:id', getUserNoticeById);
-router.put('/:id', validateStatus, updateNoticeById);
+router.get('/', protectRoutes(PermissionType.ADMIN), getAllNotices);
+router.get('/:id', protectRoutes(PermissionType.EMPLOYEE), getUserNoticeById);
+router.put(
+  '/:id',
+  validateStatus,
+  protectRoutes(PermissionType.ADMIN),
+  updateNoticeById
+);
 router.post(
   '/',
   body('description').isString().withMessage('Invalid description'),
+  protectRoutes(PermissionType.EMPLOYEE),
   postNewNotice
 );
-router.delete('/:id', deleteNotice);
+router.delete('/:id', protectRoutes(PermissionType.ADMIN), deleteNotice);
 
 export default router;

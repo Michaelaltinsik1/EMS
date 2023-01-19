@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import prisma from '../db';
 import { body, validationResult } from 'express-validator';
+import { PermissionType } from '../enums/enums';
+import { protectRoutes } from '../utils/auth';
 
 enum ErrorTypes {
   AUTH = 'Auth',
@@ -152,7 +154,12 @@ export const deleteProjectById = async (
 //   });
 // };
 
-router.get('/', getAllProjects);
+/**
+ * Create route to get all projects based on userId
+ * with permission Employee
+ */
+
+router.get('/', protectRoutes(PermissionType.ADMIN), getAllProjects);
 router.put(
   '/:id',
   body('name')
@@ -166,9 +173,14 @@ router.put(
     .optional()
     .isLength({ max: 1020 })
     .withMessage('Invalid description'),
+  protectRoutes(PermissionType.ADMIN),
   updateProjectById
 );
-router.put('/:id/addemployee', addEmployeeToProject);
+router.put(
+  '/:id/addemployee',
+  protectRoutes(PermissionType.ADMIN),
+  addEmployeeToProject
+);
 router.post(
   '/',
   body('name')
@@ -182,8 +194,9 @@ router.post(
     .optional()
     .isLength({ max: 1020 })
     .withMessage('Invalid description'),
+  protectRoutes(PermissionType.ADMIN),
   postNewProject
 );
-router.delete('/:id', deleteProjectById);
+router.delete('/:id', protectRoutes(PermissionType.ADMIN), deleteProjectById);
 
 export default router;

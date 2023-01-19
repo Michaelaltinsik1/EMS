@@ -5,7 +5,8 @@ import {
   validateLeaveType,
   validateStatus,
 } from '../middleware/customMiddleware';
-
+import { protectRoutes } from '../utils/auth';
+import { PermissionType } from '../enums/enums';
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
 enum ErrorTypes {
@@ -131,16 +132,22 @@ export const deleteLeaveById = async (
   }
 };
 
-router.get('/admin', getAllLeaves);
-router.get('/', getLeavesByUserId);
-router.put('/:id', validateStatus, updateLeaveById);
+router.get('/admin', protectRoutes(PermissionType.ADMIN), getAllLeaves);
+router.get('/', protectRoutes(PermissionType.EMPLOYEE), getLeavesByUserId);
+router.put(
+  '/:id',
+  validateStatus,
+  protectRoutes(PermissionType.ADMIN),
+  updateLeaveById
+);
 router.post(
   '/',
   body('to').isISO8601().toDate().withMessage('Invalid To date'),
   body('from').isISO8601().toDate().withMessage('Invalid From date'),
   validateLeaveType,
+  protectRoutes(PermissionType.EMPLOYEE),
   postNewLeave
 );
-router.delete('/:id', deleteLeaveById);
+router.delete('/:id', protectRoutes(PermissionType.ADMIN), deleteLeaveById);
 
 export default router;

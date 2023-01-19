@@ -2,6 +2,8 @@ import { NextFunction, Request, Response, Router } from 'express';
 import prisma from '../db';
 import { validateStatus } from '../middleware/customMiddleware';
 import { body, validationResult } from 'express-validator';
+import { protectRoutes } from '../utils/auth';
+import { PermissionType } from '../enums/enums';
 enum ErrorTypes {
   AUTH = 'Auth',
   INPUT = 'Input',
@@ -123,15 +125,21 @@ export const deleteTimeReport = async (
   }
 };
 
-router.get('/admin', getAllTimeReports);
-router.get('/', getTimeReportsByUserId);
-router.put('/:id', validateStatus, updateTimeReportById);
+router.get('/admin', protectRoutes(PermissionType.ADMIN), getAllTimeReports);
+router.get('/', protectRoutes(PermissionType.EMPLOYEE), getTimeReportsByUserId);
+router.put(
+  '/:id',
+  validateStatus,
+  protectRoutes(PermissionType.ADMIN),
+  updateTimeReportById
+);
 router.post(
   '/',
   body('to').isISO8601().toDate().withMessage('Invalid To date'),
   body('from').isISO8601().toDate().withMessage('Invalid From date'),
+  protectRoutes(PermissionType.EMPLOYEE),
   postNewTimeReport
 );
-router.delete('/:id', deleteTimeReport);
+router.delete('/:id', protectRoutes(PermissionType.ADMIN), deleteTimeReport);
 
 export default router;

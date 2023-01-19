@@ -92,7 +92,7 @@ app.post(
   signIn
 );
 
-app.use('/users/:userId/addresses', addressRouter); //not needed
+app.use('/users/:userId/addresses', addressRouter);
 app.use('/users/:userId/departments', departmentRouter);
 app.use('/users/:userId/leaves', leaveRouter);
 // app.use('/users/:userId/users/:userId/notices', noticeRouter);

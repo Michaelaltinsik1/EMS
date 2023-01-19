@@ -6,6 +6,9 @@ enum ErrorTypes {
   INPUT = 'Input',
   SERVER = 'Server',
 }
+import { PermissionType } from '../enums/enums';
+import { protectRoutes } from '../utils/auth';
+
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
 export const postNewRole = async (
@@ -121,13 +124,14 @@ export const deleteRoleById = async (
 // router.get('/', (req, res) => {
 //   res.json({ message: 'get all role' });
 // });
-router.get('/', getAllRoles);
+router.get('/', protectRoutes(PermissionType.ADMIN), getAllRoles);
 router.put(
   '/:id',
   body('name')
     .isString()
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid name'),
+  protectRoutes(PermissionType.ADMIN),
   updateRoleById
 );
 router.post(
@@ -136,9 +140,10 @@ router.post(
     .isString()
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid name'),
+  protectRoutes(PermissionType.ADMIN),
   postNewRole
 );
-router.delete('/:id', deleteRoleById);
+router.delete('/:id', protectRoutes(PermissionType.ADMIN), deleteRoleById);
 
 // router.get('/:id', (req, res) => {
 //   res.json({ message: 'get role by id' });

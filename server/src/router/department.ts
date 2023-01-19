@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import prisma from '../db';
+import { protectRoutes } from '../utils/auth';
+import { PermissionType } from '../enums/enums';
 
 const router = Router({ mergeParams: true }); //merges the url => makes sure you can access the userid params in server.ts on this file
 
@@ -139,7 +141,7 @@ export const deleteDepartmentById = async (
   }
 };
 
-router.get('/', getAllDepartments);
+router.get('/', protectRoutes(PermissionType.ADMIN), getAllDepartments);
 
 router.put(
   '/:id',
@@ -148,6 +150,7 @@ router.put(
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid name'),
   body('budget').isInt().withMessage('Invalid budget'),
+  protectRoutes(PermissionType.ADMIN),
   updateDepartmentById
 );
 router.post(
@@ -157,9 +160,14 @@ router.post(
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid name'),
   body('budget').isInt().withMessage('Invalid budget'),
+  protectRoutes(PermissionType.ADMIN),
   createNewDepartment
 );
-router.delete('/:id', deleteDepartmentById);
+router.delete(
+  '/:id',
+  protectRoutes(PermissionType.ADMIN),
+  deleteDepartmentById
+);
 
 // router.post('/', (req, res) => {
 //   res.json({ message: 'post department' });
