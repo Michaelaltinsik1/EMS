@@ -1,24 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signIn } from './API';
 
 function App() {
+  const navigate = useNavigate();
+  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+
+  async function handleSubmit(event: any) {
+    event.preventDefault();
+    const data = await signIn(email, password);
+    console.log('Data:', data);
+    if (data && data?.status === 200) {
+      console.log('redirect');
+      navigate('/dashboard');
+    }
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form>
+        <label htmlFor="email">Email</label>
+        <input
+          onChange={(e) => setEmail(e.target.value)}
+          id="email"
+          type="email"
+          placeholder="Emma.larsson@hotmail.com"
+        />
+        <label htmlFor="password">Password</label>
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          id="password"
+          type="password"
+          placeholder="Enter your password"
+        />
+        <button onClick={(e) => handleSubmit(e)} type="submit">
+          Sign in
+        </button>
+      </form>
     </div>
   );
 }

@@ -7,6 +7,7 @@ import projectRouter from './router/project';
 import roleRouter from './router/role';
 import timereportRouter from './router/timereport';
 import userRouter from './router/user';
+import cookie from 'cookie';
 import cors from 'cors';
 import {
   hashPassword,
@@ -67,7 +68,16 @@ export const signIn = async (
           return;
         }
         const token = createJWT(user);
-        res.json({ token });
+        res.setHeader(
+          'Set-Cookie',
+          cookie.serialize('JWT_ACCESS_TOKEN', token, {
+            httoOnly: true,
+            maxAge: 8 * 60 * 60,
+            path: '/',
+            sameSite: 'lax',
+          })
+        );
+        res.json({ data: user });
       } else {
         res.status(401);
         res.json({ error: 'Invalid email address' });
