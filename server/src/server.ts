@@ -9,6 +9,8 @@ import timereportRouter from './router/timereport';
 import userRouter from './router/user';
 import cookie from 'cookie';
 import cors from 'cors';
+
+import cookieParser from 'cookie-parser';
 import {
   hashPassword,
   protectRoutes,
@@ -25,9 +27,13 @@ enum ErrorTypes {
   INPUT = 'Input',
   SERVER = 'Server',
 }
-
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+};
 const app = express();
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(express.json()); //enables a client send the server json
 app.use(express.urlencoded({ extended: true })); // url query to object
 // app.get('/', (req: Request, res: Response) => {
@@ -71,12 +77,13 @@ export const signIn = async (
         res.setHeader(
           'Set-Cookie',
           cookie.serialize('JWT_ACCESS_TOKEN', token, {
-            httoOnly: true,
+            httpOnly: true,
             maxAge: 8 * 60 * 60,
             path: '/',
             sameSite: 'lax',
           })
         );
+
         res.json({ data: user });
       } else {
         res.status(401);

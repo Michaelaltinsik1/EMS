@@ -40,8 +40,8 @@ export const createNewUser = async (
           salary: req.body.salary,
           permission: req.body.permission,
           date_of_birth: req.body.date_of_birth,
-          roleId: req.body.roleId,
-          departmentId: req.body.departmentId,
+          roleId: req.body.roleId || '',
+          departmentId: req.body.departmentId || '',
           notice: req.body.notice,
           addresses: {
             create: {
@@ -385,9 +385,9 @@ router.post(
       'Invalid password. Requires minimum of 8 characters, minimum 1 lowercase, minimum 1 uppercase, minimum 1 special character '
     ),
   body('salary').isInt().withMessage('Invalid salary'),
-  body('roleId').isUUID().withMessage('Invalid id'),
+  body('roleId').optional().isUUID().withMessage('Invalid id'),
   body('notice').optional().isUUID().withMessage('Invalid id'),
-  body('departmentId').isUUID().withMessage('Invalid id'),
+  body('departmentId').optional().isUUID().withMessage('Invalid id'),
   body('country')
     .isString()
     .isLength({ min: 2, max: 255 })
