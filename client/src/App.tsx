@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from './API';
-
 function App() {
   const navigate = useNavigate();
   const [password, setPassword] = useState<string>('');
@@ -10,12 +9,15 @@ function App() {
   async function handleSubmit(event: any) {
     event.preventDefault();
     const data = await signIn(email, password);
-    console.log('Data:', data);
     if (data && data?.status === 200) {
-      console.log('redirect');
-      navigate('/dashboard');
+      if (data.value.permission === 'ADMIN') {
+        navigate('/dashboard/admin');
+      } else if (data.value?.permission === 'EMPLOYEE') {
+        navigate('/dashboard/');
+      }
     }
   }
+
   return (
     <div className="App">
       <form>

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { getUsers } from '../API/index';
+import { getUsers } from '../../API/user';
+import { UserType } from '@src/Types';
 const DashBoardPage = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<Array<UserType>>([]);
   useEffect(() => {
     const getAllUsers = async () => {
       const users = await getUsers();
-      if (users) {
+      if (users.status === 200) {
         setUsers(users.value);
       }
     };
@@ -14,11 +15,14 @@ const DashBoardPage = () => {
   console.log(users);
   return (
     <div>
-      <h1>Dashboard</h1>
+      <h1>Employee Dashboard</h1>
       <p>Users:</p>
       {users.map((user) => (
-        <div>
-          <h2>test</h2>
+        <div key={user.id}>
+          <h2>{user.id}</h2>
+          <p>{user.lastName}</p>
+          <p>{user.roleId}</p>
+          <p>{user.permission}</p>
         </div>
       ))}
     </div>

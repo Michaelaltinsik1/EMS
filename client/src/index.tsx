@@ -4,7 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, RouterProvider, Routes, Route } from 'react-router-dom';
-import DashBoardPage from './Views/Dashboard';
+import DashBoardPage from './Views/Employee/Dashboard';
+import AdminDashBoardPage from './Views/Admin/AdminDashBoard';
 
 // const router = createBrowserRouter([
 //   {
@@ -30,6 +31,7 @@ root.render(
       <Routes>
         <Route index element={<App />} />
         <Route path="dashboard" element={<DashBoardPage />} />
+        <Route path="dashboard/admin" element={<AdminDashBoardPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

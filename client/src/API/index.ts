@@ -16,15 +16,3 @@ export async function signIn(email: string, password: string) {
     });
   return user;
 }
-export async function getUsers() {
-  console.log(document.cookie);
-  const user = await axios
-    .get('/users')
-    .then((response) => {
-      return { status: response?.status, value: response.data?.data };
-    })
-    .catch((e) => {
-      return { status: e?.response?.status, value: e?.response?.data?.errors };
-    });
-  return user;
-}
