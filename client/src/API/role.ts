@@ -1,4 +1,4 @@
-import { RoleType } from '@src/Types';
+import { RoleType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';

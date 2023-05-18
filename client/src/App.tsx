@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signIn } from './API';
+import { Toast } from './utils/toastGenerator';
 function App() {
   const navigate = useNavigate();
   const [password, setPassword] = useState<string>('');
@@ -15,7 +16,14 @@ function App() {
       } else if (data.value?.permission === 'EMPLOYEE') {
         navigate('/dashboard/');
       }
+    } else {
+      Toast({
+        message: 'Invalid credentials!',
+        id: 'Sign-in-toast-id',
+        isSuccess: false,
+      });
     }
+    console.log(data);
   }
 
   return (

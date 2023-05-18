@@ -1,4 +1,4 @@
-import { LeaveType } from '@src/Types';
+import { Type_of_leaveType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';

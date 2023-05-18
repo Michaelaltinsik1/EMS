@@ -1,4 +1,4 @@
-import { Time_reportType } from '@src/Types';
+import { Time_reportType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';

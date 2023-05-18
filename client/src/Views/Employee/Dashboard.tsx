@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { getUsers } from '../../API/user';
-import { UserType } from '@src/Types';
+import { getUsers } from 'src/API/user';
+import { UserType } from 'src/Types';
+
 const DashBoardPage = () => {
   const [users, setUsers] = useState<Array<UserType>>([]);
   useEffect(() => {

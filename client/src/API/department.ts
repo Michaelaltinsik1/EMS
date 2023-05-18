@@ -1,4 +1,4 @@
-import { DepartmentType } from '@src/Types';
+import { DepartmentType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';

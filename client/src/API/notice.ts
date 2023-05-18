@@ -1,4 +1,4 @@
-import { NoticeType } from '@src/Types';
+import { NoticeType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';

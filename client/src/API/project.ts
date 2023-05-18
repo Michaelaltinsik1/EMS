@@ -1,4 +1,4 @@
-import { ProjectType } from '@src/Types';
+import { ProjectType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';

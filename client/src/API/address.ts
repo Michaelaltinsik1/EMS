@@ -1,4 +1,4 @@
-import { AddressType } from '@src/Types';
+import { AddressType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';
