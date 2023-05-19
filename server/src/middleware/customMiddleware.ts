@@ -25,7 +25,7 @@ export const validateStatus = (
 ) => {
   if (Object.values(Status).includes(req.body.status)) {
   } else {
-    req.body.errors = { msg: 'Invalid status', param: 'status' };
+    req.body.errors = { error: 'Invalid status', param: 'status' };
   }
   next();
 };
@@ -37,7 +37,7 @@ export const validateLeaveType = (
 ) => {
   if (Object.values(Type_of_leave).includes(req.body.type_of_leave)) {
   } else {
-    req.body.errors = { msg: 'Invalid leave', param: 'type_of_leave' };
+    req.body.errors = { error: 'Invalid leave', param: 'type_of_leave' };
   }
   next();
 };
@@ -49,7 +49,7 @@ export const validatePermission = (
 ) => {
   if (Object.values(Permission).includes(req.body.permission)) {
   } else {
-    req.body.errors = { msg: 'Invalid permission', param: 'permission' };
+    req.body.errors = { error: 'Invalid permission', param: 'permission' };
   }
   next();
 };

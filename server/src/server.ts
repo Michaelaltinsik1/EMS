@@ -122,13 +122,13 @@ app.use('/users', userRouter);
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   if (err.type === ErrorTypes.AUTH) {
     res.status(401);
-    res.json({ errors: [{ msg: 'Unauthorized' }] });
+    res.json({ errors: [{ error: 'Unauthorized' }] });
   } else if ((err.type = ErrorTypes.INPUT)) {
     res.status(400);
-    res.json({ errors: [{ msg: 'Invalid input' }] });
+    res.json({ errors: [{ error: 'Invalid input' }] });
   } else {
     res.status(500);
-    res.json({ errors: [{ msg: 'Server issue!' }] });
+    res.json({ errors: [{ error: 'Server issue!' }] });
   }
 });
 

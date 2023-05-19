@@ -7,7 +7,17 @@ interface ApiResponse<T> {
   data: T;
 }
 
-export async function getAllNotices() {}
+export async function getAllNotices(id: string) {
+  const response = await axios
+    .get(`/users/${id}/notices`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
 export async function getUserNoticeById() {}
 export async function updateNoticeById() {}
 export async function postNewNotice() {}

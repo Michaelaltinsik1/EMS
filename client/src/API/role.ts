@@ -8,6 +8,16 @@ interface ApiResponse<T> {
 }
 
 export async function postNewRole() {}
-export async function getAllRoles() {}
+export async function getAllRoles(id: string) {
+  const response = await axios
+    .get(`/users/${id}/roles`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
 export async function updateRoleById() {}
 export async function deleteRoleById() {}

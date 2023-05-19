@@ -8,6 +8,16 @@ interface ApiResponse<T> {
 }
 
 export async function createNewDepartment() {}
-export async function getAllDepartments() {}
+export async function getAllDepartments(id: string) {
+  const response = await axios
+    .get<ApiResponse<DepartmentType>>(`/users/${id}/departments`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
 export async function updateDepartmentById() {}
 export async function deleteDepartmentById() {}

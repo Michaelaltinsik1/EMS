@@ -26,14 +26,14 @@ export const protectRoutes = (permissionType: PermissionType) => {
 
     if (!bearer) {
       res.status(401);
-      res.send({ errors: [{ msg: 'Unauthorized' }] });
+      res.send({ errors: [{ error: 'Unauthorized' }] });
       return;
     }
 
     const [, token] = bearer.split(' ');
     if (!token) {
       res.status(401);
-      res.send({ errors: [{ msg: 'Unauthorized' }] });
+      res.send({ errors: [{ error: 'Unauthorized' }] });
       return;
     }
 
@@ -47,13 +47,13 @@ export const protectRoutes = (permissionType: PermissionType) => {
           next();
         } else {
           res.status(401);
-          res.send({ errors: [{ msg: 'Unauthorized' }] });
+          res.send({ errors: [{ error: 'Unauthorized' }] });
         }
       }
       return;
     } catch (e) {
       res.status(401);
-      res.send({ errors: [{ msg: 'Unauthorized' }] });
+      res.send({ errors: [{ error: 'Unauthorized' }] });
       return;
     }
   };

@@ -8,7 +8,17 @@ interface ApiResponse<T> {
 }
 
 export async function postNewProject() {}
-export async function getAllProjects() {}
+export async function getAllProjects(id: string) {
+  const response = await axios
+    .get(`/users/${id}/projects`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
 export async function updateProjectById() {}
 export async function addEmployeeToProject() {}
 export async function deleteProjectById() {}
