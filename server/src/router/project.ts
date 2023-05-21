@@ -83,6 +83,7 @@ export const updateProjectById = async (
       //P2025 Record to update not found.
       //P2002 unique constraint failed.
       if (e.code === 'P2025' || e.code === 'P2002') {
+        console.log(e.code);
         e.type = ErrorTypes.INPUT;
       } else {
         e.type = ErrorTypes.SERVER;
@@ -146,23 +147,27 @@ export const deleteProjectById = async (
   }
 };
 
-// export const getProjectsWithEmployeeID = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const projects = await prisma.project.findMany({
-//       where: {
-
-//       },
-//     });
-//     res.json({ data: projects });
-//   } catch (e) {
-//     e.type = ErrorTypes.SERVER;
-//     next(e);
-//   }
-// };
+export const getProjectsWithEmployeeID = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const projects = await prisma.project.findMany({
+      where: {
+        users: {
+          some: {
+            id: req.params.id,
+          },
+        },
+      },
+    });
+    res.json({ data: projects });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
+};
 
 /**
  * Create route to get all projects based on userId
@@ -170,11 +175,11 @@ export const deleteProjectById = async (
  */
 
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllProjects);
-// router.get(
-//   '/:id',
-//   protectRoutes(PermissionType.EMPLOYEE),
-//   getProjectsWithEmployeeID
-// );
+router.get(
+  '/:id',
+  protectRoutes(PermissionType.EMPLOYEE),
+  getProjectsWithEmployeeID
+);
 router.put(
   '/:id',
   body('name')
