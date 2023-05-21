@@ -20,5 +20,16 @@ export async function getAllProjects(id: string) {
   return response;
 }
 export async function updateProjectById() {}
+export async function getProjectsWithEmployeeID(id: string) {
+  const response = await axios
+    .get(`/users/${id}/projects/${id}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
 export async function addEmployeeToProject() {}
 export async function deleteProjectById() {}

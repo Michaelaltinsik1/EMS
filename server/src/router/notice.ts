@@ -41,6 +41,23 @@ export const getUserNoticeById = async (
     next(e);
   }
 };
+export const getNoticeByUserId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const notice = await prisma.notice.findUnique({
+      where: {
+        userId: req.params.userId,
+      },
+    });
+    res.json({ data: notice });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
+};
 
 export const updateNoticeById = async (
   req: Request,
@@ -126,6 +143,11 @@ export const deleteNotice = async (
 };
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllNotices);
 router.get('/:id', protectRoutes(PermissionType.EMPLOYEE), getUserNoticeById);
+router.get(
+  '/:userId/byUserId',
+  protectRoutes(PermissionType.EMPLOYEE),
+  getNoticeByUserId
+);
 router.put(
   '/:id',
   validateStatus,

@@ -9,7 +9,7 @@ interface ApiResponse<T> {
 // Needs a backend check
 export async function getAllTimeReports(id: string) {
   const response = await axios
-    .get(`/users/2bc597e4-ec75-448f-ba6f-249550a33107/timereports`)
+    .get(`/users/2bc597e4-ec75-448f-ba6f-249550a33107/timereports/admin`)
     .then((response) => {
       return response.data;
     })
@@ -18,7 +18,17 @@ export async function getAllTimeReports(id: string) {
     });
   return response;
 }
-export async function getTimeReportsByUserId() {}
+export async function getTimeReportsByUserId(id: string) {
+  const response = await axios
+    .get(`/users/${id}/timereports`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
 export async function updateTimeReportById() {}
 export async function postNewTimeReport() {}
 export async function deleteTimeReport() {}
