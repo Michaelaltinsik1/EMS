@@ -157,7 +157,7 @@ export const getProjectsWithEmployeeID = async (
       where: {
         users: {
           some: {
-            id: req.params.id,
+            id: req.params.userId,
           },
         },
       },
@@ -176,7 +176,7 @@ export const getProjectsWithEmployeeID = async (
 
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllProjects);
 router.get(
-  '/:id',
+  '/users/:userId',
   protectRoutes(PermissionType.EMPLOYEE),
   getProjectsWithEmployeeID
 );
@@ -197,7 +197,7 @@ router.put(
   updateProjectById
 );
 router.put(
-  '/:id/addemployee',
+  '/:id/users/:userId',
   protectRoutes(PermissionType.ADMIN),
   addEmployeeToProject
 );

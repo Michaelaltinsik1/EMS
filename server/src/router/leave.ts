@@ -132,8 +132,12 @@ export const deleteLeaveById = async (
   }
 };
 
-router.get('/admin', protectRoutes(PermissionType.ADMIN), getAllLeaves);
-router.get('/', protectRoutes(PermissionType.EMPLOYEE), getLeavesByUserId);
+router.get('/', protectRoutes(PermissionType.ADMIN), getAllLeaves);
+router.get(
+  '/users/:userId',
+  protectRoutes(PermissionType.EMPLOYEE),
+  getLeavesByUserId
+);
 router.put(
   '/:id',
   validateStatus,

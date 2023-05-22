@@ -10,7 +10,7 @@ const ProjectPageAdmin = () => {
   const [projects, setProjects] = useState<Array<ProjectType>>([]);
   useEffect(() => {
     const getProjects = async () => {
-      const projects: ProjectAPI = await getAllProjects('dfsds');
+      const projects: ProjectAPI = await getAllProjects();
       console.log('Leaves: ', projects);
       if (projects?.data) {
         setProjects(projects.data);

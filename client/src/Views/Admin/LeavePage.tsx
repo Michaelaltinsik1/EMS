@@ -10,7 +10,7 @@ const LeavePageAdmin = () => {
   const [leaves, setLeaves] = useState<Array<LeaveType>>([]);
   useEffect(() => {
     const getLeaves = async () => {
-      const leaves: LeaveAPI = await getAllLeaves('dfsds');
+      const leaves: LeaveAPI = await getAllLeaves();
       console.log('Leaves: ', leaves);
       if (leaves?.data) {
         setLeaves(leaves.data);

@@ -125,8 +125,12 @@ export const deleteTimeReport = async (
   }
 };
 
-router.get('/admin', protectRoutes(PermissionType.ADMIN), getAllTimeReports);
-router.get('/', protectRoutes(PermissionType.EMPLOYEE), getTimeReportsByUserId);
+router.get('/', protectRoutes(PermissionType.ADMIN), getAllTimeReports);
+router.get(
+  '/users/:userId',
+  protectRoutes(PermissionType.EMPLOYEE),
+  getTimeReportsByUserId
+);
 router.put(
   '/:id',
   validateStatus,

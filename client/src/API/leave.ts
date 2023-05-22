@@ -3,9 +3,9 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:4000/';
 axios.defaults.withCredentials = true;
 
-export async function getAllLeaves(id: string) {
+export async function getAllLeaves() {
   const response = await axios
-    .get(`/users/2bc597e4-ec75-448f-ba6f-249550a33107/leaves/admin`)
+    .get(`/leaves`)
     .then((response) => {
       return response.data;
     })
@@ -16,7 +16,7 @@ export async function getAllLeaves(id: string) {
 }
 export async function getLeavesByUserId(id: string) {
   const response = await axios
-    .get(`/users/${id}/leaves`)
+    .get(`/leaves/users/${id}`)
     .then((response) => {
       return response.data;
     })

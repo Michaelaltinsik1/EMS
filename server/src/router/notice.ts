@@ -144,7 +144,7 @@ export const deleteNotice = async (
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllNotices);
 router.get('/:id', protectRoutes(PermissionType.EMPLOYEE), getUserNoticeById);
 router.get(
-  '/:userId/byUserId',
+  '/users/:userId/',
   protectRoutes(PermissionType.EMPLOYEE),
   getNoticeByUserId
 );

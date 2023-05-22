@@ -109,14 +109,13 @@ app.post(
   signIn
 );
 
-app.use('/users/:userId/addresses', addressRouter);
-app.use('/users/:userId/departments', departmentRouter);
-app.use('/users/:userId/leaves', leaveRouter);
-// app.use('/users/:userId/users/:userId/notices', noticeRouter);
-app.use('/users/:userId/notices', noticeRouter);
-app.use('/users/:userId/projects', projectRouter);
-app.use('/users/:userId/roles', roleRouter);
-app.use('/users/:userId/timereports', timereportRouter);
+app.use('/addresses', addressRouter);
+app.use('/departments', departmentRouter);
+app.use('/leaves', leaveRouter);
+app.use('/notices', noticeRouter);
+app.use('/projects', projectRouter);
+app.use('/roles', roleRouter);
+app.use('/timereports', timereportRouter);
 app.use('/users', userRouter);
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {

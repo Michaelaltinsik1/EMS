@@ -1,16 +1,12 @@
-import { ProjectType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';
 axios.defaults.withCredentials = true;
-interface ApiResponse<T> {
-  data: T;
-}
 
 export async function postNewProject() {}
-export async function getAllProjects(id: string) {
+export async function getAllProjects() {
   const response = await axios
-    .get(`/users/${id}/projects`)
+    .get(`/projects`)
     .then((response) => {
       return response.data;
     })
@@ -22,7 +18,7 @@ export async function getAllProjects(id: string) {
 export async function updateProjectById() {}
 export async function getProjectsWithEmployeeID(id: string) {
   const response = await axios
-    .get(`/users/${id}/projects/${id}`)
+    .get(`/projects/users/${id}`)
     .then((response) => {
       return response.data;
     })

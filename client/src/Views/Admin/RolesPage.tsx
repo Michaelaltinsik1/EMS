@@ -10,7 +10,7 @@ const RolePageAdmin = () => {
   const [roles, setRoles] = useState<Array<RoleType>>([]);
   useEffect(() => {
     const getRoles = async () => {
-      const roles: RolesAPI = await getAllRoles('dfsds');
+      const roles: RolesAPI = await getAllRoles();
       console.log('roles: ', roles);
       if (roles?.data) {
         setRoles(roles.data);

@@ -10,7 +10,7 @@ const NoticePageAdmin = () => {
   const [notices, setNotices] = useState<Array<NoticeType>>([]);
   useEffect(() => {
     const getNotices = async () => {
-      const notices: NoticeAPI = await getAllNotices('dfsds');
+      const notices: NoticeAPI = await getAllNotices();
       console.log('Notices: ', notices);
       if (notices?.data) {
         setNotices(notices.data);

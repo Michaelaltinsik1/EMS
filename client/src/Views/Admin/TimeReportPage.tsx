@@ -10,7 +10,7 @@ const TimeReportPageAdmin = () => {
   const [timereports, setTimereports] = useState<Array<Time_reportType>>([]);
   useEffect(() => {
     const getTimeReports = async () => {
-      const timereports: TimereportAPI = await getAllTimeReports('dfsds');
+      const timereports: TimereportAPI = await getAllTimeReports();
       console.log('Timereport: ', timereports);
       if (timereports?.data) {
         setTimereports(timereports.data);

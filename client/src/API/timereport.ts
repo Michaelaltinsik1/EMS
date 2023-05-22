@@ -1,15 +1,11 @@
-import { Time_reportType } from 'src/Types';
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';
 axios.defaults.withCredentials = true;
-interface ApiResponse<T> {
-  data: T;
-}
-// Needs a backend check
-export async function getAllTimeReports(id: string) {
+
+export async function getAllTimeReports() {
   const response = await axios
-    .get(`/users/2bc597e4-ec75-448f-ba6f-249550a33107/timereports/admin`)
+    .get(`/timereports`)
     .then((response) => {
       return response.data;
     })
@@ -20,7 +16,7 @@ export async function getAllTimeReports(id: string) {
 }
 export async function getTimeReportsByUserId(id: string) {
   const response = await axios
-    .get(`/users/${id}/timereports`)
+    .get(`/timereports/users/${id}`)
     .then((response) => {
       return response.data;
     })

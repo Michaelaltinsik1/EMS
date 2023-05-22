@@ -286,7 +286,7 @@ export const getProjectsByUserId = async (
   try {
     const projects = await prisma.user.findUnique({
       where: {
-        id: req.params.id,
+        id: req.params.userId,
       },
       include: {
         projects: true,
@@ -304,7 +304,11 @@ export const getProjectsByUserId = async (
 };
 
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllUsers);
-router.get('/:id', protectRoutes(PermissionType.EMPLOYEE), getProjectsByUserId);
+router.get(
+  '/:userId',
+  protectRoutes(PermissionType.EMPLOYEE),
+  getProjectsByUserId
+);
 router.put(
   '/',
   body('id').isUUID().withMessage('Invalid id'),

@@ -11,7 +11,7 @@ const DepartmentPageAdmin = () => {
   const [departments, setDepartments] = useState<Array<DepartmentType>>([]);
   useEffect(() => {
     const getDepartments = async () => {
-      const departments: DepartmentsAPI = await getAllDepartments('dfsds');
+      const departments: DepartmentsAPI = await getAllDepartments();
       console.log('Departments: ', departments);
       if (departments?.data) {
         setDepartments(departments.data);
