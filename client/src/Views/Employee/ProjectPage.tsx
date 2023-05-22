@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getProjectsWithEmployeeID } from 'src/API/project';
+import Paragraph from 'src/Components/Base/Paragrapgh';
 import { ProjectType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface ProjectAPI {
@@ -38,7 +39,8 @@ const ProjectPage = () => {
       {projects.map((project) => (
         <div key={project.id}>
           <h2>Name: {project.name}</h2>
-          <p>Start: {project.created_at.toString()}</p>
+          {/* <p>Start: {project.created_at.toString()}</p> */}
+          <Paragraph type="body" content="fefefefefefe" />
           <p>Deadline: {project.deadline.toString()}</p>
           <p>Description: {project.description}</p>
         </div>

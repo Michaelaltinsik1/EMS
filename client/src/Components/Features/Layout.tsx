@@ -1,5 +1,6 @@
 import SideBar from './SideBar';
 import { Outlet } from 'react-router-dom';
+import ThemeButton from './ThemeButton';
 interface LayoutProps {
   isAdmin?: boolean;
 }
@@ -10,6 +11,7 @@ const Layout = ({ isAdmin = false }: LayoutProps) => {
         <h1>test</h1>
         <p>dfdfdf</p>
       </header>
+      <ThemeButton />
       {isAdmin ? (
         <SideBar
           menuOptions={[

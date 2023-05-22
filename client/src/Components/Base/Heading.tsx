@@ -1,4 +1,11 @@
 import { H1, H2, H3, H4, H5 } from 'src/utils/typography';
+import { useContext } from 'react';
+import { ThemeContext } from '../Features/ThemeProvider';
+
+export enum Theme {
+  LIGHT = 'light',
+  Dark = 'dark',
+}
 
 interface HeadingProps {
   type: 'H1' | 'H2' | 'H3' | 'H4' | 'H5';
@@ -7,13 +14,14 @@ interface HeadingProps {
 }
 
 const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
+  const { theme } = useContext(ThemeContext);
   const getheadingType = ({ type, content }: HeadingProps) => {
     switch (type) {
       case 'H1':
         return (
           <h1
             className={`${H1} ${
-              isLightTheme ? 'text-gray-900' : 'text-gray-50'
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
             }`}
           >
             {content}
@@ -23,7 +31,7 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h2
             className={`${H2} ${
-              isLightTheme ? 'text-gray-900' : 'text-gray-50'
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
             }`}
           >
             {content}
@@ -33,7 +41,7 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h3
             className={`${H3} ${
-              isLightTheme ? 'text-gray-900' : 'text-gray-50'
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
             }`}
           >
             {content}
@@ -43,7 +51,7 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h4
             className={`${H4} ${
-              isLightTheme ? 'text-gray-900' : 'text-gray-50'
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
             }`}
           >
             {content}
@@ -53,7 +61,7 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h5
             className={`${H5} ${
-              isLightTheme ? 'text-gray-900' : 'text-gray-50'
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
             }`}
           >
             {content}

@@ -1,4 +1,10 @@
 import { body, body2 } from 'src/utils/typography';
+import { useContext } from 'react';
+import { ThemeContext } from '../Features/ThemeProvider';
+export enum Theme {
+  LIGHT = 'light',
+  Dark = 'dark',
+}
 
 interface ParagraphProps {
   type: 'body' | 'bodySmall';
@@ -7,12 +13,13 @@ interface ParagraphProps {
 }
 
 const Paragraph = ({ type, content, isLightTheme = true }: ParagraphProps) => {
+  const { theme } = useContext(ThemeContext);
   return (
     <>
       {type === 'body' ? (
         <p
           className={`${body} ${
-            isLightTheme ? 'text-gray-900' : 'text-gray-50'
+            theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
           }`}
         >
           {content}
@@ -20,7 +27,7 @@ const Paragraph = ({ type, content, isLightTheme = true }: ParagraphProps) => {
       ) : (
         <p
           className={`${body2} ${
-            isLightTheme ? 'text-gray-900' : 'text-gray-50'
+            theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
           }`}
         >
           {content}
