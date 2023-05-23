@@ -2,18 +2,15 @@ import { H1, H2, H3, H4, H5 } from 'src/utils/typography';
 import { useContext } from 'react';
 import { ThemeContext } from '../Features/ThemeProvider';
 
-export enum Theme {
-  LIGHT = 'light',
-  Dark = 'dark',
-}
+import { Theme } from 'src/Types/enums';
 
 interface HeadingProps {
   type: 'H1' | 'H2' | 'H3' | 'H4' | 'H5';
   content: string | number;
-  isLightTheme?: boolean;
+  className?: string;
 }
 
-const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
+const Heading = ({ type, content, className = '' }: HeadingProps) => {
   const { theme } = useContext(ThemeContext);
   const getheadingType = ({ type, content }: HeadingProps) => {
     switch (type) {
@@ -21,8 +18,8 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h1
             className={`${H1} ${
-              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
-            }`}
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-100'
+            } ${className}`}
           >
             {content}
           </h1>
@@ -31,8 +28,8 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h2
             className={`${H2} ${
-              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
-            }`}
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-100'
+            } ${className}`}
           >
             {content}
           </h2>
@@ -41,8 +38,8 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h3
             className={`${H3} ${
-              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
-            }`}
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-100'
+            } ${className}`}
           >
             {content}
           </h3>
@@ -51,8 +48,8 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h4
             className={`${H4} ${
-              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
-            }`}
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-100'
+            } ${className}`}
           >
             {content}
           </h4>
@@ -61,14 +58,14 @@ const Heading = ({ type, content, isLightTheme = true }: HeadingProps) => {
         return (
           <h5
             className={`${H5} ${
-              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-50'
-            }`}
+              theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-100'
+            } ${className}`}
           >
             {content}
           </h5>
         );
     }
   };
-  return getheadingType({ type, content });
+  return getheadingType({ type, content, className });
 };
 export default Heading;

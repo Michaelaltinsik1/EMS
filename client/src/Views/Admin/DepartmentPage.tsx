@@ -9,6 +9,7 @@ interface DepartmentsAPI {
 
 const DepartmentPageAdmin = () => {
   const [departments, setDepartments] = useState<Array<DepartmentType>>([]);
+
   useEffect(() => {
     const getDepartments = async () => {
       const departments: DepartmentsAPI = await getAllDepartments();
@@ -32,7 +33,7 @@ const DepartmentPageAdmin = () => {
     getDepartments();
   }, []);
   return (
-    <div>
+    <div className="">
       <h1>Admin Department page</h1>
       {departments.map((department) => (
         <div key={department.id}>

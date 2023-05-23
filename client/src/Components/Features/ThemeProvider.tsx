@@ -1,9 +1,5 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
-
-export enum Theme {
-  LIGHT = 'light',
-  Dark = 'dark',
-}
+import { Theme } from 'src/Types/enums';
 
 interface ThemeContextProps {
   theme: Theme;

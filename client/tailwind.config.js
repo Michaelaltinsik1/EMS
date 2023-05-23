@@ -93,6 +93,10 @@ module.exports = {
         96: '96px',
         120: '120px',
       },
+      boxShadow: {
+        darkShadow: '0px 3px 8px 0px #212121',
+        lightShadow: '0px 3px 8px 0px #E0E0E0',
+      },
     },
   },
   plugins: [],
