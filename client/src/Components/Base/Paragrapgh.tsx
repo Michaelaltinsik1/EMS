@@ -34,7 +34,7 @@ const Paragraph = ({
         <p
           className={`${body2} ${
             theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-100'
-          } `}
+          } ${className}`}
         >
           {content}
         </p>

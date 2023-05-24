@@ -1,11 +1,10 @@
 import Heading from '../Base/Heading';
 import Logo from 'src/Icons/logo.svg';
-import Menu from 'src/Icons/Menu.svg';
-import Close from 'src/Icons/Close.svg';
 import { useContext } from 'react';
 import { ThemeContext } from '../Features/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import { useNavigate, useLocation } from 'react-router-dom';
+import Icon from '../Base/Icon';
 interface HeaderProps {
   toggleMenuState: () => void;
   isMenuOpen: boolean;
@@ -34,21 +33,16 @@ const Header = ({ toggleMenuState, isMenuOpen }: HeaderProps) => {
         alt="EMS logo"
       />
       <Heading className="max-w-[400px] text-center " type="H1" content="EMS" />
-      <div>
+      <div className="max-w-[52px]">
         {isMenuOpen ? (
-          <img
-            className="w-[32px] h-[32px] tablet:w-[50px] tablet:h-[50px]"
+          <Icon
+            className=""
             onClick={toggleMenuState}
-            src={Close}
-            alt="Close menu"
+            name="Close"
+            theme={theme}
           />
         ) : (
-          <img
-            className="w-[32px] h-[32px] tablet:w-[50px] tablet:h-[50px]"
-            onClick={toggleMenuState}
-            src={Menu}
-            alt="Open menu"
-          />
+          <Icon onClick={toggleMenuState} name="Menu" theme={theme} />
         )}
       </div>
     </header>

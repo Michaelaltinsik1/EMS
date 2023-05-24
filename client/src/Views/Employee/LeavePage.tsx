@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { getLeavesByUserId } from 'src/API/leave';
 import { LeaveType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
+
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;

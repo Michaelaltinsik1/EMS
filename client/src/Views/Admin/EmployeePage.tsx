@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getUsers } from 'src/API/user';
 import { UserType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
-
+import Card from 'src/Components/Features/Cards';
 const EmployeePageAdmin = () => {
   const [users, setUsers] = useState<Array<UserType>>([]);
   useEffect(() => {
@@ -17,16 +17,9 @@ const EmployeePageAdmin = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Admin Employee page</h1>
-      <p>Users:</p>
-      {users.map((user) => (
-        <div key={user.id}>
-          <h2>{user.id}</h2>
-          <p>{user.firstName}</p>
-          <p>{user.roleId}</p>
-          <p>{user.permission}</p>
-        </div>
+    <div className="p-4">
+      {users.map((user: UserType) => (
+        <Card user={user} key={user.id} />
       ))}
     </div>
   );
