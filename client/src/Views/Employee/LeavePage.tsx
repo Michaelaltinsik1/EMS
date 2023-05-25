@@ -1,19 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getLeavesByUserId } from 'src/API/leave';
-import { LeaveType } from 'src/Types';
+import Card from 'src/Components/Features/Cards';
+import { LeaveType, PermissionType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
-
+import { AuthContext } from 'src/Components/Features/AuthProvider';
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;
 }
 const LeavePage = () => {
   const [leaves, setLeaves] = useState<Array<LeaveType>>([]);
+  const { user } = useContext(AuthContext);
+  const userId = user?.userId as string;
+  const permission = user?.permission as PermissionType;
   useEffect(() => {
     const getLeaves = async () => {
-      const leaves: LeaveAPI = await getLeavesByUserId(
-        '2bc597e4-ec75-448f-ba6f-249550a33107'
-      );
+      const leaves: LeaveAPI = await getLeavesByUserId(userId);
       console.log('Leaves: ', leaves);
       if (leaves?.data) {
         setLeaves(leaves.data);
@@ -32,17 +34,12 @@ const LeavePage = () => {
       }
     };
     getLeaves();
-  }, []);
+  }, [userId]);
   return (
     <div>
       <h1>Leave</h1>
       {leaves.map((leave) => (
-        <div key={leave.id}>
-          <h2>Type: {leave.type_of_leave}</h2>
-          <p>From: {leave.from.toString()}</p>
-          <p>To: {leave.to.toString()}</p>
-          <p>Status: {leave.status}</p>
-        </div>
+        <Card permission={permission} leave={leave} key={leave.id} />
       ))}
     </div>
   );

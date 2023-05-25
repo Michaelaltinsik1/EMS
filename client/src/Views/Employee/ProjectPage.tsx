@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getProjectsWithEmployeeID } from 'src/API/project';
 import Paragraph from 'src/Components/Base/Paragrapgh';
-import { ProjectType } from 'src/Types';
+import { AuthContext } from 'src/Components/Features/AuthProvider';
+import Card from 'src/Components/Features/Cards';
+import { PermissionType, ProjectType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface ProjectAPI {
   data?: Array<ProjectType>;
@@ -9,11 +11,12 @@ interface ProjectAPI {
 }
 const ProjectPage = () => {
   const [projects, setProjects] = useState<Array<ProjectType>>([]);
+  const { user } = useContext(AuthContext);
+  const userId = user?.userId as string;
+  const permission = user?.permission as PermissionType;
   useEffect(() => {
     const getProjects = async () => {
-      const projects: ProjectAPI = await getProjectsWithEmployeeID(
-        '80f9a863-4944-4f7b-ba29-05f5f3bd7362'
-      );
+      const projects: ProjectAPI = await getProjectsWithEmployeeID(userId);
       console.log('Leaves: ', projects);
       if (projects?.data) {
         setProjects(projects.data);
@@ -37,13 +40,7 @@ const ProjectPage = () => {
     <div>
       <h1>Project</h1>
       {projects.map((project) => (
-        <div key={project.id}>
-          <h2>Name: {project.name}</h2>
-          {/* <p>Start: {project.created_at.toString()}</p> */}
-          <Paragraph type="body" content="fefefefefefe" />
-          <p>Deadline: {project.deadline.toString()}</p>
-          <p>Description: {project.description}</p>
-        </div>
+        <Card permission={permission} project={project} key={project.id} />
       ))}
     </div>
   );

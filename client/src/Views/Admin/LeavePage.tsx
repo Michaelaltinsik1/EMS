@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getAllLeaves } from 'src/API/leave';
-import { LeaveType } from 'src/Types';
+import { AuthContext } from 'src/Components/Features/AuthProvider';
+import Card from 'src/Components/Features/Cards';
+import { LeaveType, PermissionType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface LeaveAPI {
   data?: Array<LeaveType>;
@@ -8,6 +10,8 @@ interface LeaveAPI {
 }
 const LeavePageAdmin = () => {
   const [leaves, setLeaves] = useState<Array<LeaveType>>([]);
+  const { user } = useContext(AuthContext);
+  const permission = user?.permission as PermissionType;
   useEffect(() => {
     const getLeaves = async () => {
       const leaves: LeaveAPI = await getAllLeaves();
@@ -34,12 +38,7 @@ const LeavePageAdmin = () => {
     <div>
       <h1>Admin Leave</h1>
       {leaves.map((leave) => (
-        <div key={leave.id}>
-          <h2>Type: {leave.type_of_leave}</h2>
-          <p>From: {leave.from.toString()}</p>
-          <p>To: {leave.to.toString()}</p>
-          <p>Status: {leave.status}</p>
-        </div>
+        <Card permission={permission} leave={leave} key={leave.id} />
       ))}
     </div>
   );

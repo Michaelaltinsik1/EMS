@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react';
-import { NoticeType } from 'src/Types';
+import { useContext, useEffect, useState } from 'react';
+import { NoticeType, PermissionType } from 'src/Types';
 import { getAllNotices } from 'src/API/notice';
 import { Toast } from 'src/utils/toastGenerator';
+import Card from 'src/Components/Features/Cards';
+import { AuthContext } from 'src/Components/Features/AuthProvider';
 interface NoticeAPI {
   data?: Array<NoticeType>;
   errors?: Array<{ error: string }>;
 }
 const NoticePageAdmin = () => {
   const [notices, setNotices] = useState<Array<NoticeType>>([]);
+  const { user } = useContext(AuthContext);
+  const permission = user?.permission as PermissionType;
   useEffect(() => {
     const getNotices = async () => {
       const notices: NoticeAPI = await getAllNotices();
@@ -34,12 +38,7 @@ const NoticePageAdmin = () => {
     <div>
       <h1>Admin Notice page</h1>
       {notices.map((notice) => (
-        <div key={notice.id}>
-          <h2>UserId: {notice.userId}</h2>
-          <p>Created_at: {notice.created_at.toString()}</p>
-          <p>Description: {notice.description}</p>
-          <p>Status: {notice.status}</p>
-        </div>
+        <Card permission={permission} notice={notice} key={notice.id} />
       ))}
     </div>
   );

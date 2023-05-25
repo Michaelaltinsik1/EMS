@@ -22,7 +22,22 @@ export const getAllLeaves = async (
   next: NextFunction
 ) => {
   try {
-    const leaves = await prisma.leave.findMany();
+    const leaves = await prisma.leave.findMany({
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            date_of_birth: true,
+            role: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
     res.json({ data: leaves });
   } catch (e) {
     e.type = ErrorTypes.SERVER;
@@ -145,7 +160,7 @@ router.put(
   updateLeaveById
 );
 router.post(
-  '/',
+  '/users/:userId',
   body('to').isISO8601().toDate().withMessage('Invalid To date'),
   body('from').isISO8601().toDate().withMessage('Invalid From date'),
   validateLeaveType,

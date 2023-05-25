@@ -9,6 +9,7 @@ import {
 import { body, validationResult } from 'express-validator';
 import { validatePermission } from '../middleware/customMiddleware';
 import { PermissionType } from '../enums/enums';
+import { Prisma } from '@prisma/client';
 enum ErrorTypes {
   AUTH = 'Auth',
   INPUT = 'Input',
@@ -40,8 +41,8 @@ export const createNewUser = async (
           salary: req.body.salary,
           permission: req.body.permission,
           date_of_birth: req.body.date_of_birth,
-          roleId: req.body.roleId || '',
-          departmentId: req.body.departmentId || '',
+          roleId: req.body.roleId,
+          departmentId: req.body.departmentId,
           notice: req.body.notice,
           addresses: {
             create: {
@@ -84,6 +85,16 @@ export const getAllUsers = async (
         time_reports: true,
         leaves: true,
         addresses: true,
+        role: {
+          select: {
+            name: true,
+          },
+        },
+        department: {
+          select: {
+            name: true,
+          },
+        },
       },
     });
     res.json({ data: users });
@@ -151,6 +162,7 @@ export const updateUserById = async (
                 country: req.body.country,
                 city: req.body.city,
                 zip: req.body.zip,
+                departmentId: req.body.departmentId,
               },
             },
           },

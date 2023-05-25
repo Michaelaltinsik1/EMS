@@ -1,18 +1,21 @@
-import { useEffect, useState } from 'react';
-import { NoticeType } from 'src/Types';
+import { useContext, useEffect, useState } from 'react';
+import { NoticeType, PermissionType } from 'src/Types';
 import { getNoticeByUserId } from 'src/API/notice';
 import { Toast } from 'src/utils/toastGenerator';
+import Card from 'src/Components/Features/Cards';
+import { AuthContext } from 'src/Components/Features/AuthProvider';
 interface NoticeAPI {
   data?: NoticeType;
   errors?: Array<{ error: string }>;
 }
 const NoticePage = () => {
   const [notice, setNotice] = useState<NoticeType>();
+  const { user } = useContext(AuthContext);
+  const userId = user?.userId as string;
+  const permission = user?.permission as PermissionType;
   useEffect(() => {
     const getNotices = async () => {
-      const notice: NoticeAPI = await getNoticeByUserId(
-        '62d225f3-4b1f-4440-ad69-dac91e80e4f4'
-      );
+      const notice: NoticeAPI = await getNoticeByUserId(userId);
       console.log('Notices: ', notice);
       if (notice?.data) {
         setNotice(notice.data);
@@ -35,12 +38,9 @@ const NoticePage = () => {
   return (
     <div>
       <h1>Notice page</h1>
-      <div key={notice?.id}>
-        <h2>UserId: {notice?.userId}</h2>
-        <p>Created_at: {notice?.created_at.toString()}</p>
-        <p>Description: {notice?.description}</p>
-        <p>Status: {notice?.status}</p>
-      </div>
+      {notice && (
+        <Card permission={permission} notice={notice} key={notice?.id} />
+      )}
     </div>
   );
 };

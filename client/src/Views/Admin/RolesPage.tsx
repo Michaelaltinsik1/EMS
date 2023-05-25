@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getAllRoles } from 'src/API/role';
+import Card from 'src/Components/Features/Cards';
 import { RoleType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface RolesAPI {
@@ -34,11 +35,7 @@ const RolePageAdmin = () => {
     <div>
       <h1>Admin Role page</h1>
       {roles.map((role) => (
-        <div key={role.id}>
-          <h2>Name: {role.name}</h2>
-          <p>Created_at: {role.created_at.toString()}</p>
-          <p>id: {role.id}</p>
-        </div>
+        <Card role={role} key={role.id} />
       ))}
     </div>
   );

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getAllDepartments } from 'src/API/department';
+import Card from 'src/Components/Features/Cards';
 import { DepartmentType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface DepartmentsAPI {
@@ -36,12 +37,7 @@ const DepartmentPageAdmin = () => {
     <div className="">
       <h1>Admin Department page</h1>
       {departments.map((department) => (
-        <div key={department.id}>
-          <h2>Name: {department.name}</h2>
-          <p>Budget: {department.budget}</p>
-          <p>Created at: {department.created_at.toString()}</p>
-          <p>id: {department.id}</p>
-        </div>
+        <Card department={department} key={department.id} />
       ))}
     </div>
   );

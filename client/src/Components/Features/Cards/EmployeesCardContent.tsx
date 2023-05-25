@@ -18,7 +18,11 @@ const EmployeeCardContent = ({ user, theme, isExpanded }: CardProps) => {
         type="H3"
         content={`${user.firstName} ${user.lastName}`}
       />
-      <Paragraph className="mb-2" type="bodySmall" content={user.roleId} />
+      <Paragraph
+        className="mb-2"
+        type="bodySmall"
+        content={user?.role?.name || ''}
+      />
       <Paragraph className="mb-2" type="body" content={user.date_of_birth} />
       <div className="flex items-center">
         <Paragraph
@@ -48,7 +52,7 @@ const EmployeeCardContent = ({ user, theme, isExpanded }: CardProps) => {
             type="bodySmall"
             content="Department: "
           />
-          <Paragraph type="bodySmall" content={user.departmentId} />
+          <Paragraph type="bodySmall" content={user?.department?.name || ''} />
           <Paragraph
             className="mt-6 mb-1"
             type="bodySmall"

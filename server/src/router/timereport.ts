@@ -17,7 +17,20 @@ export const getAllTimeReports = async (
   next: NextFunction
 ) => {
   try {
-    const timeReports = await prisma.time_report.findMany();
+    const timeReports = await prisma.time_report.findMany({
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            date_of_birth: true,
+            id: true,
+            role: true,
+            projects: true,
+          },
+        },
+      },
+    });
 
     res.json({ data: timeReports });
   } catch (e) {
@@ -138,7 +151,7 @@ router.put(
   updateTimeReportById
 );
 router.post(
-  '/',
+  '/users/:userId',
   body('to').isISO8601().toDate().withMessage('Invalid To date'),
   body('from').isISO8601().toDate().withMessage('Invalid From date'),
   protectRoutes(PermissionType.EMPLOYEE),

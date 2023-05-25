@@ -17,7 +17,22 @@ export const getAllNotices = async (
   next: NextFunction
 ) => {
   try {
-    const notices = await prisma.notice.findMany();
+    const notices = await prisma.notice.findMany({
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            date_of_birth: true,
+            role: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
+    });
     res.json({ data: notices });
   } catch (e) {
     e.type = ErrorTypes.SERVER;
@@ -155,7 +170,7 @@ router.put(
   updateNoticeById
 );
 router.post(
-  '/',
+  '/users/:userId',
   body('description').isString().withMessage('Invalid description'),
   protectRoutes(PermissionType.EMPLOYEE),
   postNewNotice

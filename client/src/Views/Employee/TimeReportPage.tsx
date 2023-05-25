@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getTimeReportsByUserId } from 'src/API/timereport';
-import { Time_reportType } from 'src/Types';
+import { AuthContext } from 'src/Components/Features/AuthProvider';
+import Card from 'src/Components/Features/Cards';
+import { PermissionType, Time_reportType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface TimereportAPI {
   data?: Array<Time_reportType>;
@@ -8,11 +10,12 @@ interface TimereportAPI {
 }
 const TimeReportPage = () => {
   const [timereports, setTimereports] = useState<Array<Time_reportType>>([]);
+  const { user } = useContext(AuthContext);
+  const userId = user?.userId as string;
+  const permission = user?.permission as PermissionType;
   useEffect(() => {
     const getTimeReports = async () => {
-      const timereports: TimereportAPI = await getTimeReportsByUserId(
-        '2bc597e4-ec75-448f-ba6f-249550a33107'
-      );
+      const timereports: TimereportAPI = await getTimeReportsByUserId(userId);
       console.log('Timereport: ', timereports);
       if (timereports?.data) {
         setTimereports(timereports.data);
@@ -36,12 +39,11 @@ const TimeReportPage = () => {
     <div>
       <h1>Time report page</h1>
       {timereports.map((timereport) => (
-        <div key={timereport.id}>
-          <h2>UserId: {timereport.userId}</h2>
-          <p>From: {timereport.from.toString()}</p>
-          <p>To: {timereport.to.toString()}</p>
-          <p>Status: {timereport.status}</p>
-        </div>
+        <Card
+          permission={permission}
+          timereport={timereport}
+          key={timereport.id}
+        />
       ))}
     </div>
   );

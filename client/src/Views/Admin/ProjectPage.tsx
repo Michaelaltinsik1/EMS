@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getAllProjects } from 'src/API/project';
-import { ProjectType } from 'src/Types';
+import { AuthContext } from 'src/Components/Features/AuthProvider';
+import Card from 'src/Components/Features/Cards';
+import { PermissionType, ProjectType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface ProjectAPI {
   data?: Array<ProjectType>;
@@ -8,6 +10,8 @@ interface ProjectAPI {
 }
 const ProjectPageAdmin = () => {
   const [projects, setProjects] = useState<Array<ProjectType>>([]);
+  const { user } = useContext(AuthContext);
+  const permission = user?.permission as PermissionType;
   useEffect(() => {
     const getProjects = async () => {
       const projects: ProjectAPI = await getAllProjects();
@@ -34,12 +38,7 @@ const ProjectPageAdmin = () => {
     <div>
       <h1>Admin Project</h1>
       {projects.map((project) => (
-        <div key={project.id}>
-          <h2>Name: {project.name}</h2>
-          <p>Start: {project.created_at.toString()}</p>
-          <p>Deadline: {project.deadline.toString()}</p>
-          <p>Description: {project.description}</p>
-        </div>
+        <Card permission={permission} project={project} key={project.id} />
       ))}
     </div>
   );

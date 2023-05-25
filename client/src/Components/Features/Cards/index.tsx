@@ -1,13 +1,43 @@
-import { ReactNode, useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ThemeContext } from '../ThemeProvider';
 import { Theme } from 'src/Types/enums';
-import EmployeeCardContent from './EmployeesCardContentAdmin';
-import { UserType, LeaveType } from 'src/Types';
+import EmployeeCardContent from './EmployeesCardContent';
+import DepartmentCardContent from './DepartmentCardContent';
+import LeaveCardContent from './LeaveCardContent';
+import ProjectCardContent from './ProjectCardContent';
+import RoleCardContent from './RoleCardContent';
+import {
+  UserType,
+  LeaveType,
+  DepartmentType,
+  ProjectType,
+  RoleType,
+  Time_reportType,
+  NoticeType,
+  PermissionType,
+} from 'src/Types';
+import TimereportCardContent from './TimereportCardContent';
+import NoticeCardContent from './NoticeCardContent';
 interface CardProps {
   user?: UserType;
   leave?: LeaveType;
+  department?: DepartmentType;
+  project?: ProjectType;
+  role?: RoleType;
+  timereport?: Time_reportType;
+  notice?: NoticeType;
+  permission?: PermissionType;
 }
-const Card = ({ user, leave }: CardProps) => {
+const Card = ({
+  user,
+  leave,
+  department,
+  project,
+  role,
+  timereport,
+  notice,
+  permission,
+}: CardProps) => {
   const { theme } = useContext(ThemeContext);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const handleToggle = () => {
@@ -15,6 +45,7 @@ const Card = ({ user, leave }: CardProps) => {
   };
   const renderCardContent = () => {
     if (user) {
+      console.log('user!');
       return (
         <EmployeeCardContent
           isExpanded={isExpanded}
@@ -22,11 +53,53 @@ const Card = ({ user, leave }: CardProps) => {
           user={user}
         />
       );
-    } else if (leave) {
+    } else if (department) {
       return (
-        <div>
-          <h1>Leave</h1>
-        </div>
+        <DepartmentCardContent
+          department={department}
+          isExpanded={isExpanded}
+          theme={theme}
+        />
+      );
+    } else if (leave && permission) {
+      return (
+        <LeaveCardContent
+          permission={permission}
+          leave={leave}
+          isExpanded={isExpanded}
+          theme={theme}
+        />
+      );
+    } else if (project && permission) {
+      return (
+        <ProjectCardContent
+          permission={permission}
+          project={project}
+          isExpanded={isExpanded}
+          theme={theme}
+        />
+      );
+    } else if (role) {
+      return (
+        <RoleCardContent role={role} isExpanded={isExpanded} theme={theme} />
+      );
+    } else if (timereport && permission) {
+      return (
+        <TimereportCardContent
+          permission={permission}
+          timereport={timereport}
+          isExpanded={isExpanded}
+          theme={theme}
+        />
+      );
+    } else if (notice && permission) {
+      return (
+        <NoticeCardContent
+          permission={permission}
+          notice={notice}
+          isExpanded={isExpanded}
+          theme={theme}
+        />
       );
     } else {
       return <></>;

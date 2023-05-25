@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
 import Button from '../Base/Button';
-import Close from 'src/Icons/close.svg';
 import Paragraph from '../Base/Paragrapgh';
 import Heading from '../Base/Heading';
 import { useContext } from 'react';
