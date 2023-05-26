@@ -4,6 +4,8 @@ import Card from 'src/Components/Features/Cards';
 import { LeaveType, PermissionType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 import { AuthContext } from 'src/Components/Features/AuthProvider';
+import Table from 'src/Components/Features/Tables';
+import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;
@@ -13,6 +15,7 @@ const LeavePage = () => {
   const { user } = useContext(AuthContext);
   const userId = user?.userId as string;
   const permission = user?.permission as PermissionType;
+  const { isMobile } = useBreakpoint();
   useEffect(() => {
     const getLeaves = async () => {
       const leaves: LeaveAPI = await getLeavesByUserId(userId);
@@ -38,9 +41,13 @@ const LeavePage = () => {
   return (
     <div className="p-4">
       <h1>Leave</h1>
-      {leaves.map((leave) => (
-        <Card permission={permission} leave={leave} key={leave.id} />
-      ))}
+      {isMobile ? (
+        leaves.map((leave) => (
+          <Card permission={permission} leave={leave} key={leave.id} />
+        ))
+      ) : (
+        <Table permission={permission} leaves={leaves} />
+      )}
     </div>
   );
 };

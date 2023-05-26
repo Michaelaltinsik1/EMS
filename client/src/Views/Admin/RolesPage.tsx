@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getAllRoles } from 'src/API/role';
 import Card from 'src/Components/Features/Cards';
+import Table from 'src/Components/Features/Tables';
+import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { RoleType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface RolesAPI {
@@ -9,6 +11,7 @@ interface RolesAPI {
 }
 const RolePageAdmin = () => {
   const [roles, setRoles] = useState<Array<RoleType>>([]);
+  const { isMobile } = useBreakpoint();
   useEffect(() => {
     const getRoles = async () => {
       const roles: RolesAPI = await getAllRoles();
@@ -34,9 +37,11 @@ const RolePageAdmin = () => {
   return (
     <div className="p-4">
       <h1>Admin Role page</h1>
-      {roles.map((role) => (
-        <Card role={role} key={role.id} />
-      ))}
+      {isMobile ? (
+        roles.map((role) => <Card role={role} key={role.id} />)
+      ) : (
+        <Table roles={roles} />
+      )}
     </div>
   );
 };

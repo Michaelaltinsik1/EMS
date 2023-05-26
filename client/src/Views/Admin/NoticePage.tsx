@@ -4,6 +4,8 @@ import { getAllNotices } from 'src/API/notice';
 import { Toast } from 'src/utils/toastGenerator';
 import Card from 'src/Components/Features/Cards';
 import { AuthContext } from 'src/Components/Features/AuthProvider';
+import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
+import Table from 'src/Components/Features/Tables';
 interface NoticeAPI {
   data?: Array<NoticeType>;
   errors?: Array<{ error: string }>;
@@ -12,6 +14,7 @@ const NoticePageAdmin = () => {
   const [notices, setNotices] = useState<Array<NoticeType>>([]);
   const { user } = useContext(AuthContext);
   const permission = user?.permission as PermissionType;
+  const { isMobile } = useBreakpoint();
   useEffect(() => {
     const getNotices = async () => {
       const notices: NoticeAPI = await getAllNotices();
@@ -37,9 +40,14 @@ const NoticePageAdmin = () => {
   return (
     <div className="p-4">
       <h1>Admin Notice page</h1>
-      {notices.map((notice) => (
-        <Card permission={permission} notice={notice} key={notice.id} />
-      ))}
+
+      {isMobile ? (
+        notices.map((notice) => (
+          <Card permission={permission} notice={notice} key={notice.id} />
+        ))
+      ) : (
+        <Table permission={permission} notices={notices} />
+      )}
     </div>
   );
 };

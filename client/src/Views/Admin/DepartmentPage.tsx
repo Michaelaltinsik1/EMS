@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { getAllDepartments } from 'src/API/department';
 import Card from 'src/Components/Features/Cards';
+import Table from 'src/Components/Features/Tables';
+import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { DepartmentType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface DepartmentsAPI {
@@ -11,6 +13,7 @@ interface DepartmentsAPI {
 const DepartmentPageAdmin = () => {
   const [departments, setDepartments] = useState<Array<DepartmentType>>([]);
 
+  const { isMobile } = useBreakpoint();
   useEffect(() => {
     const getDepartments = async () => {
       const departments: DepartmentsAPI = await getAllDepartments();
@@ -36,9 +39,13 @@ const DepartmentPageAdmin = () => {
   return (
     <div className="p-4">
       <h1>Admin Department page</h1>
-      {departments.map((department) => (
-        <Card department={department} key={department.id} />
-      ))}
+      {isMobile ? (
+        departments.map((department) => (
+          <Card department={department} key={department.id} />
+        ))
+      ) : (
+        <Table departments={departments} />
+      )}
     </div>
   );
 };

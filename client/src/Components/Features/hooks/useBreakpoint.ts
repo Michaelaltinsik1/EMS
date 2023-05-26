@@ -17,11 +17,11 @@ export const useBreakpoint = () => {
   // Return the width so we can use it in our components
   return {
     isMobile: width < TABLETBREAKPOINT,
-    IsTablet: width < DESKTOPBREAKPOINT && width >= TABLETBREAKPOINT,
-    IsTabletEdgeCase:
+    isTablet: width < DESKTOPBREAKPOINT && width >= TABLETBREAKPOINT,
+    isTabletEdgeCase:
       width < DESKTOPBREAKPOINT && width >= TABLETEDGECASESBREAKPOINT,
     isDesktop: width >= DESKTOPBREAKPOINT && width < XLDESKTOPBREAKPOINT,
-    IsDesktopEdgeCaseBreakpoint:
+    isDesktopEdgeCaseBreakpoint:
       width < XLDESKTOPBREAKPOINT && width >= DESKTOPEDGECASESBREAKPOINT,
     isXLDesktop: width >= XLDESKTOPBREAKPOINT,
   };

@@ -62,7 +62,12 @@ const NoticeCardContent = ({
             content="Description: "
           />
           <Paragraph type="body" content={notice.description || ''} />
-
+          <Paragraph
+            className="mt-4 mb-1"
+            type="bodySmall"
+            content="Status: "
+          />
+          <Paragraph type="body" content={notice.status} />
           <Button
             className="mb-4 mt-6"
             onClick={(e) => e.stopPropagation()}

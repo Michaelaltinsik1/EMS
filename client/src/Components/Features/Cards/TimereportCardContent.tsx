@@ -60,6 +60,16 @@ const TimereportCardContent = ({
             type="body"
             content={timereport.created_at.toString().split('T')[0]}
           />
+          <Paragraph className="mt-4 mb-1" type="bodySmall" content="From: " />
+          <Paragraph
+            type="body"
+            content={timereport.from.toString().split('T')[0]}
+          />
+          <Paragraph className="mt-4 mb-1" type="bodySmall" content="To: " />
+          <Paragraph
+            type="body"
+            content={timereport.to.toString().split('T')[0]}
+          />
           <Paragraph
             className="mt-4 mb-1"
             type="bodySmall"

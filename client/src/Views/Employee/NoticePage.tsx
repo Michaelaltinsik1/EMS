@@ -39,7 +39,12 @@ const NoticePage = () => {
     <div className="p-4">
       <h1>Notice page</h1>
       {notice && (
-        <Card permission={permission} notice={notice} key={notice?.id} />
+        <Card
+          className="tabletEdgeCases:max-w-[50%] tabletEdgeCases:mx-auto"
+          permission={permission}
+          notice={notice}
+          key={notice?.id}
+        />
       )}
     </div>
   );

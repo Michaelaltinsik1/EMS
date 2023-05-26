@@ -2,6 +2,8 @@ import { useContext, useEffect, useState } from 'react';
 import { getAllProjects } from 'src/API/project';
 import { AuthContext } from 'src/Components/Features/AuthProvider';
 import Card from 'src/Components/Features/Cards';
+import Table from 'src/Components/Features/Tables';
+import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { PermissionType, ProjectType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface ProjectAPI {
@@ -12,6 +14,7 @@ const ProjectPageAdmin = () => {
   const [projects, setProjects] = useState<Array<ProjectType>>([]);
   const { user } = useContext(AuthContext);
   const permission = user?.permission as PermissionType;
+  const { isMobile } = useBreakpoint();
   useEffect(() => {
     const getProjects = async () => {
       const projects: ProjectAPI = await getAllProjects();
@@ -37,9 +40,13 @@ const ProjectPageAdmin = () => {
   return (
     <div className="p-4">
       <h1>Admin Project</h1>
-      {projects.map((project) => (
-        <Card permission={permission} project={project} key={project.id} />
-      ))}
+      {isMobile ? (
+        projects.map((project) => (
+          <Card permission={permission} project={project} key={project.id} />
+        ))
+      ) : (
+        <Table permission={permission} projects={projects} />
+      )}
     </div>
   );
 };

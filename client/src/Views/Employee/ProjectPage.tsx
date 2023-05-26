@@ -3,6 +3,8 @@ import { getProjectsWithEmployeeID } from 'src/API/project';
 
 import { AuthContext } from 'src/Components/Features/AuthProvider';
 import Card from 'src/Components/Features/Cards';
+import Table from 'src/Components/Features/Tables';
+import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { PermissionType, ProjectType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
 interface ProjectAPI {
@@ -14,6 +16,7 @@ const ProjectPage = () => {
   const { user } = useContext(AuthContext);
   const userId = user?.userId as string;
   const permission = user?.permission as PermissionType;
+  const { isMobile } = useBreakpoint();
   useEffect(() => {
     const getProjects = async () => {
       const projects: ProjectAPI = await getProjectsWithEmployeeID(userId);
@@ -39,9 +42,13 @@ const ProjectPage = () => {
   return (
     <div className="p-4">
       <h1>Project</h1>
-      {projects.map((project) => (
-        <Card permission={permission} project={project} key={project.id} />
-      ))}
+      {isMobile ? (
+        projects.map((project) => (
+          <Card permission={permission} project={project} key={project.id} />
+        ))
+      ) : (
+        <Table permission={permission} projects={projects} />
+      )}
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Heading from 'src/Components/Base/Heading';
 import Paragraph from 'src/Components/Base/Paragrapgh';
 import Icon from 'src/Components/Base/Icon';
