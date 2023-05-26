@@ -35,7 +35,7 @@ const NoticePageAdmin = () => {
     getNotices();
   }, []);
   return (
-    <div>
+    <div className="p-4">
       <h1>Admin Notice page</h1>
       {notices.map((notice) => (
         <Card permission={permission} notice={notice} key={notice.id} />

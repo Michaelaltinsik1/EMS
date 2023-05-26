@@ -34,7 +34,7 @@ const DepartmentPageAdmin = () => {
     getDepartments();
   }, []);
   return (
-    <div className="">
+    <div className="p-4">
       <h1>Admin Department page</h1>
       {departments.map((department) => (
         <Card department={department} key={department.id} />

@@ -34,9 +34,9 @@ const TimeReportPage = () => {
       }
     };
     getTimeReports();
-  }, []);
+  }, [userId]);
   return (
-    <div>
+    <div className="p-4">
       <h1>Time report page</h1>
       {timereports.map((timereport) => (
         <Card

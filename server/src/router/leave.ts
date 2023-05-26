@@ -54,6 +54,20 @@ export const getLeavesByUserId = async (
       where: {
         userId: req.params.userId,
       },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            date_of_birth: true,
+            role: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
+      },
     });
     res.json({ data: leaves });
   } catch (e) {

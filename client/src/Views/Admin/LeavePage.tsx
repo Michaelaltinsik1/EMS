@@ -35,7 +35,7 @@ const LeavePageAdmin = () => {
     getLeaves();
   }, []);
   return (
-    <div>
+    <div className="p-4">
       <h1>Admin Leave</h1>
       {leaves.map((leave) => (
         <Card permission={permission} leave={leave} key={leave.id} />

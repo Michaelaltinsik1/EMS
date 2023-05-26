@@ -49,6 +49,18 @@ export const getTimeReportsByUserId = async (
       where: {
         userId: req.params.userId,
       },
+      include: {
+        user: {
+          select: {
+            firstName: true,
+            lastName: true,
+            date_of_birth: true,
+            id: true,
+            role: true,
+            projects: true,
+          },
+        },
+      },
     });
     res.json({ data: timeReports });
   } catch (e) {

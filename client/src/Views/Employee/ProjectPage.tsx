@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { getProjectsWithEmployeeID } from 'src/API/project';
-import Paragraph from 'src/Components/Base/Paragrapgh';
+
 import { AuthContext } from 'src/Components/Features/AuthProvider';
 import Card from 'src/Components/Features/Cards';
 import { PermissionType, ProjectType } from 'src/Types';
@@ -35,9 +35,9 @@ const ProjectPage = () => {
       }
     };
     getProjects();
-  }, []);
+  }, [userId]);
   return (
-    <div>
+    <div className="p-4">
       <h1>Project</h1>
       {projects.map((project) => (
         <Card permission={permission} project={project} key={project.id} />

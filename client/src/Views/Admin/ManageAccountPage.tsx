@@ -1,4 +1,4 @@
 const ManageAccountPageAdmin = () => {
-  return <div>Admin Manage account</div>;
+  return <div className="p-4">Admin Manage account</div>;
 };
 export default ManageAccountPageAdmin;

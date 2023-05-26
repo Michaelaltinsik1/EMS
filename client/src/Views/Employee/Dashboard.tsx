@@ -15,7 +15,7 @@ const DashBoardPage = () => {
   }, []);
   console.log(users);
   return (
-    <div>
+    <div className="p-4">
       <h1>Employee Dashboard</h1>
       <p>Users:</p>
       {users.map((user) => (

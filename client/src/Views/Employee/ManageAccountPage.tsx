@@ -1,4 +1,4 @@
 const ManageAccountPage = () => {
-  return <div>Manage account</div>;
+  return <div className="p-4">Manage account</div>;
 };
 export default ManageAccountPage;

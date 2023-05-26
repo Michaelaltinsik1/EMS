@@ -35,7 +35,7 @@ const TimeReportPageAdmin = () => {
     getTimeReports();
   }, []);
   return (
-    <div>
+    <div className="p-4">
       <h1>Admin Time report page</h1>
       {timereports.map((timereport) => (
         <Card

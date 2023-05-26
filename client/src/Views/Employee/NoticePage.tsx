@@ -34,9 +34,9 @@ const NoticePage = () => {
       }
     };
     getNotices();
-  }, []);
+  }, [userId]);
   return (
-    <div>
+    <div className="p-4">
       <h1>Notice page</h1>
       {notice && (
         <Card permission={permission} notice={notice} key={notice?.id} />

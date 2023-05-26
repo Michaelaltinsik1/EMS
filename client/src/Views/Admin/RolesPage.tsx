@@ -32,7 +32,7 @@ const RolePageAdmin = () => {
     getRoles();
   }, []);
   return (
-    <div>
+    <div className="p-4">
       <h1>Admin Role page</h1>
       {roles.map((role) => (
         <Card role={role} key={role.id} />

@@ -35,7 +35,7 @@ const ProjectPageAdmin = () => {
     getProjects();
   }, []);
   return (
-    <div>
+    <div className="p-4">
       <h1>Admin Project</h1>
       {projects.map((project) => (
         <Card permission={permission} project={project} key={project.id} />
