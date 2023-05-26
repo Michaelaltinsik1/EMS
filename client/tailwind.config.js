@@ -76,7 +76,7 @@ module.exports = {
       tabletEdgeCases: '1000px',
       desktop: '1201px',
       desktopEdgeCases: '1800px',
-      xlDesktop: '2580px',
+      xlDesktop: '2560px',
     },
     extend: {
       spacing: {
