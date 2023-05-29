@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import { ThemeContext } from '../ThemeProvider';
 import { Theme } from 'src/Types/enums';
-import EmployeeRow from './EmployeeRow';
-import DepartmentRow from './DepartmentRow';
-import TableItem from 'src/Components/Base/TableItem';
+import EmployeeRow from './EmployeeTable/EmployeeRow';
+import DepartmentRow from './DepartmentTable/DepartmentRow';
+import DepartmentHeader from './DepartmentTable/DepartmentHeader';
 
 import {
   UserType,
@@ -15,14 +15,19 @@ import {
   NoticeType,
   PermissionType,
 } from 'src/Types';
-import LeaveRow from './LeaveRow';
-import ProjectRow from './ProjectRow';
-import RoleRow from './RoleRow';
-import TimereportRow from './TimereportRow';
+import LeaveRow from './LeaveTable/LeaveRow';
+import LeaveHeader from './LeaveTable/LeaveHeader';
+import ProjectRow from './ProjectTable/ProjectRow';
+import ProjectHeader from './ProjectTable/ProjectHeader';
+import RoleRow from './RoleTable/RoleRow';
+import RoleHeader from './RoleTable/RoleHeader';
+import TimereportRow from './TimereportTable/TimereportRow';
+import TimereportHeader from './TimereportTable/TimereportHeader';
+import NoticeRow from './NoticeTable/NoticeRow';
+import NoticeHeader from './NoticeTable/NoticeHeader';
 
-import NoticeRow from './NoticeRow';
-import { useBreakpoint } from '../hooks/useBreakpoint';
 import { TaskTypes } from 'src/utils/enum';
+import EmployeeHeader from './EmployeeTable/EmployeeHeader';
 interface CardProps<T> {
   permission?: PermissionType;
   data?: Array<T>;
@@ -30,31 +35,12 @@ interface CardProps<T> {
 }
 const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
   const { theme } = useContext(ThemeContext);
-  const { isTablet, isDesktop, isDesktopEdgeCaseBreakpoint } = useBreakpoint();
+
   const renderTableContent = () => {
     if (data && type === TaskTypes.USER) {
       return (
         <>
-          <tr
-            className={`[&>th]:py-4 border-b border-opacity-50 rounded-lg  ${
-              theme === Theme.LIGHT ? 'border-gray-900' : 'border-gray-100'
-            }`}
-          >
-            <TableItem type="tableHeader">Name</TableItem>
-            <TableItem type="tableHeader">Role</TableItem>
-            {!isTablet && (
-              <TableItem type="tableHeader">Day of birth</TableItem>
-            )}
-            {isTablet ||
-              (isDesktopEdgeCaseBreakpoint && isDesktop && (
-                <TableItem type="tableHeader">Id</TableItem>
-              ))}
-            {!isTablet && <TableItem type="tableHeader">Email</TableItem>}
-            {!isTablet && <TableItem type="tableHeader">Hire date</TableItem>}
-            <TableItem type="tableHeader">Department</TableItem>
-            {!isTablet && <TableItem type="tableHeader">Salary</TableItem>}
-            <TableItem type="tableHeader">Permission</TableItem>
-          </tr>
+          <EmployeeHeader theme={theme} />
           {data.map((user) => {
             return <EmployeeRow theme={theme} user={user as UserType} />;
           })}
@@ -63,19 +49,8 @@ const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
     } else if (data && type === TaskTypes.DEPARTMENT) {
       return (
         <>
-          <tr
-            className={`[&>th]:py-4 border-b border-opacity-50 rounded-lg ${
-              theme === Theme.LIGHT ? 'border-gray-900' : 'border-gray-100'
-            }`}
-          >
-            <TableItem type="tableHeader">Name</TableItem>
-            {!isTablet && <TableItem type="tableHeader">Id</TableItem>}
-            <TableItem type="tableHeader">Budget</TableItem>
-            <TableItem type="tableHeader">Created at</TableItem>
-            <TableItem type="tableHeader">Address</TableItem>
-          </tr>
+          <DepartmentHeader theme={theme} />
           {data.map((department) => {
-            console.log(department);
             return (
               <DepartmentRow
                 theme={theme}
@@ -88,20 +63,7 @@ const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
     } else if (data && permission && type === TaskTypes.LEAVE) {
       return (
         <>
-          <tr
-            className={`[&>th]:py-4 border-b border-opacity-50 rounded-lg ${
-              theme === Theme.LIGHT ? 'border-gray-900' : 'border-gray-100'
-            }`}
-          >
-            <TableItem type="tableHeader">Name</TableItem>
-            <TableItem type="tableHeader">Role</TableItem>
-            <TableItem type="tableHeader">Day of birth</TableItem>
-            {!isTablet && <TableItem type="tableHeader">Id</TableItem>}
-            <TableItem type="tableHeader">Type of leave</TableItem>
-            <TableItem type="tableHeader">To</TableItem>
-            <TableItem type="tableHeader">From</TableItem>
-            <TableItem type="tableHeader">Status</TableItem>
-          </tr>
+          <LeaveHeader theme={theme} />
           {data.map((leave) => {
             return <LeaveRow theme={theme} leave={leave as LeaveType} />;
           })}
@@ -110,17 +72,7 @@ const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
     } else if (data && permission && type === TaskTypes.PROJECT) {
       return (
         <>
-          <tr
-            className={`[&>th]:py-4 border-b border-opacity-50 rounded-lg ${
-              theme === Theme.LIGHT ? 'border-gray-900' : 'border-gray-100'
-            }`}
-          >
-            <TableItem type="tableHeader">Name</TableItem>
-            {!isTablet && <TableItem type="tableHeader">Id</TableItem>}
-            <TableItem type="tableHeader">Created at</TableItem>
-            <TableItem type="tableHeader">Deadline</TableItem>
-            <TableItem type="tableHeader">Description</TableItem>
-          </tr>
+          <ProjectHeader theme={theme} />
           {data.map((project) => {
             return (
               <ProjectRow theme={theme} project={project as ProjectType} />
@@ -131,15 +83,7 @@ const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
     } else if (data && type === TaskTypes.ROLE) {
       return (
         <>
-          <tr
-            className={`[&>th]:py-4 border-b border-opacity-50 w-screen rounded-lg ${
-              theme === Theme.LIGHT ? 'border-gray-900' : 'border-gray-100'
-            }`}
-          >
-            <TableItem type="tableHeader">Name</TableItem>
-            <TableItem type="tableHeader">Id</TableItem>
-            <TableItem type="tableHeader">Created at</TableItem>
-          </tr>
+          <RoleHeader theme={theme} />
           {data.map((role) => {
             return <RoleRow theme={theme} role={role as RoleType} />;
           })}
@@ -148,21 +92,7 @@ const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
     } else if (data && permission && type === TaskTypes.TIMEREPORT) {
       return (
         <>
-          <tr
-            className={`[&>th]:py-4 border-b border-opacity-50 rounded-lg ${
-              theme === Theme.LIGHT ? 'border-gray-900' : 'border-gray-100'
-            }`}
-          >
-            <TableItem type="tableHeader">Name</TableItem>
-            <TableItem type="tableHeader">Role</TableItem>
-            <TableItem type="tableHeader">Day of birth</TableItem>
-            {!isTablet && <TableItem type="tableHeader">Id</TableItem>}
-            <TableItem type="tableHeader">Project</TableItem>
-            <TableItem type="tableHeader">Created at</TableItem>
-            <TableItem type="tableHeader">From</TableItem>
-            <TableItem type="tableHeader">To</TableItem>
-            <TableItem type="tableHeader">Status</TableItem>
-          </tr>
+          <TimereportHeader theme={theme} />
           {data.map((timereport) => {
             return (
               <TimereportRow
@@ -176,19 +106,7 @@ const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
     } else if (data && permission && type === TaskTypes.NOTICE) {
       return (
         <>
-          <tr
-            className={`[&>th]:py-4 border-b border-opacity-50 rounded-lg ${
-              theme === Theme.LIGHT ? 'border-gray-900' : 'border-gray-100'
-            }`}
-          >
-            <TableItem type="tableHeader">Name</TableItem>
-            <TableItem type="tableHeader">Role</TableItem>
-            <TableItem type="tableHeader">Day of birth</TableItem>
-            {!isTablet && <TableItem type="tableHeader">Id</TableItem>}
-            <TableItem type="tableHeader">Created at</TableItem>
-            <TableItem type="tableHeader">Description</TableItem>
-            <TableItem type="tableHeader">Status</TableItem>
-          </tr>
+          <NoticeHeader theme={theme} />
           {data.map((notice) => {
             return <NoticeRow theme={theme} notice={notice as NoticeType} />;
           })}

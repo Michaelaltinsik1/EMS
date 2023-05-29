@@ -1,7 +1,7 @@
 import { Theme } from 'src/Types/enums';
 import { DepartmentType } from 'src/Types';
 import TableItem from 'src/Components/Base/TableItem';
-import { useBreakpoint } from '../hooks/useBreakpoint';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 interface rowProps {
   department: DepartmentType;
   theme?: Theme;
