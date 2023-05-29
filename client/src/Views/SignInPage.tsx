@@ -9,19 +9,40 @@ import { AuthContext } from 'src/Components/Features/AuthProvider';
 import Input from 'src/Components/Base/Input';
 import { Theme } from 'src/Types/enums';
 import Button from 'src/Components/Base/Button';
+import Form from 'src/Components/Base/Form';
+import * as yup from 'yup';
 
+const validationSchema = yup.object({
+  email: yup.string().email('Invalid formate').required('Email is required'),
+  password: yup
+    .string()
+    .required('Password is required')
+    .min(8, 'Minimum of 8 charcters'),
+});
+
+const defaultValues = {
+  email: '',
+  password: '',
+};
+interface FormSubmitType {
+  email: string;
+  password: string;
+}
 const SignInPage = () => {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
   const { handleSignInPermissions } = useContext(AuthContext);
-  const [password, setPassword] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
+  // const [password, setPassword] = useState<string>('');
+  // const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
-    event.preventDefault();
+  async function handleSubmit(formFields: FormSubmitType) {
+    console.log('email: ', formFields.email);
+    console.log('password:', formFields.password);
+    //  onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}
+    //event.preventDefault();
     setIsLoading(true);
-    const data = await signIn(email, password);
+    const data = await signIn(formFields.email, formFields.password);
     if (data && data?.status === 200) {
       handleSignInPermissions({
         userId: data.value.id,
@@ -51,7 +72,10 @@ const SignInPage = () => {
         theme === Theme.LIGHT ? 'bg-gray-50' : 'bg-gray-700'
       }`}
     >
-      <form
+      <Form
+        onSubmit={handleSubmit}
+        defaultValues={defaultValues}
+        validationSchema={validationSchema}
         className={`flex flex-col min-w-[100%] px-4 py-[80px] tablet:px-[40px] tablet:py-[100px] tabletEdgeCases:min-w-[880px] desktop:py-[96px] desktop:px-[80px] xlDesktop:[px-160px] rounded-[24px] ${
           theme === Theme.LIGHT
             ? 'bg-gray-200 shadow-lightShadow'
@@ -59,7 +83,7 @@ const SignInPage = () => {
         }`}
       >
         <Input
-          onChangeHandler={setEmail}
+          //onChangeHandler={setEmail}
           className="mb-[24px]"
           name="email"
           type="email"
@@ -67,7 +91,7 @@ const SignInPage = () => {
           placeholder="Anna.andersson@hotmail.se"
         />
         <Input
-          onChangeHandler={setPassword}
+          //onChangeHandler={setPassword}
           className="mb-[32px]"
           name="password"
           type="password"
@@ -79,11 +103,11 @@ const SignInPage = () => {
           variant="addButton"
           type="submit"
           loading={isLoading}
-          onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}
+          // onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}
         >
           Sign in
         </Button>
-      </form>
+      </Form>
       <ThemeButton />
     </div>
   );

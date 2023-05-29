@@ -6,6 +6,7 @@ import { Toast } from 'src/utils/toastGenerator';
 import { AuthContext } from 'src/Components/Features/AuthProvider';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
+import { TaskTypes } from 'src/utils/enum';
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;
@@ -46,7 +47,7 @@ const LeavePage = () => {
           <Card permission={permission} leave={leave} key={leave.id} />
         ))
       ) : (
-        <Table permission={permission} leaves={leaves} />
+        <Table type={TaskTypes.LEAVE} permission={permission} data={leaves} />
       )}
     </div>
   );

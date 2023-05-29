@@ -5,6 +5,7 @@ import Card from 'src/Components/Features/Cards';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { LeaveType, PermissionType } from 'src/Types';
+import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
 interface LeaveAPI {
   data?: Array<LeaveType>;
@@ -45,7 +46,7 @@ const LeavePageAdmin = () => {
           <Card permission={permission} leave={leave} key={leave.id} />
         ))
       ) : (
-        <Table permission={permission} leaves={leaves} />
+        <Table type={TaskTypes.LEAVE} permission={permission} data={leaves} />
       )}
     </div>
   );

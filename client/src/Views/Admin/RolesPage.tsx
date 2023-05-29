@@ -4,6 +4,7 @@ import Card from 'src/Components/Features/Cards';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { RoleType } from 'src/Types';
+import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
 interface RolesAPI {
   data?: Array<RoleType>;
@@ -40,7 +41,7 @@ const RolePageAdmin = () => {
       {isMobile ? (
         roles.map((role) => <Card role={role} key={role.id} />)
       ) : (
-        <Table roles={roles} />
+        <Table type={TaskTypes.ROLE} data={roles} />
       )}
     </div>
   );

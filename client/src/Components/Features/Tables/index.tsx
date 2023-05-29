@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { ThemeContext } from '../ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import EmployeeRow from './EmployeeRow';
@@ -22,37 +22,17 @@ import TimereportRow from './TimereportRow';
 
 import NoticeRow from './NoticeRow';
 import { useBreakpoint } from '../hooks/useBreakpoint';
-
-interface CardProps {
-  users?: Array<UserType>;
-  leaves?: Array<LeaveType>;
-  departments?: Array<DepartmentType>;
-  projects?: Array<ProjectType>;
-  roles?: Array<RoleType>;
-  timereports?: Array<Time_reportType>;
-  notices?: Array<NoticeType>;
+import { TaskTypes } from 'src/utils/enum';
+interface CardProps<T> {
   permission?: PermissionType;
+  data?: Array<T>;
+  type: TaskTypes;
 }
-const Table = ({
-  users,
-  leaves,
-  departments,
-  projects,
-  roles,
-  timereports,
-  notices,
-  permission,
-}: CardProps) => {
+const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
   const { theme } = useContext(ThemeContext);
-  const {
-    isTablet,
-    isTabletEdgeCase,
-    isDesktop,
-    isDesktopEdgeCaseBreakpoint,
-    isXLDesktop,
-  } = useBreakpoint();
+  const { isTablet, isDesktop, isDesktopEdgeCaseBreakpoint } = useBreakpoint();
   const renderTableContent = () => {
-    if (users) {
+    if (data && type === TaskTypes.USER) {
       return (
         <>
           <tr
@@ -75,12 +55,12 @@ const Table = ({
             {!isTablet && <TableItem type="tableHeader">Salary</TableItem>}
             <TableItem type="tableHeader">Permission</TableItem>
           </tr>
-          {users.map((user) => {
-            return <EmployeeRow theme={theme} user={user} />;
+          {data.map((user) => {
+            return <EmployeeRow theme={theme} user={user as UserType} />;
           })}
         </>
       );
-    } else if (departments) {
+    } else if (data && type === TaskTypes.DEPARTMENT) {
       return (
         <>
           <tr
@@ -94,12 +74,18 @@ const Table = ({
             <TableItem type="tableHeader">Created at</TableItem>
             <TableItem type="tableHeader">Address</TableItem>
           </tr>
-          {departments.map((department) => {
-            return <DepartmentRow theme={theme} department={department} />;
+          {data.map((department) => {
+            console.log(department);
+            return (
+              <DepartmentRow
+                theme={theme}
+                department={department as DepartmentType}
+              />
+            );
           })}
         </>
       );
-    } else if (leaves && permission) {
+    } else if (data && permission && type === TaskTypes.LEAVE) {
       return (
         <>
           <tr
@@ -116,12 +102,12 @@ const Table = ({
             <TableItem type="tableHeader">From</TableItem>
             <TableItem type="tableHeader">Status</TableItem>
           </tr>
-          {leaves.map((leave) => {
-            return <LeaveRow theme={theme} leave={leave} />;
+          {data.map((leave) => {
+            return <LeaveRow theme={theme} leave={leave as LeaveType} />;
           })}
         </>
       );
-    } else if (projects && permission) {
+    } else if (data && permission && type === TaskTypes.PROJECT) {
       return (
         <>
           <tr
@@ -135,12 +121,14 @@ const Table = ({
             <TableItem type="tableHeader">Deadline</TableItem>
             <TableItem type="tableHeader">Description</TableItem>
           </tr>
-          {projects.map((project) => {
-            return <ProjectRow theme={theme} project={project} />;
+          {data.map((project) => {
+            return (
+              <ProjectRow theme={theme} project={project as ProjectType} />
+            );
           })}
         </>
       );
-    } else if (roles) {
+    } else if (data && type === TaskTypes.ROLE) {
       return (
         <>
           <tr
@@ -152,12 +140,12 @@ const Table = ({
             <TableItem type="tableHeader">Id</TableItem>
             <TableItem type="tableHeader">Created at</TableItem>
           </tr>
-          {roles.map((role) => {
-            return <RoleRow theme={theme} role={role} />;
+          {data.map((role) => {
+            return <RoleRow theme={theme} role={role as RoleType} />;
           })}
         </>
       );
-    } else if (timereports && permission) {
+    } else if (data && permission && type === TaskTypes.TIMEREPORT) {
       return (
         <>
           <tr
@@ -175,12 +163,17 @@ const Table = ({
             <TableItem type="tableHeader">To</TableItem>
             <TableItem type="tableHeader">Status</TableItem>
           </tr>
-          {timereports.map((timereport) => {
-            return <TimereportRow theme={theme} timereport={timereport} />;
+          {data.map((timereport) => {
+            return (
+              <TimereportRow
+                theme={theme}
+                timereport={timereport as Time_reportType}
+              />
+            );
           })}
         </>
       );
-    } else if (notices && permission) {
+    } else if (data && permission && type === TaskTypes.NOTICE) {
       return (
         <>
           <tr
@@ -196,8 +189,8 @@ const Table = ({
             <TableItem type="tableHeader">Description</TableItem>
             <TableItem type="tableHeader">Status</TableItem>
           </tr>
-          {notices.map((notice) => {
-            return <NoticeRow theme={theme} notice={notice} />;
+          {data.map((notice) => {
+            return <NoticeRow theme={theme} notice={notice as NoticeType} />;
           })}
         </>
       );

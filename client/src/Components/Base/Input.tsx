@@ -1,6 +1,7 @@
 import { ChangeEvent, useContext } from 'react';
 import { ThemeContext } from '../Features/ThemeProvider';
 import { Theme } from 'src/Types/enums';
+import { UseFormRegister, FieldValues } from 'react-hook-form';
 interface InputProps {
   type:
     | 'email'
@@ -20,6 +21,7 @@ interface InputProps {
   disabled?: boolean;
   className?: string;
   onChangeHandler?: (value: string) => void;
+  errors?: any;
 }
 const Input = ({
   type,
@@ -30,8 +32,14 @@ const Input = ({
   required = false,
   disabled = false,
   className = '',
+  errors,
   onChangeHandler,
 }: InputProps) => {
+  let inputError: any;
+
+  if (errors && errors.hasOwnProperty(name)) {
+    inputError = errors[name];
+  }
   const handleOnChange = (value: string) => {
     if (onChangeHandler) {
       onChangeHandler(value);
@@ -52,6 +60,7 @@ const Input = ({
         name={name}
         disabled={disabled}
         placeholder={placeholder}
+        {...register(name)}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           handleOnChange(e.target.value)
         }
@@ -61,7 +70,21 @@ const Input = ({
             : 'bg-gray-600 border-gray-50 text-gray-900 outline-blue-400 outline-1 '
         }`}
       />
+
       {required && <p>*</p>}
+      <div className="min-h-[30px]">
+        {inputError && (
+          <p
+            className={`font-bold text-bodySmall font-body ${
+              theme === Theme.LIGHT
+                ? 'text-red-600'
+                : 'bg-red-400 text-gray-100 py-1 px-2 rounded-[6px] my-2'
+            }`}
+          >
+            {inputError?.message}
+          </p>
+        )}
+      </div>
     </label>
   );
 };

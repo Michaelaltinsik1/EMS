@@ -6,6 +6,7 @@ import Card from 'src/Components/Features/Cards';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { PermissionType, ProjectType } from 'src/Types';
+import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
 interface ProjectAPI {
   data?: Array<ProjectType>;
@@ -47,7 +48,11 @@ const ProjectPage = () => {
           <Card permission={permission} project={project} key={project.id} />
         ))
       ) : (
-        <Table permission={permission} projects={projects} />
+        <Table
+          type={TaskTypes.PROJECT}
+          permission={permission}
+          data={projects}
+        />
       )}
     </div>
   );

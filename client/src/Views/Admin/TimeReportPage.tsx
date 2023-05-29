@@ -5,6 +5,7 @@ import Card from 'src/Components/Features/Cards';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { PermissionType, Time_reportType } from 'src/Types';
+import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
 interface TimereportAPI {
   data?: Array<Time_reportType>;
@@ -49,7 +50,11 @@ const TimeReportPageAdmin = () => {
           />
         ))
       ) : (
-        <Table permission={permission} timereports={timereports} />
+        <Table
+          type={TaskTypes.TIMEREPORT}
+          permission={permission}
+          data={timereports}
+        />
       )}
     </div>
   );

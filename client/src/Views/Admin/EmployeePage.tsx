@@ -5,6 +5,7 @@ import { Toast } from 'src/utils/toastGenerator';
 import Card from 'src/Components/Features/Cards';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import Table from 'src/Components/Features/Tables';
+import { TaskTypes } from 'src/utils/enum';
 const EmployeePageAdmin = () => {
   const [users, setUsers] = useState<Array<UserType>>([]);
   const { isMobile } = useBreakpoint();
@@ -26,7 +27,7 @@ const EmployeePageAdmin = () => {
       {isMobile ? (
         users.map((user) => <Card user={user} key={user.id} />)
       ) : (
-        <Table users={users} />
+        <Table type={TaskTypes.USER} data={users} />
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import Card from 'src/Components/Features/Cards';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { DepartmentType } from 'src/Types';
+import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
 interface DepartmentsAPI {
   data?: Array<DepartmentType>;
@@ -17,7 +18,6 @@ const DepartmentPageAdmin = () => {
   useEffect(() => {
     const getDepartments = async () => {
       const departments: DepartmentsAPI = await getAllDepartments();
-      console.log('Departments: ', departments);
       if (departments?.data) {
         setDepartments(departments.data);
         Toast({ message: 'Success', id: 'GetAllEmployeesToast' });
@@ -44,7 +44,7 @@ const DepartmentPageAdmin = () => {
           <Card department={department} key={department.id} />
         ))
       ) : (
-        <Table departments={departments} />
+        <Table type={TaskTypes.DEPARTMENT} data={departments} />
       )}
     </div>
   );

@@ -6,6 +6,7 @@ import Card from 'src/Components/Features/Cards';
 import { AuthContext } from 'src/Components/Features/AuthProvider';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import Table from 'src/Components/Features/Tables';
+import { TaskTypes } from 'src/utils/enum';
 interface NoticeAPI {
   data?: Array<NoticeType>;
   errors?: Array<{ error: string }>;
@@ -46,7 +47,7 @@ const NoticePageAdmin = () => {
           <Card permission={permission} notice={notice} key={notice.id} />
         ))
       ) : (
-        <Table permission={permission} notices={notices} />
+        <Table type={TaskTypes.NOTICE} permission={permission} data={notices} />
       )}
     </div>
   );

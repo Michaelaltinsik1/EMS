@@ -9,7 +9,7 @@ interface rowProps {
 }
 const EmployeeRow = ({ user, theme }: rowProps) => {
   const { isTablet, isDesktop, isDesktopEdgeCaseBreakpoint } = useBreakpoint();
-
+  console.log('user: ', user);
   return (
     <>
       <tr
