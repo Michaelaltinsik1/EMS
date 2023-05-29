@@ -9,15 +9,15 @@ import { AuthContext } from 'src/Components/Features/AuthProvider';
 import Input from 'src/Components/Base/Input';
 import { Theme } from 'src/Types/enums';
 import Button from 'src/Components/Base/Button';
-import { PermissionType } from 'src/Types';
 
 const SignInPage = () => {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
-  const { user, handleSignInPermissions } = useContext(AuthContext);
+  const { handleSignInPermissions } = useContext(AuthContext);
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
   async function handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     setIsLoading(true);
@@ -39,11 +39,6 @@ const SignInPage = () => {
         id: 'Sign-in-toast-id',
         isSuccess: false,
       });
-
-      // handleSignInPermissions({
-      //   userId: data.value.id,
-      //   permission: data.value.permission,
-      // });
     }
 
     setIsLoading(false);
@@ -90,7 +85,6 @@ const SignInPage = () => {
         </Button>
       </form>
       <ThemeButton />
-      {/* <Input name="test" type="text" label="Password1: " /> */}
     </div>
   );
 };
