@@ -6,9 +6,10 @@ import * as yup from 'yup';
 import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { UserType } from 'src/Types';
+
 interface EmployeeFormProps {
   handleOnClick: () => void;
-  user: UserType;
+  user?: UserType;
   isEditForm?: boolean;
 }
 
@@ -37,11 +38,11 @@ const EmployeeForm = ({
   isEditForm = true,
 }: EmployeeFormProps) => {
   const defaultValuesEdit = {
-    name: user.firstName + ' ' + user.lastName,
-    salary: user.salary,
-    permission: user.permission,
-    department: user?.department,
-    role: user?.role,
+    name: (user?.firstName || '') + +(user?.lastName || ''),
+    salary: user?.salary || '',
+    permission: user?.permission || '',
+    department: user?.department || '',
+    role: user?.role || '',
     country: '',
     city: '',
     zip: '',
@@ -93,7 +94,11 @@ const EmployeeForm = ({
           <Select options={[]} name="country" label="Country:" />
           <Input type="text" name="city" label="City: " />
           <Input type="number" name="zip" label="Zip code:" />
-          <Button type="submit" variant="addButton">
+          <Button
+            className="desktop:self-end"
+            type="submit"
+            variant="addButton"
+          >
             Add
           </Button>
         </Form>

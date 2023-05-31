@@ -6,13 +6,19 @@ import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { RoleType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
+import Contentmanagement from 'src/Components/Features/ContentManagement';
+import RoleForm from 'src/Components/Features/Forms/RoleForm';
 interface RolesAPI {
   data?: Array<RoleType>;
   errors?: Array<{ error: string }>;
 }
 const RolePageAdmin = () => {
   const [roles, setRoles] = useState<Array<RoleType>>([]);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const { isMobile } = useBreakpoint();
+  const toggleForm = () => {
+    setIsFormOpen((prevState) => !prevState);
+  };
   useEffect(() => {
     const getRoles = async () => {
       const roles: RolesAPI = await getAllRoles();
@@ -36,14 +42,18 @@ const RolePageAdmin = () => {
     getRoles();
   }, []);
   return (
-    <div className="p-4">
-      <h1>Admin Role page</h1>
-      {isMobile ? (
-        roles.map((role) => <Card role={role} key={role.id} />)
-      ) : (
-        <Table type={TaskTypes.ROLE} data={roles} />
-      )}
-    </div>
+    <>
+      <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add role" />
+      <div className="p-4">
+        <h1>Admin Role page</h1>
+        {isMobile ? (
+          roles.map((role) => <Card role={role} key={role.id} />)
+        ) : (
+          <Table type={TaskTypes.ROLE} data={roles} />
+        )}
+      </div>
+      {isFormOpen && <RoleForm isEditForm={false} handleOnClick={toggleForm} />}
+    </>
   );
 };
 export default RolePageAdmin;

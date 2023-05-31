@@ -9,7 +9,7 @@ import Input from 'src/Components/Base/Input';
 
 interface TimereportProps {
   handleOnClick: () => void;
-  timereport: Time_reportType;
+  timereport?: Time_reportType;
   isEditForm?: boolean;
 }
 
@@ -29,7 +29,7 @@ const TimereportForm = ({
   isEditForm = true,
 }: TimereportProps) => {
   const defaultValuesEdit = {
-    status: timereport.status,
+    status: timereport?.status || '',
   };
   return (
     <Modal handleOnClick={handleOnClick}>
@@ -54,7 +54,11 @@ const TimereportForm = ({
           <Heading className="mb-[24px]" type="H3" content="Add timereport" />
           <Input type="date" name="from" label="Start date:" />
           <Input type="date" name="to" label="End date:" />
-          <Button type="submit" variant="addButton">
+          <Button
+            className="desktop:self-end"
+            type="submit"
+            variant="addButton"
+          >
             Add
           </Button>
         </Form>

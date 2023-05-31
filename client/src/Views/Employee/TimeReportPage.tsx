@@ -7,16 +7,22 @@ import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { PermissionType, Time_reportType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
+import Contentmanagement from 'src/Components/Features/ContentManagement';
+import TimereportForm from 'src/Components/Features/Forms/TimereportForm';
 interface TimereportAPI {
   data?: Array<Time_reportType>;
   errors?: Array<{ error: string }>;
 }
 const TimeReportPage = () => {
   const [timereports, setTimereports] = useState<Array<Time_reportType>>([]);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
   const userId = user?.userId as string;
   const permission = user?.permission as PermissionType;
   const { isMobile } = useBreakpoint();
+  const toggleForm = () => {
+    setIsFormOpen((prevState) => !prevState);
+  };
   useEffect(() => {
     const getTimeReports = async () => {
       const timereports: TimereportAPI = await getTimeReportsByUserId(userId);
@@ -40,25 +46,34 @@ const TimeReportPage = () => {
     getTimeReports();
   }, [userId]);
   return (
-    <div className="p-4">
-      <h1>Time report page</h1>
+    <>
+      <Contentmanagement
+        toggleAddForm={toggleForm}
+        buttonContent="Add timereport"
+      />
+      <div className="p-4">
+        <h1>Time report page</h1>
 
-      {isMobile ? (
-        timereports.map((timereport) => (
-          <Card
+        {isMobile ? (
+          timereports.map((timereport) => (
+            <Card
+              permission={permission}
+              timereport={timereport}
+              key={timereport.id}
+            />
+          ))
+        ) : (
+          <Table
+            type={TaskTypes.TIMEREPORT}
             permission={permission}
-            timereport={timereport}
-            key={timereport.id}
+            data={timereports}
           />
-        ))
-      ) : (
-        <Table
-          type={TaskTypes.TIMEREPORT}
-          permission={permission}
-          data={timereports}
-        />
-      )}
-    </div>
+        )}
+        {isFormOpen && (
+          <TimereportForm isEditForm={false} handleOnClick={toggleForm} />
+        )}
+      </div>
+    </>
   );
 };
 export default TimeReportPage;

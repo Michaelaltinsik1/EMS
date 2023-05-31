@@ -8,7 +8,7 @@ import { RoleType } from 'src/Types';
 
 interface RoleProps {
   handleOnClick: () => void;
-  role: RoleType;
+  role?: RoleType;
   isEditForm?: boolean;
 }
 
@@ -20,7 +20,7 @@ const defaultValuesAdd = {
 
 const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
   const defaultValuesEdit = {
-    name: role.name,
+    name: role?.name || '',
   };
   const onSubmit = () => {
     if (isEditForm) {
@@ -44,7 +44,7 @@ const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
           <Heading className="mb-[24px]" type="H3" content="Add role" />
         )}
         <Select options={[]} name="role" label="Role:" />
-        <Button type="submit" variant="addButton">
+        <Button className="desktop:self-end" type="submit" variant="addButton">
           {isEditForm ? 'Edit' : 'Add'}
         </Button>
       </Form>

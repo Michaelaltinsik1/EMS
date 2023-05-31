@@ -9,7 +9,7 @@ import Input from 'src/Components/Base/Input';
 
 interface LeaveProps {
   handleOnClick: () => void;
-  leave: LeaveType;
+  leave?: LeaveType;
   isEditForm?: boolean;
 }
 
@@ -27,7 +27,7 @@ const onSubmit = () => {
 
 const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
   const defaultValuesEdit = {
-    status: leave.status,
+    status: leave?.status || '',
   };
   return (
     <Modal handleOnClick={handleOnClick}>
@@ -57,7 +57,11 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
           <Select options={[]} name="type" label="Status:" />
           <Input type="date" name="from" label="Start date:" />
           <Input type="date" name="to" label="End date:" />
-          <Button type="submit" variant="addButton">
+          <Button
+            className="desktop:self-end"
+            type="submit"
+            variant="addButton"
+          >
             Add
           </Button>
         </Form>

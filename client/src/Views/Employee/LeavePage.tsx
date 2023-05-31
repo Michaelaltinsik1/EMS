@@ -7,16 +7,22 @@ import { AuthContext } from 'src/Components/Features/AuthProvider';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { TaskTypes } from 'src/utils/enum';
+import Contentmanagement from 'src/Components/Features/ContentManagement';
+import LeaveForm from 'src/Components/Features/Forms/LeaveForm';
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;
 }
 const LeavePage = () => {
   const [leaves, setLeaves] = useState<Array<LeaveType>>([]);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
   const userId = user?.userId as string;
   const permission = user?.permission as PermissionType;
   const { isMobile } = useBreakpoint();
+  const toggleForm = () => {
+    setIsFormOpen((prevState) => !prevState);
+  };
   useEffect(() => {
     const getLeaves = async () => {
       const leaves: LeaveAPI = await getLeavesByUserId(userId);
@@ -40,16 +46,22 @@ const LeavePage = () => {
     getLeaves();
   }, [userId]);
   return (
-    <div className="p-4">
-      <h1>Leave</h1>
-      {isMobile ? (
-        leaves.map((leave) => (
-          <Card permission={permission} leave={leave} key={leave.id} />
-        ))
-      ) : (
-        <Table type={TaskTypes.LEAVE} permission={permission} data={leaves} />
+    <>
+      <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add leave" />
+      <div className="p-4">
+        <h1>Leave</h1>
+        {isMobile ? (
+          leaves.map((leave) => (
+            <Card permission={permission} leave={leave} key={leave.id} />
+          ))
+        ) : (
+          <Table type={TaskTypes.LEAVE} permission={permission} data={leaves} />
+        )}
+      </div>
+      {isFormOpen && (
+        <LeaveForm isEditForm={false} handleOnClick={toggleForm} />
       )}
-    </div>
+    </>
   );
 };
 export default LeavePage;

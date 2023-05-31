@@ -9,7 +9,7 @@ import { ProjectType } from 'src/Types';
 
 interface ProjectProps {
   handleOnClick: () => void;
-  project: ProjectType;
+  project?: ProjectType;
   isEditForm?: boolean;
 }
 
@@ -28,9 +28,9 @@ const ProjectForm = ({
   isEditForm = true,
 }: ProjectProps) => {
   const defaultValuesEdit = {
-    name: project.name,
-    start: project.created_at,
-    deadline: project.deadline,
+    name: project?.name || '',
+    start: project?.created_at || '',
+    deadline: project?.deadline || '',
     description: project?.description || '',
   };
   const onSubmit = () => {
@@ -60,7 +60,7 @@ const ProjectForm = ({
         <Input type="date" name="deadline" label="Deadline:" />
         {/* Text area fix needed */}
         <Input type="text" name="description" label="Description:" />
-        <Button type="submit" variant="addButton">
+        <Button className="desktop:self-end" type="submit" variant="addButton">
           {isEditForm ? 'Edit' : 'Add'}
         </Button>
       </Form>

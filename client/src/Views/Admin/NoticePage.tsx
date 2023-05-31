@@ -7,15 +7,21 @@ import { AuthContext } from 'src/Components/Features/AuthProvider';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import Table from 'src/Components/Features/Tables';
 import { TaskTypes } from 'src/utils/enum';
+import Contentmanagement from 'src/Components/Features/ContentManagement';
+import NoticeForm from 'src/Components/Features/Forms/NoticeForm';
 interface NoticeAPI {
   data?: Array<NoticeType>;
   errors?: Array<{ error: string }>;
 }
 const NoticePageAdmin = () => {
   const [notices, setNotices] = useState<Array<NoticeType>>([]);
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
   const permission = user?.permission as PermissionType;
   const { isMobile } = useBreakpoint();
+  const toggleForm = () => {
+    setIsFormOpen((prevState) => !prevState);
+  };
   useEffect(() => {
     const getNotices = async () => {
       const notices: NoticeAPI = await getAllNotices();
@@ -39,17 +45,30 @@ const NoticePageAdmin = () => {
     getNotices();
   }, []);
   return (
-    <div className="p-4">
-      <h1>Admin Notice page</h1>
+    <>
+      <Contentmanagement
+        toggleAddForm={toggleForm}
+        buttonContent="Add notice"
+      />
+      <div className="p-4">
+        <h1>Admin Notice page</h1>
 
-      {isMobile ? (
-        notices.map((notice) => (
-          <Card permission={permission} notice={notice} key={notice.id} />
-        ))
-      ) : (
-        <Table type={TaskTypes.NOTICE} permission={permission} data={notices} />
+        {isMobile ? (
+          notices.map((notice) => (
+            <Card permission={permission} notice={notice} key={notice.id} />
+          ))
+        ) : (
+          <Table
+            type={TaskTypes.NOTICE}
+            permission={permission}
+            data={notices}
+          />
+        )}
+      </div>
+      {isFormOpen && (
+        <NoticeForm isEditForm={false} handleOnClick={toggleForm} />
       )}
-    </div>
+    </>
   );
 };
 export default NoticePageAdmin;

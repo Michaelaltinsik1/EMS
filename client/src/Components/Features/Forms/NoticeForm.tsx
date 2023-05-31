@@ -9,7 +9,7 @@ import Input from 'src/Components/Base/Input';
 
 interface NoticeProps {
   handleOnClick: () => void;
-  notice: NoticeType;
+  notice?: NoticeType;
   isEditForm?: boolean;
 }
 
@@ -28,7 +28,7 @@ const NoticeForm = ({
   isEditForm = true,
 }: NoticeProps) => {
   const defaultValuesEdit = {
-    status: notice.status,
+    status: notice?.status || '',
   };
   return (
     <Modal handleOnClick={handleOnClick}>
@@ -53,7 +53,11 @@ const NoticeForm = ({
           <Heading className="mb-[24px]" type="H3" content="Add notice" />
           {/* Add text area here later */}
           <Input type="text" name="description" label="Description:" />
-          <Button type="submit" variant="addButton">
+          <Button
+            className="desktop:self-end"
+            type="submit"
+            variant="addButton"
+          >
             Add
           </Button>
         </Form>

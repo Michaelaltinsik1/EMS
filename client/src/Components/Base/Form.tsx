@@ -30,7 +30,10 @@ const Form = ({
   };
 
   return (
-    <form className={`${className}`} onSubmit={handleSubmit(getFormFields)}>
+    <form
+      className={`flex flex-col ${className}`}
+      onSubmit={handleSubmit(getFormFields)}
+    >
       {React.Children.map(children, (child) => {
         return child.props.name
           ? React.createElement(child.type, {

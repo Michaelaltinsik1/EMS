@@ -9,7 +9,7 @@ import { DepartmentType } from 'src/Types';
 
 interface DepartmentProps {
   handleOnClick: () => void;
-  department: DepartmentType;
+  department?: DepartmentType;
   isEditForm?: boolean;
 }
 
@@ -32,8 +32,8 @@ const DepartmentForm = ({
   isEditForm = true,
 }: DepartmentProps) => {
   const defaultValuesEdit = {
-    name: department.name,
-    budget: department.budget,
+    name: department?.name || '',
+    budget: department?.budget || '',
     country: department?.addresses?.country || '',
     city: department?.addresses?.city || '',
     zip: department?.addresses?.zip || '',
@@ -65,7 +65,11 @@ const DepartmentForm = ({
           <Heading className="mb-[24px]" type="H3" content="Add department" />
           <Input type="text" name="name" label="Name:" />
           <Input type="number" name="budget" label="Budget:" />
-          <Button type="submit" variant="addButton">
+          <Button
+            className="desktop:self-end"
+            type="submit"
+            variant="addButton"
+          >
             Add
           </Button>
         </Form>

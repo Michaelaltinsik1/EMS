@@ -66,9 +66,11 @@ const Icon = ({ name, theme, onClick, className = '' }: IconProps) => {
       case 'Filter':
         return (
           <Filter
-            className={`w-[52px] h-[52px] ${className}`}
+            className={` ${className} `}
             onClick={onClick}
-            fill={color}
+            width={52}
+            height={52}
+            stroke={color}
           />
         );
     }
