@@ -4,18 +4,26 @@ import Icon from 'src/Components/Base/Icon';
 import { Theme } from 'src/Types/enums';
 import { LeaveType, PermissionType } from 'src/Types';
 import Button from 'src/Components/Base/Button';
+import { MouseEvent } from 'react';
 interface CardProps {
   leave: LeaveType;
   theme: Theme;
   isExpanded: boolean;
   permission: PermissionType;
+  clickHandler: () => void;
 }
 const LeaveCardContent = ({
   leave,
   theme,
   isExpanded,
   permission,
+  clickHandler,
 }: CardProps) => {
+  const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    console.log('tghe click');
+    e.stopPropagation();
+    clickHandler();
+  };
   return (
     <>
       <Heading
@@ -64,22 +72,26 @@ const LeaveCardContent = ({
             content="Status: "
           />
           <Paragraph type="body" content={leave.status} />
-          <Button
-            className="mb-4 mt-6"
-            onClick={(e) => e.stopPropagation()}
-            variant="addButton"
-            type="button"
-          >
-            Edit
-          </Button>
-          <Button
-            className="mb-4"
-            onClick={(e) => e.stopPropagation()}
-            variant="removeButton"
-            type="button"
-          >
-            Remove
-          </Button>
+          {permission === 'ADMIN' && (
+            <Button
+              className="mb-4 mt-6"
+              onClick={(e) => handleOnClick(e)}
+              variant="addButton"
+              type="button"
+            >
+              Edit
+            </Button>
+          )}
+          {permission === 'ADMIN' && (
+            <Button
+              className="mb-4"
+              onClick={(e) => e.stopPropagation()}
+              variant="removeButton"
+              type="button"
+            >
+              Remove
+            </Button>
+          )}
           {isExpanded && (
             <Icon className="ml-auto" name="Minimize" theme={theme} />
           )}

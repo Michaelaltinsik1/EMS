@@ -4,15 +4,18 @@ import Icon from 'src/Components/Base/Icon';
 import { Theme } from 'src/Types/enums';
 import { DepartmentType } from 'src/Types';
 import Button from 'src/Components/Base/Button';
+import { MouseEvent } from 'react';
 interface CardProps {
   department: DepartmentType;
   theme: Theme;
   isExpanded: boolean;
+  clickHandler: () => void;
 }
 const DepartmentCardContent = ({
   department,
   theme,
   isExpanded,
+  clickHandler,
 }: CardProps) => {
   let address: string = '';
   if (
@@ -23,10 +26,13 @@ const DepartmentCardContent = ({
     address = `${department?.addresses?.zip} ${department?.addresses?.city} ${department?.addresses?.country}`;
   }
 
+  const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    clickHandler();
+  };
   return (
     <>
       <Heading className="mb-1" type="H3" content={department.name} />
-
       <div className="flex items-center">
         <Paragraph
           className="whitespace-nowrap text-ellipsis overflow-hidden mr-2"
@@ -64,7 +70,7 @@ const DepartmentCardContent = ({
           {address && <Paragraph type="bodySmall" content={address} />}
           <Button
             className="mb-4 mt-6"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => handleOnClick(e)}
             variant="addButton"
             type="button"
           >

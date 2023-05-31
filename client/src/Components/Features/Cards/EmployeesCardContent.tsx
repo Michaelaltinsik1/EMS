@@ -4,12 +4,29 @@ import Icon from 'src/Components/Base/Icon';
 import { Theme } from 'src/Types/enums';
 import { UserType } from 'src/Types';
 import Button from 'src/Components/Base/Button';
+import EmployeeForm from '../Forms/EmployeeForm';
+import { useState } from 'react';
+import { MouseEvent } from 'react';
 interface CardProps {
   user: UserType;
   theme: Theme;
   isExpanded: boolean;
+  clickHandler: () => void;
 }
-const EmployeeCardContent = ({ user, theme, isExpanded }: CardProps) => {
+const EmployeeCardContent = ({
+  user,
+  theme,
+  isExpanded,
+  clickHandler,
+}: CardProps) => {
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    clickHandler();
+  };
+  const toggleForm = () => {
+    setIsFormOpen((prevState) => !prevState);
+  };
   return (
     <>
       <Heading
@@ -66,7 +83,7 @@ const EmployeeCardContent = ({ user, theme, isExpanded }: CardProps) => {
           <Paragraph className="mb-6" type="body" content={user.permission} />
           <Button
             className="mb-4"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => handleOnClick(e)}
             variant="addButton"
             type="button"
           >

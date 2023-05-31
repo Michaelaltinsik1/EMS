@@ -1,7 +1,6 @@
 import { ChangeEvent, useContext } from 'react';
 import { ThemeContext } from '../Features/ThemeProvider';
 import { Theme } from 'src/Types/enums';
-import { UseFormRegister, FieldValues } from 'react-hook-form';
 interface InputProps {
   type:
     | 'email'
@@ -67,7 +66,7 @@ const Input = ({
         className={`h-[56px] min-w-full px-4 py-3 text-body font-heading leading-150 rounded-lg border mt-2 ${className}  ${
           theme === Theme.LIGHT
             ? 'bg-gray-50 border-gray-900 text-gray-900 outline-blue-600 outline-1 '
-            : 'bg-gray-600 border-gray-50 text-gray-900 outline-blue-400 outline-1 '
+            : 'bg-gray-600 border-gray-50 text-gray-100 outline-blue-400 outline-1 '
         }`}
       />
 

@@ -14,26 +14,27 @@ const Modal = ({ children, handleOnClick }: ModalProps) => {
   };
   return (
     <>
-      <div
-        onClick={(e) => closeOnClick(e)}
-        className={`box-border absolute z-[1000] left-0 right-0 rounded-[16px] mx-4 px-[16px] py-[24px] tablet:mx-[56px] 
-        tabletEdgeCases:max-w-[828px] tabletEdgeCases:mx-auto tabletEdgeCases:px-[64px] tabletEdgeCases:py-[32px] ${
+      <Overlay handleOnClick={handleOnClick}>
+        <div
+          onClick={(e) => closeOnClick(e)}
+          className={`box-border z-[1000] rounded-[16px] mx-4 px-[16px] py-[24px] tablet:mx-[56px] max-h-[calc(100%-32px)] overflow-scroll
+        tabletEdgeCases:max-w-[828px] tabletEdgeCases:mx-auto tabletEdgeCases:px-[64px] tabletEdgeCases:py-[32px] mt-4  ${
           theme === Theme.LIGHT
             ? 'bg-gray-200 shadow-lightShadow'
             : 'bg-gray-700 shadow-darkShadow'
         }`}
-      >
-        <div>
-          <Icon
-            onClick={handleOnClick}
-            className="ml-auto"
-            name="Close"
-            theme={theme}
-          />
+        >
+          <div>
+            <Icon
+              onClick={handleOnClick}
+              className="ml-auto"
+              name="Close"
+              theme={theme}
+            />
+          </div>
+          {children}
         </div>
-        {children}
-      </div>
-      <Overlay handleOnClick={handleOnClick} />
+      </Overlay>
     </>
   );
 };

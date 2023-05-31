@@ -1,15 +1,27 @@
 import Heading from 'src/Components/Base/Heading';
 import Paragraph from 'src/Components/Base/Paragrapgh';
-import Icon from 'src/Components/Base/Icon';
+
 import { Theme } from 'src/Types/enums';
 import { RoleType } from 'src/Types';
 import Button from 'src/Components/Base/Button';
+import { MouseEvent } from 'react';
 interface CardProps {
   role: RoleType;
   theme: Theme;
   isExpanded: boolean;
+  clickHandler: () => void;
 }
-const RoleCardContent = ({ role, theme, isExpanded }: CardProps) => {
+const RoleCardContent = ({
+  role,
+  theme,
+  isExpanded,
+  clickHandler,
+}: CardProps) => {
+  const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    console.log('tghe click');
+    e.stopPropagation();
+    clickHandler();
+  };
   return (
     <>
       <Heading className="mb-1" type="H3" content={role.name} />
@@ -30,7 +42,7 @@ const RoleCardContent = ({ role, theme, isExpanded }: CardProps) => {
       />
       <Button
         className="mb-4 mt-6"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => handleOnClick(e)}
         variant="addButton"
         type="button"
       >
