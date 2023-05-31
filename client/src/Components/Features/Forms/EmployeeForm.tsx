@@ -6,6 +6,8 @@ import * as yup from 'yup';
 import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { UserType } from 'src/Types';
+import { CacheContext } from '../Context/CacheProvider';
+import { useContext } from 'react';
 
 interface EmployeeFormProps {
   handleOnClick: () => void;
@@ -37,6 +39,7 @@ const EmployeeForm = ({
   user,
   isEditForm = true,
 }: EmployeeFormProps) => {
+  const { roles } = useContext(CacheContext);
   const defaultValuesEdit = {
     name: (user?.firstName || '') + +(user?.lastName || ''),
     salary: user?.salary || '',
@@ -64,7 +67,11 @@ const EmployeeForm = ({
             label="Permission:"
           />
           <Select options={[]} name="department" label="Department:" />
-          <Select options={[]} name="role" label="Role:" />
+          <Select
+            options={roles?.map((role) => role.name) || []}
+            name="role"
+            label="Role:"
+          />
           <Select options={[]} name="country" label="Country:" />
           <Input type="text" name="city" label="City: " />
           <Input type="number" name="zip" label="Zip code:" />

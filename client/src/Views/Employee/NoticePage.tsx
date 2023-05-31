@@ -3,7 +3,7 @@ import { NoticeType, PermissionType } from 'src/Types';
 import { getNoticeByUserId } from 'src/API/notice';
 import { Toast } from 'src/utils/toastGenerator';
 import Card from 'src/Components/Features/Cards';
-import { AuthContext } from 'src/Components/Features/AuthProvider';
+import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import NoticeForm from 'src/Components/Features/Forms/NoticeForm';
 interface NoticeAPI {

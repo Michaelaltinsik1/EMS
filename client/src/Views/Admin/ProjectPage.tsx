@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { getAllProjects } from 'src/API/project';
-import { AuthContext } from 'src/Components/Features/AuthProvider';
+import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import Card from 'src/Components/Features/Cards';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';

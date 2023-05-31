@@ -1,4 +1,4 @@
-import { ThemeContext } from './ThemeProvider';
+import { ThemeContext } from '../Features/Context/ThemeProvider';
 import { ReactNode, useContext } from 'react';
 import { Theme } from 'src/Types/enums';
 import Icon from '../Base/Icon';

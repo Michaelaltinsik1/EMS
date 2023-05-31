@@ -3,10 +3,10 @@ import { Outlet, useLocation } from 'react-router-dom';
 import ThemeButton from './ThemeButton';
 import Header from './header';
 import { useEffect, useState } from 'react';
-import { ThemeContext } from '../Features/ThemeProvider';
+import { ThemeContext } from '../Features/Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import { useContext } from 'react';
-import { AuthContext } from './AuthProvider';
+import { AuthContext } from './Context/AuthProvider';
 import AuthGuard from './AuthGuard';
 interface LayoutProps {
   isAdmin?: boolean;

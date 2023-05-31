@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { ThemeContext } from '../ThemeProvider';
+import { ThemeContext } from '../Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import EmployeeCardContent from './EmployeesCardContent';
 import DepartmentCardContent from './DepartmentCardContent';

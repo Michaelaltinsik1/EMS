@@ -1,6 +1,6 @@
 import { body, body2 } from 'src/utils/typography';
 import { useContext } from 'react';
-import { ThemeContext } from '../Features/ThemeProvider';
+import { ThemeContext } from '../Features/Context/ThemeProvider';
 export enum Theme {
   LIGHT = 'light',
   Dark = 'dark',

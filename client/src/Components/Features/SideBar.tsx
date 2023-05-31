@@ -3,7 +3,7 @@ import Button from '../Base/Button';
 import Paragraph from '../Base/Paragrapgh';
 import Heading from '../Base/Heading';
 import { useContext } from 'react';
-import { ThemeContext } from '../Features/ThemeProvider';
+import { ThemeContext } from './Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import Icon from '../Base/Icon';
 interface MenuProps {

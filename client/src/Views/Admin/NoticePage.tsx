@@ -3,7 +3,7 @@ import { NoticeType, PermissionType } from 'src/Types';
 import { getAllNotices } from 'src/API/notice';
 import { Toast } from 'src/utils/toastGenerator';
 import Card from 'src/Components/Features/Cards';
-import { AuthContext } from 'src/Components/Features/AuthProvider';
+import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import Table from 'src/Components/Features/Tables';
 import { TaskTypes } from 'src/utils/enum';

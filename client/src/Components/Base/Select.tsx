@@ -1,9 +1,13 @@
 import { useContext } from 'react';
-import { ThemeContext } from '../Features/ThemeProvider';
+import { ThemeContext } from '../Features/Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import Icon from './Icon';
 
+/**
+ * Add type guard to check for type
+ */
 interface SelectProps {
+  //options: Array<{ id: string; name: string }>;
   options: Array<string>;
   label: string;
   name: string;

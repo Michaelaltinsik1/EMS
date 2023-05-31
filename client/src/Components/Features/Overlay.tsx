@@ -1,4 +1,4 @@
-import { ThemeContext } from './ThemeProvider';
+import { ThemeContext } from './Context/ThemeProvider';
 import { ReactNode, useContext } from 'react';
 import { Theme } from 'src/Types/enums';
 interface OverlayProps {

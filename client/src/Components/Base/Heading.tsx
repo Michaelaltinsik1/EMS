@@ -1,6 +1,6 @@
 import { H1, H2, H3, H4, H5 } from 'src/utils/typography';
 import { useContext } from 'react';
-import { ThemeContext } from '../Features/ThemeProvider';
+import { ThemeContext } from '../Features/Context/ThemeProvider';
 
 import { Theme } from 'src/Types/enums';
 

@@ -6,7 +6,7 @@ interface ButtonProps {
   className?: string;
   loading?: boolean;
   children: ReactNode;
-  variant: 'addButton' | 'removeButton';
+  variant: 'addButton' | 'removeButton' | 'confirmRemoveButton';
   hasIcon?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -19,14 +19,20 @@ const Button = ({
   variant,
   onClick,
 }: ButtonProps) => {
+  const handleVariant = () => {
+    switch (variant) {
+      case 'addButton':
+        return 'bg-blue-400 hover:bg-blue-500 active:bg-blue-600 text-gray-900';
+      case 'removeButton':
+        return 'bg-red-400 text-gray-900 hover:bg-red-500 active:bg-red-600 hover:text-gray-100 active:text-gray-100';
+      case 'confirmRemoveButton':
+        return 'bg-gray-100 text-red-dark border-[2px] border-solid border-red-400 hover:bg-red-500 hover:text-gray-100 hover:border-red-500 active:bg-red-600 active:text-gray-100 active:border-red-600';
+    }
+  };
   return (
     <button
       onClick={onClick}
-      className={`w-full h-[52px] desktop:w-[142px] font-body text-bodySmall font-bold rounded-2xl ${className} ${
-        variant === 'addButton'
-          ? 'bg-blue-400 hover:bg-blue-500 active:bg-blue-600 text-gray-900'
-          : 'bg-red-400 text-gray-900 hover:bg-red-500 active:bg-red-600 hover:text-gray-100 active:text-gray-100'
-      } `}
+      className={`border-red-400 w-full h-[52px] desktop:w-[142px] font-body text-bodySmall font-bold rounded-2xl ${className} ${handleVariant()} `}
       type={type}
       disabled={disabled}
     >

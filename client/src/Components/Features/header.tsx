@@ -1,7 +1,7 @@
 import Heading from '../Base/Heading';
 import Logo from 'src/Icons/logo.svg';
 import { useContext } from 'react';
-import { ThemeContext } from '../Features/ThemeProvider';
+import { ThemeContext } from '../Features/Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Icon from '../Base/Icon';

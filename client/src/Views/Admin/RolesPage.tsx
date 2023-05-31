@@ -8,14 +8,16 @@ import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import RoleForm from 'src/Components/Features/Forms/RoleForm';
+import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
+import { useContext } from 'react';
 interface RolesAPI {
   data?: Array<RoleType>;
   errors?: Array<{ error: string }>;
 }
 const RolePageAdmin = () => {
-  const [roles, setRoles] = useState<Array<RoleType>>([]);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const { isMobile } = useBreakpoint();
+  const { roles, updateRoles } = useContext(CacheContext);
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
@@ -24,7 +26,7 @@ const RolePageAdmin = () => {
       const roles: RolesAPI = await getAllRoles();
       console.log('roles: ', roles);
       if (roles?.data) {
-        setRoles(roles.data);
+        updateRoles(roles.data);
         Toast({ message: 'Success', id: 'GetAllRolesToast' });
       } else {
         console.log(roles.errors);
@@ -39,17 +41,23 @@ const RolePageAdmin = () => {
         }
       }
     };
-    getRoles();
-  }, []);
+    if (roles === null) {
+      getRoles();
+    }
+  }, [roles, updateRoles]);
   return (
     <>
       <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add role" />
       <div className="p-4">
-        <h1>Admin Role page</h1>
-        {isMobile ? (
-          roles.map((role) => <Card role={role} key={role.id} />)
-        ) : (
-          <Table type={TaskTypes.ROLE} data={roles} />
+        {roles && (
+          <>
+            <h1>Admin Role page</h1>
+            {isMobile ? (
+              roles.map((role) => <Card role={role} key={role.id} />)
+            ) : (
+              <Table type={TaskTypes.ROLE} data={roles} />
+            )}
+          </>
         )}
       </div>
       {isFormOpen && <RoleForm isEditForm={false} handleOnClick={toggleForm} />}

@@ -3,7 +3,7 @@ import { getLeavesByUserId } from 'src/API/leave';
 import Card from 'src/Components/Features/Cards';
 import { LeaveType, PermissionType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
-import { AuthContext } from 'src/Components/Features/AuthProvider';
+import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { TaskTypes } from 'src/utils/enum';

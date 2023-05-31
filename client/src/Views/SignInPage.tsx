@@ -4,8 +4,8 @@ import { signIn } from 'src/API';
 import { Toast } from 'src/utils/toastGenerator';
 import ThemeButton from 'src/Components/Features/ThemeButton';
 import { useContext } from 'react';
-import { ThemeContext } from 'src/Components/Features/ThemeProvider';
-import { AuthContext } from 'src/Components/Features/AuthProvider';
+import { ThemeContext } from 'src/Components/Features/Context/ThemeProvider';
+import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import Input from 'src/Components/Base/Input';
 import { Theme } from 'src/Types/enums';
 import Button from 'src/Components/Base/Button';
@@ -71,6 +71,15 @@ const SignInPage = () => {
         theme === Theme.LIGHT ? 'bg-gray-50' : 'bg-gray-700'
       }`}
     >
+      <Button type="button" variant="addButton">
+        test button1
+      </Button>
+      <Button type="button" variant="removeButton">
+        test button2
+      </Button>
+      <Button type="button" variant="confirmRemoveButton">
+        test button3
+      </Button>
       <Form
         onSubmit={handleSubmit}
         defaultValues={defaultValues}

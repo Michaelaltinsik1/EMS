@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { ThemeContext } from '../ThemeProvider';
+import { ThemeContext } from '../Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import EmployeeRow from './EmployeeTable/EmployeeRow';
 import DepartmentRow from './DepartmentTable/DepartmentRow';

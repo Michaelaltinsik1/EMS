@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useContext } from 'react';
-import { ThemeContext } from '../Features/ThemeProvider';
+import { ThemeContext } from '../Features/Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 
 interface ButtonProps {

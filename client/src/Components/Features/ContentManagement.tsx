@@ -1,7 +1,7 @@
 import Filter from './Filter';
 import Button from '../Base/Button';
 import { useContext } from 'react';
-import { ThemeContext } from '../Features/ThemeProvider';
+import { ThemeContext } from './Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 
 interface ContentmanagementProps {
