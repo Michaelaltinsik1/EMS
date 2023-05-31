@@ -10,16 +10,28 @@ import { DepartmentType } from 'src/Types';
 interface DepartmentProps {
   handleOnClick: () => void;
   department: DepartmentType;
+  isEditForm?: boolean;
 }
 
-const validationSchema = yup.object({});
+const validationSchemaEdit = yup.object({});
+
+const validationSchemaAdd = yup.object({});
+
+const defaultValuesAdd = {
+  name: '',
+  budget: '',
+};
 
 const onSubmit = () => {
   console.log('submit');
 };
 
-const DepartmentForm = ({ handleOnClick, department }: DepartmentProps) => {
-  const defaultValues = {
+const DepartmentForm = ({
+  handleOnClick,
+  department,
+  isEditForm = true,
+}: DepartmentProps) => {
+  const defaultValuesEdit = {
     name: department.name,
     budget: department.budget,
     country: department?.addresses?.country || '',
@@ -28,21 +40,36 @@ const DepartmentForm = ({ handleOnClick, department }: DepartmentProps) => {
   };
   return (
     <Modal handleOnClick={handleOnClick}>
-      <Form
-        defaultValues={defaultValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        <Heading className="mb-[24px]" type="H3" content="Edit department" />
-        <Input type="text" name="name" label="Name:" />
-        <Input type="number" name="budget" label="Budget:" />
-        <Select options={[]} name="country" label="Country:" />
-        <Input type="text" name="city" label="City: " />
-        <Input type="number" name="zip" label="Zip code:" />
-        <Button type="submit" variant="addButton">
-          Edit
-        </Button>
-      </Form>
+      {isEditForm ? (
+        <Form
+          defaultValues={defaultValuesEdit}
+          validationSchema={validationSchemaEdit}
+          onSubmit={onSubmit}
+        >
+          <Heading className="mb-[24px]" type="H3" content="Edit department" />
+          <Input type="text" name="name" label="Name:" />
+          <Input type="number" name="budget" label="Budget:" />
+          <Select options={[]} name="country" label="Country:" />
+          <Input type="text" name="city" label="City: " />
+          <Input type="number" name="zip" label="Zip code:" />
+          <Button type="submit" variant="addButton">
+            Edit
+          </Button>
+        </Form>
+      ) : (
+        <Form
+          defaultValues={defaultValuesAdd}
+          validationSchema={validationSchemaAdd}
+          onSubmit={onSubmit}
+        >
+          <Heading className="mb-[24px]" type="H3" content="Add department" />
+          <Input type="text" name="name" label="Name:" />
+          <Input type="number" name="budget" label="Budget:" />
+          <Button type="submit" variant="addButton">
+            Add
+          </Button>
+        </Form>
+      )}
     </Modal>
   );
 };

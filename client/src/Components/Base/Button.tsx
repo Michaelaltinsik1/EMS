@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-
+import Loader from './Loader';
 interface ButtonProps {
   type: 'submit' | 'button';
   disabled?: boolean;
@@ -30,7 +30,7 @@ const Button = ({
       type={type}
       disabled={disabled}
     >
-      {loading ? 'Loading...' : children}
+      {loading ? <Loader /> : children}
     </button>
   );
 };

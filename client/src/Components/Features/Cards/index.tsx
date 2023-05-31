@@ -114,7 +114,11 @@ const Card = ({
             clickHandler={toggleForm}
           />
           {isFormOpen && (
-            <ProjectForm project={project} handleOnClick={toggleForm} />
+            <ProjectForm
+              isEditForm={false}
+              project={project}
+              handleOnClick={toggleForm}
+            />
           )}
         </>
       );

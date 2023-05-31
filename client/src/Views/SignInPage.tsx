@@ -11,6 +11,7 @@ import { Theme } from 'src/Types/enums';
 import Button from 'src/Components/Base/Button';
 import Form from 'src/Components/Base/Form';
 import * as yup from 'yup';
+import Loader from 'src/Components/Base/Loader';
 
 const validationSchema = yup.object({
   email: yup.string().email('Invalid formate').required('Email is required'),
@@ -32,15 +33,13 @@ const SignInPage = () => {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
   const { handleSignInPermissions } = useContext(AuthContext);
-  // const [password, setPassword] = useState<string>('');
-  // const [email, setEmail] = useState<string>('');
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function handleSubmit(formFields: FormSubmitType) {
     console.log('email: ', formFields.email);
     console.log('password:', formFields.password);
-    //  onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}
-    //event.preventDefault();
+
     setIsLoading(true);
     const data = await signIn(formFields.email, formFields.password);
     if (data && data?.status === 200) {
@@ -83,7 +82,6 @@ const SignInPage = () => {
         }`}
       >
         <Input
-          //onChangeHandler={setEmail}
           className="mb-[24px]"
           name="email"
           type="email"
@@ -91,7 +89,6 @@ const SignInPage = () => {
           placeholder="Anna.andersson@hotmail.se"
         />
         <Input
-          //onChangeHandler={setPassword}
           className="mb-[32px]"
           name="password"
           type="password"
@@ -103,7 +100,6 @@ const SignInPage = () => {
           variant="addButton"
           type="submit"
           loading={isLoading}
-          // onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}
         >
           Sign in
         </Button>

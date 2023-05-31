@@ -9,29 +9,43 @@ import { RoleType } from 'src/Types';
 interface RoleProps {
   handleOnClick: () => void;
   role: RoleType;
+  isEditForm?: boolean;
 }
 
-const validationSchema = yup.object({});
-
-const onSubmit = () => {
-  console.log('submit');
+const validationSchemaEdit = yup.object({});
+const validationSchemaAdd = yup.object({});
+const defaultValuesAdd = {
+  name: '',
 };
 
-const RoleForm = ({ handleOnClick, role }: RoleProps) => {
-  const defaultValues = {
+const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
+  const defaultValuesEdit = {
     name: role.name,
+  };
+  const onSubmit = () => {
+    if (isEditForm) {
+      // Handle edit form network request
+    } else {
+      // Handle add form network request
+    }
   };
   return (
     <Modal handleOnClick={handleOnClick}>
       <Form
-        defaultValues={defaultValues}
-        validationSchema={validationSchema}
+        defaultValues={isEditForm ? defaultValuesEdit : defaultValuesAdd}
+        validationSchema={
+          isEditForm ? validationSchemaEdit : validationSchemaAdd
+        }
         onSubmit={onSubmit}
       >
-        <Heading className="mb-[24px]" type="H3" content="Edit role" />
+        {isEditForm ? (
+          <Heading className="mb-[24px]" type="H3" content="Edit role" />
+        ) : (
+          <Heading className="mb-[24px]" type="H3" content="Add role" />
+        )}
         <Select options={[]} name="role" label="Role:" />
         <Button type="submit" variant="addButton">
-          Edit
+          {isEditForm ? 'Edit' : 'Add'}
         </Button>
       </Form>
     </Modal>

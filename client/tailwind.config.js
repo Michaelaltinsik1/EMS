@@ -97,6 +97,21 @@ module.exports = {
         darkShadow: '0px 3px 8px 0px #212121',
         lightShadow: '0px 3px 8px 0px #E0E0E0',
       },
+      keyframes: {
+        loaderAnimation: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.5)' },
+          '100%': { transform: 'scale(1)' },
+        },
+        spin: {
+          '0%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(360deg)' },
+        },
+      },
+      animation: {
+        loader: 'loaderAnimation 1s infinite ease-in-out',
+        spin: 'spin 1.5s linear infinite',
+      },
     },
   },
   plugins: [],

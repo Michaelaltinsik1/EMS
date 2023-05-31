@@ -3,9 +3,10 @@ import { ReactComponent as Close } from 'src/Icons/close.svg';
 import { ReactComponent as Person } from 'src/Icons/person.svg';
 import { ReactComponent as Minimize } from 'src/Icons/Minimize.svg';
 import { ReactComponent as Logo } from 'src/Icons/logo.svg';
+import { ReactComponent as Filter } from 'src/Icons/filter.svg';
 import { Theme } from 'src/Types/enums';
 interface IconProps {
-  name: 'Close' | 'Expand' | 'Logo' | 'Menu' | 'Minimize' | 'Person';
+  name: 'Close' | 'Expand' | 'Logo' | 'Menu' | 'Minimize' | 'Person' | 'Filter';
   theme: Theme;
   onClick?: () => void;
   className?: string;
@@ -57,6 +58,14 @@ const Icon = ({ name, theme, onClick, className = '' }: IconProps) => {
       case 'Person':
         return (
           <Person
+            className={`w-[52px] h-[52px] ${className}`}
+            onClick={onClick}
+            fill={color}
+          />
+        );
+      case 'Filter':
+        return (
+          <Filter
             className={`w-[52px] h-[52px] ${className}`}
             onClick={onClick}
             fill={color}
