@@ -1,18 +1,30 @@
 import Form from 'src/Components/Base/Form';
 import Input from 'src/Components/Base/Input';
-import Select from 'src/Components/Base/Select';
+
 import Button from 'src/Components/Base/Button';
 import * as yup from 'yup';
 import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { ProjectType } from 'src/Types';
-
+import { postNewProject, updateProjectById } from 'src/API/project';
+import { CacheContext } from '../Context/CacheProvider';
+import { useContext } from 'react';
+import { Toast } from 'src/utils/toastGenerator';
 interface ProjectProps {
   handleOnClick: () => void;
   project?: ProjectType;
   isEditForm?: boolean;
 }
-
+interface ProjectAPI {
+  data?: Array<ProjectType>;
+  errors?: Array<{ error: string }>;
+}
+interface FormFieldTypes {
+  name: string;
+  start: string;
+  deadline: string;
+  description: string;
+}
 const validationSchemaEdit = yup.object({
   name: yup
     .string()
@@ -50,11 +62,55 @@ const ProjectForm = ({
     deadline: project?.deadline || '',
     description: project?.description || '',
   };
-  const onSubmit = () => {
+  const { updateProjects } = useContext(CacheContext);
+  const onSubmit = async ({
+    name,
+    start,
+    deadline,
+    description,
+  }: FormFieldTypes) => {
+    let roleResponse: ProjectAPI | null = null;
     if (isEditForm) {
       // Handle edit form network request
+      roleResponse = await updateProjectById({
+        name,
+        start_date: new Date(start),
+        deadline: new Date(deadline),
+        description,
+        projectId: project?.id || '',
+      });
+      if (roleResponse?.data) {
+        updateProjects(null);
+        Toast({
+          message: 'Role has been updated!',
+          id: 'postProjectToastSuccess',
+        });
+      }
     } else {
       // Handle add form network request
+      roleResponse = await postNewProject({
+        name,
+        start_date: new Date(start),
+        deadline: new Date(deadline),
+        description,
+      });
+      if (roleResponse?.data) {
+        updateProjects(null);
+        Toast({
+          message: 'Role has been added!',
+          id: 'postProjectToastSuccess',
+        });
+      }
+    }
+    if (roleResponse?.errors) {
+      roleResponse?.errors.map((errorMessage) =>
+        Toast({
+          //message: errorMessage?.error || errorMessage?.msg || '',
+          message: 'Error',
+          id: 'postProjectToastError',
+          isSuccess: false,
+        })
+      );
     }
   };
 

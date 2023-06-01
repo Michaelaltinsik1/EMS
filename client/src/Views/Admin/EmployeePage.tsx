@@ -26,18 +26,19 @@ const EmployeePageAdmin = () => {
       const employeeResponse: EmployeeAPI = await getUsers();
       if (employeeResponse?.data) {
         updateEmployees(employeeResponse.data);
-        Toast({ message: 'Success', id: 'GetAllEmployeesToastSuccess' });
-      } else {
-        if (employeeResponse?.errors) {
-          employeeResponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetAllEmployeesToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'GetAllEmployeesToastSuccess' });
       }
+      // else {
+      //   if (employeeResponse?.errors) {
+      //     employeeResponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetAllEmployeesToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (employees === null) {
       getAllUsers();

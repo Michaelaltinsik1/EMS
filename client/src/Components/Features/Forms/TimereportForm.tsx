@@ -7,12 +7,29 @@ import Heading from 'src/Components/Base/Heading';
 import { Time_reportType } from 'src/Types';
 import Input from 'src/Components/Base/Input';
 import { statuses } from 'src/utils/lists';
+import { postNewTimeReport, updateTimeReportById } from 'src/API/timereport';
+import { useContext } from 'react';
+import { AuthContext } from '../Context/AuthProvider';
+import { Toast } from 'src/utils/toastGenerator';
+import { CacheContext } from '../Context/CacheProvider';
+import { StatusType } from 'src/Types';
+interface TimereportAPI {
+  data?: Array<Time_reportType>;
+  errors?: Array<{ error: string }>;
+}
 interface TimereportProps {
   handleOnClick: () => void;
   timereport?: Time_reportType;
   isEditForm?: boolean;
 }
 
+interface FormFieldTypesEdit {
+  status: string;
+}
+interface FormFieldTypesAdd {
+  from: string;
+  to: string;
+}
 const validationSchemaEdit = yup.object({
   status: yup.string().required('Status is a required field'),
 });
@@ -24,25 +41,73 @@ const defaultValuesAdd = {
   from: '',
   to: '',
 };
-const onSubmit = () => {
-  console.log('submit');
-};
 
 const TimereportForm = ({
   handleOnClick,
   timereport,
   isEditForm = true,
 }: TimereportProps) => {
+  const { user } = useContext(AuthContext);
+  const { updateTimereports } = useContext(CacheContext);
   const defaultValuesEdit = {
     status: timereport?.status || '',
   };
+  const onSubmitAdd = async ({ to, from }: FormFieldTypesAdd) => {
+    const timereportResponse: TimereportAPI = await postNewTimeReport({
+      to: new Date(to),
+      from: new Date(from),
+      userId: user?.userId || '',
+    });
+    if (timereportResponse?.data) {
+      renderToast(timereportResponse, 'Timereport has been added!!');
+    } else {
+      renderToast(timereportResponse);
+    }
+  };
+  const onSubmitEdit = async ({ status }: FormFieldTypesEdit) => {
+    if (statuses.some((currStatus) => currStatus.id === status)) {
+      const timereportResponse: TimereportAPI = await updateTimeReportById({
+        status: status as StatusType,
+        timereportId: timereport?.id || '',
+      });
+      if (timereportResponse?.data) {
+        renderToast(timereportResponse, 'Timereport has been updated!');
+      } else {
+        renderToast(timereportResponse);
+      }
+    } else {
+      Toast({
+        message: 'Invalid Status',
+        id: 'postTimereportToastError',
+        isSuccess: false,
+      });
+    }
+  };
+
+  const renderToast = (rolesResponse: TimereportAPI, message?: string) => {
+    if (rolesResponse?.data && message) {
+      updateTimereports(null);
+      Toast({ message, id: 'postTimereportToastSuccess' });
+    } else {
+      if (rolesResponse?.errors) {
+        rolesResponse?.errors.map((errorMessage) =>
+          Toast({
+            message: errorMessage.error,
+            id: 'postTimereportToastError',
+            isSuccess: false,
+          })
+        );
+      }
+    }
+  };
+
   return (
     <Modal handleOnClick={handleOnClick}>
       {isEditForm ? (
         <Form
           defaultValues={defaultValuesEdit}
           validationSchema={validationSchemaEdit}
-          onSubmit={onSubmit}
+          onSubmit={onSubmitEdit}
         >
           <Heading className="mb-[24px]" type="H3" content="Edit timereport" />
           <Select required options={statuses} name="status" label="Status:" />
@@ -54,11 +119,16 @@ const TimereportForm = ({
         <Form
           defaultValues={defaultValuesAdd}
           validationSchema={validationSchemaAdd}
-          onSubmit={onSubmit}
+          onSubmit={onSubmitAdd}
         >
           <Heading className="mb-[24px]" type="H3" content="Add timereport" />
-          <Input required type="date" name="from" label="Start date:" />
-          <Input required type="date" name="to" label="End date:" />
+          <Input
+            required
+            type="datetime-local"
+            name="from"
+            label="Start date:"
+          />
+          <Input required type="datetime-local" name="to" label="End date:" />
           <Button
             className="desktop:self-end"
             type="submit"

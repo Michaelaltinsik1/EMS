@@ -5,6 +5,7 @@ import { Theme } from 'src/Types/enums';
 import { PermissionType, Time_reportType } from 'src/Types';
 import Button from 'src/Components/Base/Button';
 import { MouseEvent } from 'react';
+import { getTimereportDateTime } from 'src/utils/functions';
 interface CardProps {
   timereport: Time_reportType;
   theme: Theme;
@@ -65,17 +66,18 @@ const TimereportCardContent = ({
           />
           <Paragraph
             type="body"
-            content={timereport.created_at.toString().split('T')[0]}
+            //content={timereport.created_at.toString().split('T')[0]}
+            content={getTimereportDateTime(timereport.created_at.toString())}
           />
           <Paragraph className="mt-4 mb-1" type="bodySmall" content="From: " />
           <Paragraph
             type="body"
-            content={timereport.from.toString().split('T')[0]}
+            content={getTimereportDateTime(timereport.from.toString())}
           />
           <Paragraph className="mt-4 mb-1" type="bodySmall" content="To: " />
           <Paragraph
             type="body"
-            content={timereport.to.toString().split('T')[0]}
+            content={getTimereportDateTime(timereport.to.toString())}
           />
           <Paragraph
             className="mt-4 mb-1"

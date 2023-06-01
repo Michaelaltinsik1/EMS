@@ -28,19 +28,20 @@ const RolePageAdmin = () => {
       console.log('roles: ', roles);
       if (rolesResponse?.data) {
         updateRoles(rolesResponse.data);
-        Toast({ message: 'Success', id: 'GetAllRolesToastSuccess' });
-      } else {
-        console.log(rolesResponse.errors);
-        if (rolesResponse?.errors) {
-          rolesResponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetAllRolesToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'postRolesToastSuccess' });
       }
+      // else {
+      //   console.log(rolesResponse.errors);
+      //   if (rolesResponse?.errors) {
+      //     rolesResponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'postRolesToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (roles === null) {
       getRoles();

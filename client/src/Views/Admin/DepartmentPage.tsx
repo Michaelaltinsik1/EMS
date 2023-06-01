@@ -28,19 +28,20 @@ const DepartmentPageAdmin = () => {
       const departmentsResponse: DepartmentsAPI = await getAllDepartments();
       if (departmentsResponse?.data) {
         updateDepartments(departmentsResponse.data);
-        Toast({ message: 'Success', id: 'GetAllDepartmentsToastSuccess' });
-      } else {
-        console.log(departmentsResponse.errors);
-        if (departmentsResponse?.errors) {
-          departmentsResponse?.errors.map((errorMessage: { error: string }) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetAllDepartmentsToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        // Toast({ message: 'Success', id: 'GetAllDepartmentsToastSuccess' });
       }
+      // else {
+      //   console.log(departmentsResponse.errors);
+      //   if (departmentsResponse?.errors) {
+      //     departmentsResponse?.errors.map((errorMessage: { error: string }) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetAllDepartmentsToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (departments === null) {
       getDepartments();

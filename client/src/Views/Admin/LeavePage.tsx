@@ -29,19 +29,20 @@ const LeavePageAdmin = () => {
       const leavesReponse: LeaveAPI = await getAllLeaves();
       if (leavesReponse?.data) {
         updateLeaves(leavesReponse.data);
-        Toast({ message: 'Success', id: 'GetAllLeavesToastSuccess' });
-      } else {
-        console.log(leavesReponse.errors);
-        if (leavesReponse?.errors) {
-          leavesReponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetAllLeavesToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'GetAllLeavesToastSuccess' });
       }
+      // else {
+      //   console.log(leavesReponse.errors);
+      //   if (leavesReponse?.errors) {
+      //     leavesReponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetAllLeavesToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (leaves === null) {
       getLeaves();

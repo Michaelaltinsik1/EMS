@@ -31,19 +31,20 @@ const NoticePage = () => {
         const tempArray: Array<NoticeType> = [];
         tempArray.push(noticeReponse.data);
         updateNotices(tempArray);
-        Toast({ message: 'Success', id: 'GetNoticesByIdToastSuccess' });
-      } else {
-        console.log(noticeReponse.errors);
-        if (noticeReponse?.errors) {
-          noticeReponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetNoticesByIdToastSuccessError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'GetNoticesByIdToastSuccess' });
       }
+      // else {
+      //   console.log(noticeReponse.errors);
+      //   if (noticeReponse?.errors) {
+      //     noticeReponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetNoticesByIdToastSuccessError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (notices === null) {
       getNotices();

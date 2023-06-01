@@ -31,19 +31,20 @@ const TimeReportPageAdmin = () => {
       console.log('Timereport: ', timereports);
       if (timereportsResponse?.data) {
         updateTimereports(timereportsResponse.data);
-        Toast({ message: 'Success', id: 'GetAllTimereportsToastSuccess' });
-      } else {
-        console.log(timereportsResponse.errors);
-        if (timereportsResponse?.errors) {
-          timereportsResponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetAllTimereportsToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        // Toast({ message: 'Success', id: 'GetAllTimereportsToastSuccess' });
       }
+      // else {
+      //   console.log(timereportsResponse.errors);
+      //   if (timereportsResponse?.errors) {
+      //     timereportsResponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetAllTimereportsToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (timereports === null) {
       getTimeReports();

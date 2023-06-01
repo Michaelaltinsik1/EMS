@@ -34,19 +34,20 @@ const ProjectPage = () => {
 
       if (projectsResponse?.data) {
         updateProjects(projectsResponse.data);
-        Toast({ message: 'Success', id: 'GetProjectsByIdToastSuccess' });
-      } else {
-        console.log(projectsResponse.errors);
-        if (projectsResponse?.errors) {
-          projectsResponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetProjectsByIdToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'GetProjectsByIdToastSuccess' });
       }
+      // else {
+      //   console.log(projectsResponse.errors);
+      //   if (projectsResponse?.errors) {
+      //     projectsResponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetProjectsByIdToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (projects === null) {
       getProjects();

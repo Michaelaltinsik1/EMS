@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { RoleType } from 'src/Types';
-import { postNewRole } from 'src/API/role';
+import { postNewRole, updateRoleById } from 'src/API/role';
 import { Toast } from 'src/utils/toastGenerator';
 import { CacheContext } from '../Context/CacheProvider';
 import { useContext } from 'react';
@@ -45,22 +45,23 @@ const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
   };
   const onSubmit = async ({ name }: FormFieldTypes) => {
     console.log('Name: ', name);
-    let role: RolesAPI | null = null;
+    let roleResponse: RolesAPI | null = null;
     if (isEditForm) {
       // Handle edit form network request
+      roleResponse = await updateRoleById({ name, roleId: role?.id || '' });
     } else {
       // Handle add form network request
-      role = await postNewRole(name);
+      roleResponse = await postNewRole(name);
       console.log('Role: ', role);
     }
-    if (role?.data) {
+    if (roleResponse?.data) {
       updateRoles(null);
       Toast({ message: 'Role has been added', id: 'GetAllRolesToast' });
     } else {
-      console.log(role?.errors);
-      if (role?.errors) {
+      console.log(roleResponse?.errors);
+      if (roleResponse?.errors) {
         console.log('an error happened');
-        role?.errors.map((errorMessage) =>
+        roleResponse?.errors.map((errorMessage) =>
           Toast({
             message: errorMessage?.error || errorMessage?.msg || '',
             id: 'PostRoleErrorToast',

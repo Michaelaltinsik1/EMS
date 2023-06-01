@@ -30,19 +30,20 @@ const ProjectPageAdmin = () => {
       console.log('Leaves: ', projects);
       if (projectsResponse?.data) {
         updateProjects(projectsResponse.data);
-        Toast({ message: 'Success', id: 'GetAllProjectsToastSuccess' });
-      } else {
-        console.log(projectsResponse.errors);
-        if (projectsResponse?.errors) {
-          projectsResponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetAllEmployeesToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'GetAllProjectsToastSuccess' });
       }
+      // else {
+      //   console.log(projectsResponse.errors);
+      //   if (projectsResponse?.errors) {
+      //     projectsResponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetAllEmployeesToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (projects === null) {
       getProjects();

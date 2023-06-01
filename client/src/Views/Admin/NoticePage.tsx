@@ -30,19 +30,20 @@ const NoticePageAdmin = () => {
       console.log('Notices: ', notices);
       if (noticesReponse?.data) {
         updateNotices(noticesReponse.data);
-        Toast({ message: 'Success', id: 'GetAllNoticesToastSuccess' });
-      } else {
-        console.log(noticesReponse.errors);
-        if (noticesReponse?.errors) {
-          noticesReponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetAllNoticesToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'GetAllNoticesToastSuccess' });
       }
+      // else {
+      //   console.log(noticesReponse.errors);
+      //   if (noticesReponse?.errors) {
+      //     noticesReponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetAllNoticesToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (notices === null) {
       getNotices();

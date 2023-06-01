@@ -31,19 +31,20 @@ const LeavePage = () => {
       console.log('Leaves: ', leaves);
       if (leavesReponse?.data) {
         updateLeaves(leavesReponse.data);
-        Toast({ message: 'Success', id: 'GetLeavesByIdToastSuccess' });
-      } else {
-        console.log(leavesReponse.errors);
-        if (leavesReponse?.errors) {
-          leavesReponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetLeavesByIdToastSuccessError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'GetLeavesByIdToastSuccess' });
       }
+      // else {
+      //   console.log(leavesReponse.errors);
+      //   if (leavesReponse?.errors) {
+      //     leavesReponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetLeavesByIdToastSuccessError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (leaves === null) {
       getLeaves();

@@ -33,18 +33,19 @@ const TimeReportPage = () => {
       console.log('Timereport: ', timereports);
       if (timereportsReponse?.data) {
         updateTimereports(timereportsReponse.data);
-        Toast({ message: 'Success', id: 'GetTimereportsByIdToastSuccess' });
-      } else {
-        if (timereportsReponse?.errors) {
-          timereportsReponse?.errors.map((errorMessage) =>
-            Toast({
-              message: errorMessage.error,
-              id: 'GetTimereportsByIdToastError',
-              isSuccess: false,
-            })
-          );
-        }
+        //Toast({ message: 'Success', id: 'GetTimereportsByIdToastSuccess' });
       }
+      // else {
+      //   if (timereportsReponse?.errors) {
+      //     timereportsReponse?.errors.map((errorMessage) =>
+      //       Toast({
+      //         message: errorMessage.error,
+      //         id: 'GetTimereportsByIdToastError',
+      //         isSuccess: false,
+      //       })
+      //     );
+      //   }
+      // }
     };
     if (timereports === null) {
       getTimeReports();
