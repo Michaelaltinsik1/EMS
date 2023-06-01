@@ -18,8 +18,20 @@ interface RolesAPI {
   data?: RoleType;
   errors?: Array<{ error?: string; msg?: string }>;
 }
-const validationSchemaEdit = yup.object({});
-const validationSchemaAdd = yup.object({});
+const validationSchemaEdit = yup.object({
+  name: yup
+    .string()
+    .required('Name is a required field')
+    .min(2, 'Requires atleast 2 characters')
+    .max(255, 'Maximum of 255 characters'),
+});
+const validationSchemaAdd = yup.object({
+  name: yup
+    .string()
+    .required('Name is a required field')
+    .min(2, 'Requires atleast 2 characters')
+    .max(255, 'Maximum of 255 characters'),
+});
 const defaultValuesAdd = {
   name: '',
 };
@@ -72,7 +84,7 @@ const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
         ) : (
           <Heading className="mb-[24px]" type="H3" content="Add role" />
         )}
-        <Input type="text" name="name" label="name:" />
+        <Input required type="text" name="name" label="Name:" />
         <Button className="desktop:self-end" type="submit" variant="addButton">
           {isEditForm ? 'Edit' : 'Add'}
         </Button>

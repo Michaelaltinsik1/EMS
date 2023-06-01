@@ -6,7 +6,7 @@ import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { NoticeType } from 'src/Types';
 import Input from 'src/Components/Base/Input';
-
+import { statuses } from 'src/utils/lists';
 interface NoticeProps {
   handleOnClick: () => void;
   notice?: NoticeType;
@@ -39,7 +39,7 @@ const NoticeForm = ({
           onSubmit={onSubmit}
         >
           <Heading className="mb-[24px]" type="H3" content="Edit notice" />
-          <Select options={[]} name="status" label="Status:" />
+          <Select required options={statuses} name="status" label="Status:" />
           <Button type="submit" variant="addButton">
             Edit
           </Button>
@@ -52,7 +52,7 @@ const NoticeForm = ({
         >
           <Heading className="mb-[24px]" type="H3" content="Add notice" />
           {/* Add text area here later */}
-          <Input type="text" name="description" label="Description:" />
+          <Input required type="text" name="description" label="Description:" />
           <Button
             className="desktop:self-end"
             type="submit"

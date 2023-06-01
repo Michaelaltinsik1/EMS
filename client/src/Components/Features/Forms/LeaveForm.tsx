@@ -6,18 +6,22 @@ import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { LeaveType } from 'src/Types';
 import Input from 'src/Components/Base/Input';
-
+import { statuses } from 'src/utils/lists';
 interface LeaveProps {
   handleOnClick: () => void;
   leave?: LeaveType;
   isEditForm?: boolean;
 }
 
-const validationSchemaEdit = yup.object({});
-const validationSchemaAdd = yup.object({});
+const validationSchemaEdit = yup.object({
+  status: yup.string().required('Status is a required field'),
+});
+const validationSchemaAdd = yup.object({
+  to: yup.string().required('Start date is a required field'),
+  from: yup.string().required('End date is a required field'),
+});
 
 const defaultValuesAdd = {
-  type: '',
   from: '',
   to: '',
 };
@@ -38,11 +42,7 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
           onSubmit={onSubmit}
         >
           <Heading className="mb-[24px]" type="H3" content="Edit leave" />
-          <Select
-            options={['PENDING', 'ACCEPTED', 'REJECTED']}
-            name="status"
-            label="Status:"
-          />
+          <Select required options={statuses} name="status" label="Status:" />
           <Button type="submit" variant="addButton">
             Edit
           </Button>
@@ -54,9 +54,8 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
           onSubmit={onSubmit}
         >
           <Heading className="mb-[24px]" type="H3" content="Add leave" />
-          <Select options={[]} name="type" label="Status:" />
-          <Input type="date" name="from" label="Start date:" />
-          <Input type="date" name="to" label="End date:" />
+          <Input required type="date" name="from" label="Start date:" />
+          <Input required type="date" name="to" label="End date:" />
           <Button
             className="desktop:self-end"
             type="submit"

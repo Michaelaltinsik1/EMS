@@ -31,7 +31,7 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <CacheProvider>
-            <ToastContainer />
+            <ToastContainer limit={1} />
             <Routes>
               <Route index element={<SignInPage />} />
               <Route element={<Layout isAdmin={true} />}>

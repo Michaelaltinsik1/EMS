@@ -6,15 +6,20 @@ import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { Time_reportType } from 'src/Types';
 import Input from 'src/Components/Base/Input';
-
+import { statuses } from 'src/utils/lists';
 interface TimereportProps {
   handleOnClick: () => void;
   timereport?: Time_reportType;
   isEditForm?: boolean;
 }
 
-const validationSchemaEdit = yup.object({});
-const validationSchemaAdd = yup.object({});
+const validationSchemaEdit = yup.object({
+  status: yup.string().required('Status is a required field'),
+});
+const validationSchemaAdd = yup.object({
+  to: yup.string().required('Start date is a required field'),
+  from: yup.string().required('End date is a required field'),
+});
 const defaultValuesAdd = {
   from: '',
   to: '',
@@ -40,7 +45,7 @@ const TimereportForm = ({
           onSubmit={onSubmit}
         >
           <Heading className="mb-[24px]" type="H3" content="Edit timereport" />
-          <Select options={[]} name="status" label="Status:" />
+          <Select required options={statuses} name="status" label="Status:" />
           <Button type="submit" variant="addButton">
             Edit
           </Button>
@@ -52,8 +57,8 @@ const TimereportForm = ({
           onSubmit={onSubmit}
         >
           <Heading className="mb-[24px]" type="H3" content="Add timereport" />
-          <Input type="date" name="from" label="Start date:" />
-          <Input type="date" name="to" label="End date:" />
+          <Input required type="date" name="from" label="Start date:" />
+          <Input required type="date" name="to" label="End date:" />
           <Button
             className="desktop:self-end"
             type="submit"

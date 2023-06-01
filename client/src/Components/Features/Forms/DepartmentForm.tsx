@@ -6,16 +6,40 @@ import * as yup from 'yup';
 import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { DepartmentType } from 'src/Types';
-
+import { countries } from 'src/utils/lists';
 interface DepartmentProps {
   handleOnClick: () => void;
   department?: DepartmentType;
   isEditForm?: boolean;
 }
 
-const validationSchemaEdit = yup.object({});
+const validationSchemaEdit = yup.object({
+  name: yup
+    .string()
+    .required('Name is a required field')
+    .min(2, 'Requires atleast 2 characters'),
+  budget: yup.string().required('Budget is a required field'),
+  country: yup
+    .string()
+    .required('Country is a required field')
+    .min(2, 'Requires atleast 2 characters'),
+  city: yup
+    .string()
+    .required('City is a required field')
+    .min(2, 'Requires atleast 2 characters'),
+  zip: yup
+    .string()
+    .required('Zip is a required field')
+    .matches(/^\s?\d{5}\s?$/, 'Invalid zip code'),
+});
 
-const validationSchemaAdd = yup.object({});
+const validationSchemaAdd = yup.object({
+  name: yup
+    .string()
+    .required('Name is a required field')
+    .min(2, 'Requires atleast 2 characters'),
+  budget: yup.string().required('Budget is a required field'),
+});
 
 const defaultValuesAdd = {
   name: '',
@@ -47,11 +71,16 @@ const DepartmentForm = ({
           onSubmit={onSubmit}
         >
           <Heading className="mb-[24px]" type="H3" content="Edit department" />
-          <Input type="text" name="name" label="Name:" />
-          <Input type="number" name="budget" label="Budget:" />
-          <Select options={[]} name="country" label="Country:" />
-          <Input type="text" name="city" label="City: " />
-          <Input type="number" name="zip" label="Zip code:" />
+          <Input required type="text" name="name" label="Name:" />
+          <Input required type="number" name="budget" label="Budget:" />
+          <Select
+            required
+            options={countries}
+            name="country"
+            label="Country:"
+          />
+          <Input required type="text" name="city" label="City: " />
+          <Input required type="number" name="zip" label="Zip code:" />
           <Button type="submit" variant="addButton">
             Edit
           </Button>
@@ -63,8 +92,8 @@ const DepartmentForm = ({
           onSubmit={onSubmit}
         >
           <Heading className="mb-[24px]" type="H3" content="Add department" />
-          <Input type="text" name="name" label="Name:" />
-          <Input type="number" name="budget" label="Budget:" />
+          <Input required type="text" name="name" label="Name:" />
+          <Input required type="number" name="budget" label="Budget:" />
           <Button
             className="desktop:self-end"
             type="submit"

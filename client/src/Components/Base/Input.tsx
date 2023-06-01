@@ -54,7 +54,10 @@ const Input = ({
       }`}
       htmlFor={name}
     >
-      {label}
+      <div className="flex items-center ">
+        {required && <span className="mr-2 font-body font-bold mt-1">*</span>}
+        {label}{' '}
+      </div>
       {register ? (
         <input
           id={name}
@@ -89,8 +92,6 @@ const Input = ({
           }`}
         />
       )}
-
-      {required && <p>*</p>}
       {isErrorSpaceDiv && (
         <div className="min-h-[30px]">
           {inputError && (

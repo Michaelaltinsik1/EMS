@@ -13,8 +13,25 @@ interface ProjectProps {
   isEditForm?: boolean;
 }
 
-const validationSchemaEdit = yup.object({});
-const validationSchemaAdd = yup.object({});
+const validationSchemaEdit = yup.object({
+  name: yup
+    .string()
+    .required('Name is a required field')
+    .min(2, 'Requires atleast 2 characters'),
+  start: yup.string().required('Start date is a required field'),
+  deadline: yup.string().required('End date is a required field'),
+  description: yup.string().optional().max(1020, 'Maximum of 1020 characters'),
+});
+
+const validationSchemaAdd = yup.object({
+  name: yup
+    .string()
+    .required('Name is a required field')
+    .min(2, 'Requires atleast 2 characters'),
+  start: yup.string().required('Start date is a required field'),
+  deadline: yup.string().required('End date is a required field'),
+  description: yup.string().optional().max(1020, 'Maximum of 1020 characters'),
+});
 const defaultValuesAdd = {
   name: '',
   start: '',
@@ -55,9 +72,9 @@ const ProjectForm = ({
         ) : (
           <Heading className="mb-[24px]" type="H3" content="Add project" />
         )}
-        <Input type="text" name="name" label="Name:" />
-        <Input type="date" name="start" label="Start date:" />
-        <Input type="date" name="deadline" label="Deadline:" />
+        <Input required type="text" name="name" label="Name:" />
+        <Input required type="date" name="start" label="Start date:" />
+        <Input required type="date" name="deadline" label="Deadline:" />
         {/* Text area fix needed */}
         <Input type="text" name="description" label="Description:" />
         <Button className="desktop:self-end" type="submit" variant="addButton">
