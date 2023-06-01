@@ -46,7 +46,7 @@ export const getAddressById = async (
     try {
       const address = await prisma.address.findUnique({
         where: {
-          id: req.body.id,
+          id: req.params.id,
         },
       });
       res.json({ data: address });
@@ -146,7 +146,7 @@ export const deleteAddress = async (
     try {
       const address = await prisma.address.delete({
         where: {
-          id: req.body.id,
+          id: req.params.id,
         },
       });
       res.json({ data: address });
@@ -163,12 +163,7 @@ export const deleteAddress = async (
 };
 
 router.get('/', protectRoutes(PermissionType.ADMIN), getAddresses);
-router.get(
-  '/getAddressById',
-  body('id').isUUID().withMessage('Invalid id'),
-  protectRoutes(PermissionType.ADMIN),
-  getAddressById
-);
+router.get('/:id', protectRoutes(PermissionType.ADMIN), getAddressById);
 router.put(
   '/',
   body('id').isUUID().withMessage('Invalid id'),
@@ -204,11 +199,6 @@ router.post(
   protectRoutes(PermissionType.ADMIN),
   postNewAddress
 );
-router.delete(
-  '/',
-  body('id').isUUID().withMessage('Invalid id'),
-  protectRoutes(PermissionType.ADMIN),
-  deleteAddress
-);
+router.delete('/:id', protectRoutes(PermissionType.ADMIN), deleteAddress);
 
 export default router;

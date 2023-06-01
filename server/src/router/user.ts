@@ -230,7 +230,7 @@ export const deleteUserById = async (
     try {
       const user = await prisma.user.delete({
         where: {
-          id: req.body.id,
+          id: req.params.id,
         },
       });
       res.json({ data: user });
@@ -400,6 +400,10 @@ router.post(
     .withMessage(
       'Invalid password. Requires minimum of 8 characters, minimum 1 lowercase, minimum 1 uppercase, minimum 1 special character '
     ),
+  body('date_of_birth')
+    .isString()
+    .isLength({ min: 10, max: 40 })
+    .withMessage('Invalid date of birth'),
   body('salary').isInt().withMessage('Invalid salary'),
   body('roleId').optional().isUUID().withMessage('Invalid id'),
   body('notice').optional().isUUID().withMessage('Invalid id'),
@@ -420,10 +424,6 @@ router.post(
   protectRoutes(PermissionType.ADMIN),
   createNewUser
 );
-router.delete(
-  '/',
-  body('id').isUUID().withMessage('Invalid id'),
-  protectRoutes(PermissionType.ADMIN),
-  deleteUserById
-);
+router.delete('/:id', protectRoutes(PermissionType.ADMIN), deleteUserById);
+
 export default router;
