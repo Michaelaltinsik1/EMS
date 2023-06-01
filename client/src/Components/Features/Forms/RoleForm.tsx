@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { RoleType } from 'src/Types';
-import { postNewRole, getAllRoles } from 'src/API/role';
+import { postNewRole } from 'src/API/role';
 import { Toast } from 'src/utils/toastGenerator';
 import { CacheContext } from '../Context/CacheProvider';
 import { useContext } from 'react';

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getUsers } from 'src/API/user';
 import { UserType } from 'src/Types';
 import { Toast } from 'src/utils/toastGenerator';
@@ -8,24 +8,41 @@ import Table from 'src/Components/Features/Tables';
 import { TaskTypes } from 'src/utils/enum';
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import EmployeeForm from 'src/Components/Features/Forms/EmployeeForm';
+import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
+import Loader from 'src/Components/Base/Loader';
+interface EmployeeAPI {
+  data?: Array<UserType>;
+  errors?: Array<{ error: string }>;
+}
 const EmployeePageAdmin = () => {
-  const [users, setUsers] = useState<Array<UserType>>([]);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const { employees, updateEmployees } = useContext(CacheContext);
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
   const { isMobile } = useBreakpoint();
   useEffect(() => {
     const getAllUsers = async () => {
-      const users = await getUsers();
-      console.log(users);
-      if (users) {
-        setUsers(users.value);
-        Toast({ message: 'Success', id: 'GetAllEmployeesToast' });
+      const employeeResponse: EmployeeAPI = await getUsers();
+      if (employeeResponse?.data) {
+        updateEmployees(employeeResponse.data);
+        Toast({ message: 'Success', id: 'GetAllEmployeesToastSuccess' });
+      } else {
+        if (employeeResponse?.errors) {
+          employeeResponse?.errors.map((errorMessage) =>
+            Toast({
+              message: errorMessage.error,
+              id: 'GetAllEmployeesToastError',
+              isSuccess: false,
+            })
+          );
+        }
       }
     };
-    getAllUsers();
-  }, []);
+    if (employees === null) {
+      getAllUsers();
+    }
+  }, [employees, updateEmployees]);
 
   return (
     <>
@@ -35,10 +52,18 @@ const EmployeePageAdmin = () => {
       />
       <div className="p-4">
         <h1>Admin Department page</h1>
-        {isMobile ? (
-          users.map((user) => <Card user={user} key={user.id} />)
+        {employees ? (
+          <>
+            {isMobile ? (
+              employees.map((user) => <Card user={user} key={user.id} />)
+            ) : (
+              <Table type={TaskTypes.USER} data={employees} />
+            )}
+          </>
         ) : (
-          <Table type={TaskTypes.USER} data={users} />
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
         )}
       </div>
       {isFormOpen && (

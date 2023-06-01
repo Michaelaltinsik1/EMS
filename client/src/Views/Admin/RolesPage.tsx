@@ -10,6 +10,7 @@ import Contentmanagement from 'src/Components/Features/ContentManagement';
 import RoleForm from 'src/Components/Features/Forms/RoleForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import { useContext } from 'react';
+import Loader from 'src/Components/Base/Loader';
 interface RolesAPI {
   data?: Array<RoleType>;
   errors?: Array<{ error: string }>;
@@ -23,18 +24,18 @@ const RolePageAdmin = () => {
   };
   useEffect(() => {
     const getRoles = async () => {
-      const roles: RolesAPI = await getAllRoles();
+      const rolesResponse: RolesAPI = await getAllRoles();
       console.log('roles: ', roles);
-      if (roles?.data) {
-        updateRoles(roles.data);
-        Toast({ message: 'Success', id: 'GetAllRolesToast' });
+      if (rolesResponse?.data) {
+        updateRoles(rolesResponse.data);
+        Toast({ message: 'Success', id: 'GetAllRolesToastSuccess' });
       } else {
-        console.log(roles.errors);
-        if (roles?.errors) {
-          roles?.errors.map((errorMessage) =>
+        console.log(rolesResponse.errors);
+        if (rolesResponse?.errors) {
+          rolesResponse?.errors.map((errorMessage) =>
             Toast({
               message: errorMessage.error,
-              id: 'GetAllRolesToast',
+              id: 'GetAllRolesToastError',
               isSuccess: false,
             })
           );
@@ -49,7 +50,7 @@ const RolePageAdmin = () => {
     <>
       <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add role" />
       <div className="p-4">
-        {roles && (
+        {roles ? (
           <>
             <h1>Admin Role page</h1>
             {isMobile ? (
@@ -58,6 +59,10 @@ const RolePageAdmin = () => {
               <Table type={TaskTypes.ROLE} data={roles} />
             )}
           </>
+        ) : (
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
         )}
       </div>
       {isFormOpen && <RoleForm isEditForm={false} handleOnClick={toggleForm} />}

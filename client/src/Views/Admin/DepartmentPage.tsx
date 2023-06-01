@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getAllDepartments } from 'src/API/department';
+import Loader from 'src/Components/Base/Loader';
 import Card from 'src/Components/Features/Cards';
 import Contentmanagement from 'src/Components/Features/ContentManagement';
+import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import DepartmentForm from 'src/Components/Features/Forms/DepartmentForm';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
@@ -15,33 +17,35 @@ interface DepartmentsAPI {
 }
 
 const DepartmentPageAdmin = () => {
-  const [departments, setDepartments] = useState<Array<DepartmentType>>([]);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const { departments, updateDepartments } = useContext(CacheContext);
   const { isMobile } = useBreakpoint();
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
   useEffect(() => {
     const getDepartments = async () => {
-      const departments: DepartmentsAPI = await getAllDepartments();
-      if (departments?.data) {
-        setDepartments(departments.data);
-        Toast({ message: 'Success', id: 'GetAllEmployeesToast' });
+      const departmentsResponse: DepartmentsAPI = await getAllDepartments();
+      if (departmentsResponse?.data) {
+        updateDepartments(departmentsResponse.data);
+        Toast({ message: 'Success', id: 'GetAllDepartmentsToastSuccess' });
       } else {
-        console.log(departments.errors);
-        if (departments?.errors) {
-          departments?.errors.map((errorMessage: { error: string }) =>
+        console.log(departmentsResponse.errors);
+        if (departmentsResponse?.errors) {
+          departmentsResponse?.errors.map((errorMessage: { error: string }) =>
             Toast({
               message: errorMessage.error,
-              id: 'GetAllEmployeesToast',
+              id: 'GetAllDepartmentsToastError',
               isSuccess: false,
             })
           );
         }
       }
     };
-    getDepartments();
-  }, []);
+    if (departments === null) {
+      getDepartments();
+    }
+  }, [departments, updateDepartments]);
   return (
     <>
       <Contentmanagement
@@ -50,12 +54,20 @@ const DepartmentPageAdmin = () => {
       />
       <div className="p-4">
         <h1>Admin Department page</h1>
-        {isMobile ? (
-          departments.map((department) => (
-            <Card department={department} key={department.id} />
-          ))
+        {departments ? (
+          <>
+            {isMobile ? (
+              departments.map((department) => (
+                <Card department={department} key={department.id} />
+              ))
+            ) : (
+              <Table type={TaskTypes.DEPARTMENT} data={departments} />
+            )}
+          </>
         ) : (
-          <Table type={TaskTypes.DEPARTMENT} data={departments} />
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
         )}
       </div>
       {isFormOpen && (

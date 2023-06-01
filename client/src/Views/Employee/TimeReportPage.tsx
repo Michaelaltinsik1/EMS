@@ -9,14 +9,16 @@ import { TaskTypes } from 'src/utils/enum';
 import { Toast } from 'src/utils/toastGenerator';
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import TimereportForm from 'src/Components/Features/Forms/TimereportForm';
+import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
+import Loader from 'src/Components/Base/Loader';
 interface TimereportAPI {
   data?: Array<Time_reportType>;
   errors?: Array<{ error: string }>;
 }
 const TimeReportPage = () => {
-  const [timereports, setTimereports] = useState<Array<Time_reportType>>([]);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
+  const { timereports, updateTimereports } = useContext(CacheContext);
   const userId = user?.userId as string;
   const permission = user?.permission as PermissionType;
   const { isMobile } = useBreakpoint();
@@ -25,26 +27,29 @@ const TimeReportPage = () => {
   };
   useEffect(() => {
     const getTimeReports = async () => {
-      const timereports: TimereportAPI = await getTimeReportsByUserId(userId);
+      const timereportsReponse: TimereportAPI = await getTimeReportsByUserId(
+        userId
+      );
       console.log('Timereport: ', timereports);
-      if (timereports?.data) {
-        setTimereports(timereports.data);
-        Toast({ message: 'Success', id: 'GetAllTimereportsToast' });
+      if (timereportsReponse?.data) {
+        updateTimereports(timereportsReponse.data);
+        Toast({ message: 'Success', id: 'GetTimereportsByIdToastSuccess' });
       } else {
-        console.log(timereports.errors);
-        if (timereports?.errors) {
-          timereports?.errors.map((errorMessage) =>
+        if (timereportsReponse?.errors) {
+          timereportsReponse?.errors.map((errorMessage) =>
             Toast({
               message: errorMessage.error,
-              id: 'GetAllTimereportsToast',
+              id: 'GetTimereportsByIdToastError',
               isSuccess: false,
             })
           );
         }
       }
     };
-    getTimeReports();
-  }, [userId]);
+    if (timereports === null) {
+      getTimeReports();
+    }
+  }, [timereports, updateTimereports, userId]);
   return (
     <>
       <Contentmanagement
@@ -53,21 +58,28 @@ const TimeReportPage = () => {
       />
       <div className="p-4">
         <h1>Time report page</h1>
-
-        {isMobile ? (
-          timereports.map((timereport) => (
-            <Card
-              permission={permission}
-              timereport={timereport}
-              key={timereport.id}
-            />
-          ))
+        {timereports ? (
+          <>
+            {isMobile ? (
+              timereports.map((timereport) => (
+                <Card
+                  permission={permission}
+                  timereport={timereport}
+                  key={timereport.id}
+                />
+              ))
+            ) : (
+              <Table
+                type={TaskTypes.TIMEREPORT}
+                permission={permission}
+                data={timereports}
+              />
+            )}
+          </>
         ) : (
-          <Table
-            type={TaskTypes.TIMEREPORT}
-            permission={permission}
-            data={timereports}
-          />
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
         )}
         {isFormOpen && (
           <TimereportForm isEditForm={false} handleOnClick={toggleForm} />
