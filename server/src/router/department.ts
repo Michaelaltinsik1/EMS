@@ -93,7 +93,22 @@ export const updateDepartmentById = async (
         data: {
           name: req.body.name,
           budget: req.body.budget,
-          addresses: req.body.addresses,
+          addresses: {
+            upsert: {
+              create: {
+                country: req.body.country,
+                city: req.body.city,
+                zip: req.body.zip,
+                id: req.params.id,
+              },
+              update: {
+                country: req.body.country,
+                city: req.body.city,
+                zip: req.body.zip,
+                id: req.params.id,
+              },
+            },
+          },
         },
         include: {
           users: true,

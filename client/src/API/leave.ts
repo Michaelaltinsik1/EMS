@@ -50,8 +50,9 @@ export async function updateLeaveById({ status, leaveId }: UpdateLeave) {
 }
 
 export async function postNewLeave({ type, from, to, userId }: CreateLeave) {
+  console.log(type);
   const response = await axios
-    .post(`/leaves`, { type, from, to })
+    .post(`/leaves/users/${userId}`, { type_of_leave: type, from, to })
     .then((response) => {
       return response.data;
     })

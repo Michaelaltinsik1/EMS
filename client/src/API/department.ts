@@ -4,11 +4,9 @@ axios.defaults.baseURL = 'http://localhost:4000/';
 axios.defaults.withCredentials = true;
 
 interface updateDepartmentType extends createDepartmentType {
-  address: {
-    country: string;
-    zip: string;
-    city: string;
-  };
+  country: string;
+  zip: string;
+  city: string;
   departmentId: string;
 }
 
@@ -45,13 +43,24 @@ export async function getAllDepartments() {
 }
 
 export async function updateDepartmentById({
-  address,
+  city,
+  country,
+  zip,
   name,
   budget,
   departmentId,
 }: updateDepartmentType) {
+  console.log('Name: ', name);
+  console.log('budget: ', budget);
+  console.log('departmentId: ', departmentId);
   const response = await axios
-    .put(`/departments/${departmentId}`, { name, budget, addresses: address })
+    .put(`/departments/${departmentId}`, {
+      name,
+      budget,
+      city,
+      country,
+      zip,
+    })
     .then((response) => {
       return response.data;
     })

@@ -7,7 +7,6 @@ interface CreateUser extends UpdateUser {
   email: string;
   password: string;
   date_of_birth: string;
-  notice: string;
 }
 
 interface UpdateUser {
@@ -17,12 +16,11 @@ interface UpdateUser {
   permission: PermissionType;
   roleId: string;
   departmentId: string;
-  addressId: string;
-  addresses: {
-    country: string;
-    city: string;
-    zip: string;
-  };
+  addressId?: string;
+  country: string;
+  city: string;
+  zip: string;
+  userId?: string;
 }
 
 interface ConnectAddress {
@@ -72,8 +70,9 @@ export async function createNewUser({
   date_of_birth,
   roleId,
   departmentId,
-  notice,
-  addresses,
+  country,
+  zip,
+  city,
 }: CreateUser) {
   const response = await axios
     .post(`/users`, {
@@ -86,8 +85,9 @@ export async function createNewUser({
       date_of_birth,
       roleId,
       departmentId,
-      notice,
-      addresses,
+      country,
+      zip,
+      city,
     })
     .then((response) => {
       return response.data;
@@ -106,7 +106,10 @@ export async function updateUserById({
   roleId,
   departmentId,
   addressId,
-  addresses,
+  country,
+  zip,
+  city,
+  userId,
 }: UpdateUser) {
   const response = await axios
     .put(`/users`, {
@@ -117,7 +120,10 @@ export async function updateUserById({
       roleId,
       departmentId,
       addressId,
-      addresses,
+      country,
+      zip,
+      city,
+      id: userId,
     })
     .then((response) => {
       return response.data;

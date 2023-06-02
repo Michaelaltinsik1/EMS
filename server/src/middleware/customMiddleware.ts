@@ -35,6 +35,7 @@ export const validateLeaveType = (
   res: Response,
   next: NextFunction
 ) => {
+  console.log('Leave: ', req.body.type_of_leave);
   if (Object.values(Type_of_leave).includes(req.body.type_of_leave)) {
   } else {
     req.body.errors = { error: 'Invalid leave', param: 'type_of_leave' };

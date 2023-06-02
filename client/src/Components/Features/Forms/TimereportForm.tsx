@@ -97,6 +97,12 @@ const TimereportForm = ({
             isSuccess: false,
           })
         );
+      } else {
+        Toast({
+          message: 'Internal server error!',
+          id: 'NoticeToastError',
+          isSuccess: false,
+        });
       }
     }
   };

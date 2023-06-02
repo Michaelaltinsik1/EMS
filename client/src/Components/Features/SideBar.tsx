@@ -19,7 +19,7 @@ const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
   const location = useLocation();
   return (
     <aside
-      className={`z-[999] min-h-screen absolute tablet:fixed top-[0] w-screen flex flex-col tablet:max-w-[400px] tablet:right-0 overflow-scroll  ${
+      className={`z-[999] min-h-screen absolute tablet:fixed top-[0] w-screen flex flex-col tablet:max-w-[400px] desktop:min-h-fit tablet:right-0 ${
         theme === Theme.LIGHT ? 'bg-gray-200' : 'bg-gray-800'
       }`}
     >
@@ -52,7 +52,7 @@ const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
       <nav className="flex flex-col mt-10 mb-[64px]">
         {menuOptions.map((menuOption) => (
           <Link
-            className={`text-H2Mobile desktopEdgeCases:text-H2 py-4 px-10 desktop:px-[64px]  ${
+            className={`text-H2Mobile desktopEdgeCases:text-H2 py-4 px-10 desktop:px-[64px]   ${
               theme === Theme.LIGHT
                 ? 'text-gray-900 hover:text-blue-400'
                 : 'text-gray-100 hover:text-blue-400'

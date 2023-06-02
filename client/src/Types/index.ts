@@ -20,6 +20,7 @@ type UserIncludeTypes = {
   department?: {
     name?: string;
   };
+  addresses?: Array<{ id: string }>;
 };
 
 type DepartmentIncludeTypes = {

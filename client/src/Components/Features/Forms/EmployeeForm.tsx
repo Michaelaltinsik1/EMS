@@ -5,13 +5,25 @@ import Button from 'src/Components/Base/Button';
 import * as yup from 'yup';
 import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
-import { UserType } from 'src/Types';
+import { PermissionType, UserType } from 'src/Types';
 import { CacheContext } from '../Context/CacheProvider';
 import { useContext, useEffect } from 'react';
 import { getAllRoles } from 'src/API/role';
 import { getAllDepartments } from 'src/API/department';
 import { countries } from 'src/utils/lists';
 import { permissions } from 'src/utils/lists';
+import { createNewUser, updateUserById } from 'src/API/user';
+import { Toast } from 'src/utils/toastGenerator';
+
+// interface EmployeeAPI {
+//   data?: UserType;
+//   errors?: Array<{ error: string }>;
+// }
+interface EmployeeAPI {
+  token?: string;
+  data?: string;
+  errors?: Array<{ error: string }>;
+}
 interface EmployeeFormProps {
   handleOnClick: () => void;
   user?: UserType;
@@ -87,22 +99,35 @@ const defaultValuesAdd = {
   zip: '',
 };
 
-interface FormFieldTypes {
-  name: any;
+interface FormFieldTypesEdit {
+  name: string;
+  salary: string;
+  permission: string;
+  department: string;
+  role: string;
+  country: string;
+  city: string;
+  zip: string;
 }
-const onSubmit = (value: any) => {
-  console.log('Values: ', value);
-  console.log('submit');
-};
+interface FormFieldTypesAdd extends FormFieldTypesEdit {
+  email: string;
+  password: string;
+  birth: string;
+}
 
 const EmployeeForm = ({
   handleOnClick,
   user,
   isEditForm = true,
 }: EmployeeFormProps) => {
-  const { roles, updateRoles, departments, updateDepartments } =
-    useContext(CacheContext);
-  console.log(roles);
+  const {
+    roles,
+    updateRoles,
+    departments,
+    updateDepartments,
+    updateEmployees,
+  } = useContext(CacheContext);
+
   useEffect(() => {
     const getRoles = async () => {
       const rolesResponse = await getAllRoles();
@@ -123,6 +148,106 @@ const EmployeeForm = ({
       getDepartments();
     }
   }, [departments, roles, updateDepartments, updateRoles]);
+
+  const onSubmitEdit = async ({
+    name,
+    salary,
+    permission,
+    department,
+    role,
+    country,
+    city,
+    zip,
+  }: FormFieldTypesEdit) => {
+    const splitedName = name.split(' ');
+    const firstName = splitedName.shift() || '';
+    const lastName = splitedName.join(' ');
+    let currAddressId = '';
+    if (user?.addresses && user?.addresses.length > 0) {
+      currAddressId = user?.addresses[0].id;
+    }
+    const employeeResponse: EmployeeAPI = await updateUserById({
+      firstName,
+      lastName,
+      salary: Number(salary),
+      permission: permission as PermissionType,
+      departmentId: department,
+      roleId: role,
+      addressId: currAddressId,
+      country,
+      zip,
+      city,
+      userId: user?.id,
+    });
+    if (employeeResponse?.token || employeeResponse?.data) {
+      renderToast(employeeResponse, 'Employee has been updated!');
+    } else {
+      renderToast(employeeResponse);
+    }
+  };
+
+  const onSubmitAdd = async ({
+    name,
+    salary,
+    permission,
+    department,
+    role,
+    country,
+    city,
+    zip,
+    email,
+    password,
+    birth,
+  }: FormFieldTypesAdd) => {
+    const splitedName = name.split(' ');
+    const firstName = splitedName.shift() || '';
+    const lastName = splitedName.join(' ');
+
+    const employeeResponse: EmployeeAPI = await createNewUser({
+      firstName,
+      lastName,
+      salary: Number(salary),
+      permission: permission as PermissionType,
+      departmentId: department,
+      roleId: role,
+      country,
+      zip,
+      city,
+      email,
+      password,
+      date_of_birth: birth,
+    });
+    console.log(employeeResponse);
+    if (employeeResponse?.token || employeeResponse?.data) {
+      renderToast(employeeResponse, 'Employee has been added!');
+    } else {
+      renderToast(employeeResponse);
+    }
+  };
+
+  const renderToast = (employeeResponse: EmployeeAPI, message?: string) => {
+    if ((employeeResponse?.token || employeeResponse?.data) && message) {
+      updateEmployees(null);
+      Toast({ message, id: 'postEmployeeToastSuccess' });
+    } else {
+      if (employeeResponse?.errors) {
+        employeeResponse?.errors.map((errorMessage) =>
+          Toast({
+            message: errorMessage.error,
+            id: 'postEmployeeToastError',
+            isSuccess: false,
+          })
+        );
+      } else {
+        Toast({
+          message: 'Internal server error!',
+          id: 'NoticeToastError',
+          isSuccess: false,
+        });
+      }
+    }
+  };
+
   const defaultValuesEdit = {
     name: (user?.firstName || '') + ' ' + (user?.lastName || ''),
     salary: user?.salary || '',
@@ -134,12 +259,12 @@ const EmployeeForm = ({
     zip: '',
   };
   return (
-    <Modal handleOnClick={handleOnClick}>
+    <Modal className="overflow-y-scroll" handleOnClick={handleOnClick}>
       {isEditForm ? (
         <Form
           defaultValues={defaultValuesEdit}
           validationSchema={validationSchemaEdit}
-          onSubmit={onSubmit}
+          onSubmit={onSubmitEdit}
         >
           <Heading className="mb-[24px]" type="H3" content="Edit employee" />
           <Input required type="text" name="name" label="Name:" />
@@ -186,7 +311,7 @@ const EmployeeForm = ({
         <Form
           defaultValues={defaultValuesAdd}
           validationSchema={validationSchemaAdd}
-          onSubmit={onSubmit}
+          onSubmit={onSubmitAdd}
         >
           <Heading className="mb-[24px]" type="H3" content="Add employee" />
           <Input required type="text" name="name" label="Name:" />

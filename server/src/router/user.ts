@@ -43,7 +43,6 @@ export const createNewUser = async (
           date_of_birth: req.body.date_of_birth,
           roleId: req.body.roleId,
           departmentId: req.body.departmentId,
-          notice: req.body.notice,
           addresses: {
             create: {
               country: req.body.country,
@@ -154,18 +153,36 @@ export const updateUserById = async (
           roleId: req.body.roleId,
           departmentId: req.body.departmentId,
           addresses: {
-            update: {
+            upsert: {
               where: {
                 id: req.body.addressId,
               },
-              data: {
+              create: {
                 country: req.body.country,
                 city: req.body.city,
                 zip: req.body.zip,
-                departmentId: req.body.departmentId,
+                id: req.params.id,
+              },
+              update: {
+                country: req.body.country,
+                city: req.body.city,
+                zip: req.body.zip,
+                id: req.params.id,
               },
             },
           },
+          // addresses: {
+          //   update: {
+          //     where: {
+          //       id: req.body.addressId,
+          //     },
+          //     data: {
+          //       country: req.body.country,
+          //       city: req.body.city,
+          //       zip: req.body.zip,
+          //     },
+          //   },
+          // },
         },
       });
       res.json({ data: user });
@@ -333,13 +350,13 @@ router.put(
     .isLength({ min: 3, max: 100 })
     .withMessage('Invalid last name'),
   body('salary').isInt().withMessage('Invalid salary'),
-  body('date_of_birth')
-    .isString()
-    .isLength({ min: 10, max: 40 })
-    .withMessage('Invalid To date'),
+  // body('date_of_birth')
+  //   .isString()
+  //   .isLength({ min: 10, max: 40 })
+  //   .withMessage('Invalid To date'),
   body('roleId').isUUID().withMessage('Invalid id'),
   body('departmentId').isUUID().withMessage('Invalid id'),
-  body('addressId').isUUID().withMessage('Invalid id'),
+  // body('addressId').isUUID().withMessage('Invalid id'),
   body('country')
     .isString()
     .isLength({ min: 2, max: 255 })
