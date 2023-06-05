@@ -10,12 +10,14 @@ interface CardProps {
   theme: Theme;
   isExpanded: boolean;
   clickHandler: () => void;
+  clickHandlerRemove: () => void;
 }
 const DepartmentCardContent = ({
   department,
   theme,
   isExpanded,
   clickHandler,
+  clickHandlerRemove,
 }: CardProps) => {
   let address: string = '';
   if (
@@ -29,6 +31,10 @@ const DepartmentCardContent = ({
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     clickHandler();
+  };
+  const handleRemoveOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    clickHandlerRemove();
   };
   return (
     <>
@@ -78,7 +84,7 @@ const DepartmentCardContent = ({
           </Button>
           <Button
             className="mb-4"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => handleRemoveOnClick(e)}
             variant="removeButton"
             type="button"
           >

@@ -71,15 +71,9 @@ const SignInPage = () => {
         theme === Theme.LIGHT ? 'bg-gray-50' : 'bg-gray-700'
       }`}
     >
-      <Button type="button" variant="addButton">
-        test button1
-      </Button>
-      <Button type="button" variant="removeButton">
-        test button2
-      </Button>
-      <Button type="button" variant="confirmRemoveButton">
-        test button3
-      </Button>
+      <div className="fixed top-4 right-4 tablet:top-[40px] tablet:right-[40px] desktop:top-[64px] desktop:right-[64px]">
+        <ThemeButton />
+      </div>
       <Form
         onSubmit={handleSubmit}
         defaultValues={defaultValues}
@@ -113,7 +107,6 @@ const SignInPage = () => {
           Sign in
         </Button>
       </Form>
-      <ThemeButton />
     </div>
   );
 };

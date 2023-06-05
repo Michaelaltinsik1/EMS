@@ -12,17 +12,23 @@ interface CardProps {
   theme: Theme;
   isExpanded: boolean;
   clickHandler: () => void;
+  clickHandlerRemove: () => void;
 }
 const EmployeeCardContent = ({
   user,
   theme,
   isExpanded,
   clickHandler,
+  clickHandlerRemove,
 }: CardProps) => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     clickHandler();
+  };
+  const handleRemoveOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    clickHandlerRemove();
   };
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
@@ -91,7 +97,7 @@ const EmployeeCardContent = ({
           </Button>
           <Button
             className="mb-4"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => handleRemoveOnClick(e)}
             variant="removeButton"
             type="button"
           >

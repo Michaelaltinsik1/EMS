@@ -45,10 +45,10 @@ model User {
   updated_at    DateTime      @updatedAt
   time_reports  Time_report[]
   leaves        Leave[]
-  role          Role          @relation(fields: [roleId], references: [id])
-  roleId        String
-  department    Department    @relation(fields: [departmentId], references: [id])
-  departmentId  String
+  role          Role?         @relation(fields: [roleId], references: [id], onDelete: SetNull)
+  roleId        String?
+  department    Department?   @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  departmentId  String?
   addresses     Address[]
   projects      Project[]
   notice        Notice?
@@ -62,7 +62,7 @@ model Notice {
   created_at  DateTime @default(now())
   description String?
   status      Status   @default(PENDING)
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String   @unique
 }
 
@@ -81,7 +81,7 @@ model Address {
   country      String      @db.VarChar(255)
   city         String      @db.VarChar(255)
   zip          String      @db.VarChar(255)
-  department   Department? @relation(fields: [departmentId], references: [id])
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   departmentId String?     @unique
   Users        User[]
 }
@@ -101,7 +101,7 @@ model Time_report {
   from       DateTime
   to         DateTime
   status     Status   @default(PENDING)
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
 
   @@index([userId])
@@ -121,7 +121,7 @@ model Leave {
   from          DateTime
   to            DateTime
   status        Status        @default(PENDING)
-  user          User          @relation(fields: [userId], references: [id])
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String
 
   @@index([userId])

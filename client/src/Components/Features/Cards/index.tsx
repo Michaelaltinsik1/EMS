@@ -6,7 +6,8 @@ import DepartmentCardContent from './DepartmentCardContent';
 import LeaveCardContent from './LeaveCardContent';
 import ProjectCardContent from './ProjectCardContent';
 import RoleCardContent from './RoleCardContent';
-
+import RemoveModal from '../RemoveModal';
+import { Entities } from 'src/Types/enums';
 import {
   UserType,
   LeaveType,
@@ -51,6 +52,7 @@ const Card = ({
   const { theme } = useContext(ThemeContext);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState<boolean>(false);
   const handleToggle = () => {
     setIsExpanded((prevState) => !prevState);
   };
@@ -58,11 +60,16 @@ const Card = ({
     setIsFormOpen((prevState) => !prevState);
     setIsExpanded(false);
   };
+  const toggleRemoveModal = () => {
+    setIsRemoveModalOpen((prevState) => !prevState);
+    setIsExpanded(false);
+  };
   const renderCardContent = () => {
     if (user) {
       return (
         <>
           <EmployeeCardContent
+            clickHandlerRemove={toggleRemoveModal}
             isExpanded={isExpanded}
             theme={theme}
             user={user}
@@ -71,12 +78,21 @@ const Card = ({
           {isFormOpen && (
             <EmployeeForm user={user} handleOnClick={toggleForm} />
           )}
+          {isRemoveModalOpen && (
+            <RemoveModal
+              id={user.id}
+              name={user.firstName + ' ' + user.lastName}
+              handleOnClick={toggleRemoveModal}
+              Entity={Entities.EMPLOYEE}
+            />
+          )}
         </>
       );
     } else if (department) {
       return (
         <>
           <DepartmentCardContent
+            clickHandlerRemove={toggleRemoveModal}
             department={department}
             isExpanded={isExpanded}
             theme={theme}
@@ -88,12 +104,21 @@ const Card = ({
               handleOnClick={toggleForm}
             />
           )}
+          {isRemoveModalOpen && (
+            <RemoveModal
+              id={department.id}
+              name={department.name}
+              handleOnClick={toggleRemoveModal}
+              Entity={Entities.DEPARTMENT}
+            />
+          )}
         </>
       );
     } else if (leave && permission) {
       return (
         <>
           <LeaveCardContent
+            clickHandlerRemove={toggleRemoveModal}
             permission={permission}
             leave={leave}
             isExpanded={isExpanded}
@@ -101,12 +126,20 @@ const Card = ({
             clickHandler={toggleForm}
           />
           {isFormOpen && <LeaveForm leave={leave} handleOnClick={toggleForm} />}
+          {isRemoveModalOpen && (
+            <RemoveModal
+              id={leave.id}
+              handleOnClick={toggleRemoveModal}
+              Entity={Entities.LEAVE}
+            />
+          )}
         </>
       );
     } else if (project && permission) {
       return (
         <>
           <ProjectCardContent
+            clickHandlerRemove={toggleRemoveModal}
             permission={permission}
             project={project}
             isExpanded={isExpanded}
@@ -116,24 +149,42 @@ const Card = ({
           {isFormOpen && (
             <ProjectForm project={project} handleOnClick={toggleForm} />
           )}
+          {isRemoveModalOpen && (
+            <RemoveModal
+              id={project.id}
+              name={project.name}
+              handleOnClick={toggleRemoveModal}
+              Entity={Entities.PROJECT}
+            />
+          )}
         </>
       );
     } else if (role) {
       return (
         <>
           <RoleCardContent
+            clickHandlerRemove={toggleRemoveModal}
             role={role}
             isExpanded={isExpanded}
             theme={theme}
             clickHandler={toggleForm}
           />
           {isFormOpen && <RoleForm role={role} handleOnClick={toggleForm} />}
+          {isRemoveModalOpen && (
+            <RemoveModal
+              id={role.id}
+              name={role.name}
+              handleOnClick={toggleRemoveModal}
+              Entity={Entities.ROLE}
+            />
+          )}
         </>
       );
     } else if (timereport && permission) {
       return (
         <>
           <TimereportCardContent
+            clickHandlerRemove={toggleRemoveModal}
             permission={permission}
             timereport={timereport}
             isExpanded={isExpanded}
@@ -146,12 +197,20 @@ const Card = ({
               handleOnClick={toggleForm}
             />
           )}
+          {isRemoveModalOpen && (
+            <RemoveModal
+              id={timereport.id}
+              handleOnClick={toggleRemoveModal}
+              Entity={Entities.TIMEREPORT}
+            />
+          )}
         </>
       );
     } else if (notice && permission) {
       return (
         <>
           <NoticeCardContent
+            clickHandlerRemove={toggleRemoveModal}
             permission={permission}
             notice={notice}
             isExpanded={isExpanded}
@@ -160,6 +219,13 @@ const Card = ({
           />
           {isFormOpen && (
             <NoticeForm notice={notice} handleOnClick={toggleForm} />
+          )}
+          {isRemoveModalOpen && (
+            <RemoveModal
+              id={notice.id}
+              handleOnClick={toggleRemoveModal}
+              Entity={Entities.NOTICE}
+            />
           )}
         </>
       );

@@ -10,18 +10,25 @@ interface CardProps {
   theme: Theme;
   isExpanded: boolean;
   clickHandler: () => void;
+  clickHandlerRemove: () => void;
 }
 const RoleCardContent = ({
   role,
   theme,
   isExpanded,
   clickHandler,
+  clickHandlerRemove,
 }: CardProps) => {
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
     console.log('tghe click');
     e.stopPropagation();
     clickHandler();
   };
+  const handleRemoveOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    clickHandlerRemove();
+  };
+
   return (
     <>
       <Heading className="mb-1" type="H3" content={role.name} />
@@ -50,7 +57,7 @@ const RoleCardContent = ({
       </Button>
       <Button
         className="mb-4"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => handleRemoveOnClick(e)}
         variant="removeButton"
         type="button"
       >

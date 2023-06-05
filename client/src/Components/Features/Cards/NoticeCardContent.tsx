@@ -11,6 +11,7 @@ interface CardProps {
   isExpanded: boolean;
   permission: PermissionType;
   clickHandler: () => void;
+  clickHandlerRemove: () => void;
 }
 const NoticeCardContent = ({
   notice,
@@ -18,10 +19,15 @@ const NoticeCardContent = ({
   isExpanded,
   permission,
   clickHandler,
+  clickHandlerRemove,
 }: CardProps) => {
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     clickHandler();
+  };
+  const handleRemoveOnClick = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    clickHandlerRemove();
   };
   return (
     <>
@@ -87,7 +93,7 @@ const NoticeCardContent = ({
           {permission === 'ADMIN' && (
             <Button
               className="mb-4"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => handleRemoveOnClick(e)}
               variant="removeButton"
               type="button"
             >

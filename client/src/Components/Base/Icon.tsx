@@ -4,9 +4,20 @@ import { ReactComponent as Person } from 'src/Icons/person.svg';
 import { ReactComponent as Minimize } from 'src/Icons/Minimize.svg';
 import { ReactComponent as Logo } from 'src/Icons/logo.svg';
 import { ReactComponent as Filter } from 'src/Icons/filter.svg';
+import { ReactComponent as Moon } from 'src/Icons/moon.svg';
+import { ReactComponent as Sun } from 'src/Icons/sun.svg';
 import { Theme } from 'src/Types/enums';
 interface IconProps {
-  name: 'Close' | 'Expand' | 'Logo' | 'Menu' | 'Minimize' | 'Person' | 'Filter';
+  name:
+    | 'Close'
+    | 'Expand'
+    | 'Logo'
+    | 'Menu'
+    | 'Minimize'
+    | 'Person'
+    | 'Filter'
+    | 'Moon'
+    | 'Sun';
   theme: Theme;
   onClick?: () => void;
   className?: string;
@@ -66,6 +77,26 @@ const Icon = ({ name, theme, onClick, className = '' }: IconProps) => {
       case 'Filter':
         return (
           <Filter
+            className={` ${className} `}
+            onClick={onClick}
+            width={52}
+            height={52}
+            stroke={color}
+          />
+        );
+      case 'Moon':
+        return (
+          <Moon
+            className={` ${className} `}
+            onClick={onClick}
+            width={52}
+            height={52}
+            fill={color}
+          />
+        );
+      case 'Sun':
+        return (
+          <Sun
             className={` ${className} `}
             onClick={onClick}
             width={52}

@@ -6,6 +6,8 @@ import { useContext } from 'react';
 import { ThemeContext } from './Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
 import Icon from '../Base/Icon';
+import ThemeButton from './ThemeButton';
+import Overlay from './Overlay';
 interface MenuProps {
   menuOptions: Array<MenuOption>;
   toggleMenuState: () => void;
@@ -18,55 +20,60 @@ const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
   const { theme } = useContext(ThemeContext);
   const location = useLocation();
   return (
-    <aside
-      className={`z-[999] min-h-screen absolute tablet:fixed top-[0] w-screen flex flex-col tablet:max-w-[400px] desktop:min-h-fit tablet:right-0 ${
-        theme === Theme.LIGHT ? 'bg-gray-200' : 'bg-gray-800'
-      }`}
-    >
-      <div className="p-4 desktop:py-[40px] desktop:px-[56px] flex items-end justify-end">
-        <Icon
-          className="cursor-pointer"
-          onClick={toggleMenuState}
-          name="Close"
-          theme={theme}
-        />
-      </div>
-
-      <div className="flex flex-col items-center px-10">
-        <div className="flex mt-4 items-center">
-          <Icon name="Person" theme={theme} />
-          <Heading className="ml-2" type="H3" content="Micke" />
-        </div>
-        <div className="flex items-center mt-1">
-          <Heading type="H3" content="Role: " />
-          <Paragraph className="ml-2" type="body" content="Admin" />
-        </div>
-      </div>
-      <Button
-        className="mt-9 max-w-[140px] self-center "
-        type="button"
-        variant="removeButton"
+    <Overlay handleOnClick={toggleMenuState}>
+      <aside
+        className={`z-[999] max-h-screen mb-9 absolute top-[0] w-screen flex flex-col tablet:max-w-[400px] desktop:min-h-fit tablet:right-0 ${
+          theme === Theme.LIGHT ? 'bg-gray-200' : 'bg-gray-800'
+        }`}
       >
-        Sign out
-      </Button>
-      <nav className="flex flex-col mt-10 mb-[64px]">
-        {menuOptions.map((menuOption) => (
-          <Link
-            className={`text-H2Mobile desktopEdgeCases:text-H2 py-4 px-10 desktop:px-[64px]   ${
-              theme === Theme.LIGHT
-                ? 'text-gray-900 hover:text-blue-400'
-                : 'text-gray-100 hover:text-blue-400'
-            } ${
-              location.pathname === menuOption.url &&
-              'underline underline-offset-8'
-            }`}
-            to={menuOption.url}
-          >
-            {menuOption.menuOption}
-          </Link>
-        ))}
-      </nav>
-    </aside>
+        <div className="p-4 desktop:py-[40px] desktop:px-[56px] flex items-end justify-end">
+          <Icon
+            onClick={toggleMenuState}
+            className="ml-auto cursor-pointer"
+            name="Close"
+            theme={theme}
+          />
+        </div>
+        <div className="flex items-center justify-around px-10">
+          <div>
+            <div className="flex items-center">
+              <Icon name="Person" theme={theme} />
+              <Heading className="ml-2" type="H3" content="Micke" />
+            </div>
+            <div className="flex items-center">
+              <Heading type="H3" content="Role: " />
+              <Paragraph className="ml-2" type="body" content="Admin" />
+            </div>
+          </div>
+          <ThemeButton />
+        </div>
+
+        <Button
+          className="mt-[32px] max-w-[140px] self-center "
+          type="button"
+          variant="removeButton"
+        >
+          Sign out
+        </Button>
+        <nav className="flex flex-col mt-[32px] mb-[64px]">
+          {menuOptions.map((menuOption) => (
+            <Link
+              className={`text-H2Mobile desktopEdgeCases:text-H2 py-4 px-10 desktop:px-[64px]   ${
+                theme === Theme.LIGHT
+                  ? 'text-gray-900 hover:text-blue-400'
+                  : 'text-gray-100 hover:text-blue-400'
+              } ${
+                location.pathname === menuOption.url &&
+                'underline underline-offset-8'
+              }`}
+              to={menuOption.url}
+            >
+              {menuOption.menuOption}
+            </Link>
+          ))}
+        </nav>
+      </aside>
+    </Overlay>
   );
 };
 export default SideBar;

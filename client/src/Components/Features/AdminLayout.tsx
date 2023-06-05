@@ -30,7 +30,7 @@ const AdminLayout = ({ isAdmin = false }: LayoutProps) => {
       }`}
     >
       <Header toggleMenuState={toggleMenuState} isMenuOpen={isMenuOpen} />
-      <ThemeButton />
+      {/* <ThemeButton /> */}
       {isAdmin && user?.permission === 'ADMIN'
         ? isMenuOpen && (
             <SideBar

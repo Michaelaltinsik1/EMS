@@ -11,7 +11,7 @@ import { useContext } from 'react';
 import { CacheContext } from '../Context/CacheProvider';
 import { Toast } from 'src/utils/toastGenerator';
 import { createNewDepartment, updateDepartmentById } from 'src/API/department';
-import { error } from 'console';
+
 interface DepartmentProps {
   handleOnClick: () => void;
   department?: DepartmentType;
