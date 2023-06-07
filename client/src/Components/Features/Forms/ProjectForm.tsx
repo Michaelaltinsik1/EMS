@@ -8,8 +8,9 @@ import Heading from 'src/Components/Base/Heading';
 import { ProjectType } from 'src/Types';
 import { postNewProject, updateProjectById } from 'src/API/project';
 import { CacheContext } from '../Context/CacheProvider';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Toast } from 'src/utils/toastGenerator';
+import Loader from 'src/Components/Base/Loader';
 interface ProjectProps {
   handleOnClick: () => void;
   project?: ProjectType;
@@ -56,6 +57,7 @@ const ProjectForm = ({
   project,
   isEditForm = true,
 }: ProjectProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const defaultValuesEdit = {
     name: project?.name || '',
     start: project?.created_at || '',
@@ -69,6 +71,7 @@ const ProjectForm = ({
     deadline,
     description,
   }: FormFieldTypes) => {
+    setIsLoading(true);
     let roleResponse: ProjectAPI | null = null;
     if (isEditForm) {
       // Handle edit form network request
@@ -112,6 +115,7 @@ const ProjectForm = ({
         })
       );
     }
+    setIsLoading(false);
   };
 
   return (
@@ -134,7 +138,7 @@ const ProjectForm = ({
         {/* Text area fix needed */}
         <Input type="text" name="description" label="Description:" />
         <Button className="desktop:self-end" type="submit" variant="addButton">
-          {isEditForm ? 'Edit' : 'Add'}
+          {isLoading ? <Loader /> : isEditForm ? 'Edit' : 'Add'}
         </Button>
       </Form>
     </Modal>

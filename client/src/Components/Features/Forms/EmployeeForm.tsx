@@ -7,18 +7,15 @@ import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { PermissionType, UserType } from 'src/Types';
 import { CacheContext } from '../Context/CacheProvider';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { getAllRoles } from 'src/API/role';
 import { getAllDepartments } from 'src/API/department';
 import { countries } from 'src/utils/lists';
 import { permissions } from 'src/utils/lists';
 import { createNewUser, updateUserById } from 'src/API/user';
 import { Toast } from 'src/utils/toastGenerator';
+import Loader from 'src/Components/Base/Loader';
 
-// interface EmployeeAPI {
-//   data?: UserType;
-//   errors?: Array<{ error: string }>;
-// }
 interface EmployeeAPI {
   token?: string;
   data?: string;
@@ -120,6 +117,7 @@ const EmployeeForm = ({
   user,
   isEditForm = true,
 }: EmployeeFormProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     roles,
     updateRoles,
@@ -166,6 +164,7 @@ const EmployeeForm = ({
     if (user?.addresses && user?.addresses.length > 0) {
       currAddressId = user?.addresses[0].id;
     }
+    setIsLoading(true);
     const employeeResponse: EmployeeAPI = await updateUserById({
       firstName,
       lastName,
@@ -184,6 +183,7 @@ const EmployeeForm = ({
     } else {
       renderToast(employeeResponse);
     }
+    setIsLoading(false);
   };
 
   const onSubmitAdd = async ({
@@ -202,7 +202,7 @@ const EmployeeForm = ({
     const splitedName = name.split(' ');
     const firstName = splitedName.shift() || '';
     const lastName = splitedName.join(' ');
-
+    setIsLoading(true);
     const employeeResponse: EmployeeAPI = await createNewUser({
       firstName,
       lastName,
@@ -217,12 +217,13 @@ const EmployeeForm = ({
       password,
       date_of_birth: birth,
     });
-    console.log(employeeResponse);
+
     if (employeeResponse?.token || employeeResponse?.data) {
       renderToast(employeeResponse, 'Employee has been added!');
     } else {
       renderToast(employeeResponse);
     }
+    setIsLoading(false);
   };
 
   const renderToast = (employeeResponse: EmployeeAPI, message?: string) => {
@@ -304,7 +305,7 @@ const EmployeeForm = ({
           <Input required type="text" name="city" label="City: " />
           <Input required type="number" name="zip" label="Zip code:" />
           <Button type="submit" variant="addButton">
-            Edit
+            {!isLoading ? 'Edit' : <Loader />}
           </Button>
         </Form>
       ) : (
@@ -363,7 +364,7 @@ const EmployeeForm = ({
             type="submit"
             variant="addButton"
           >
-            Add
+            {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
       )}

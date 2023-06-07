@@ -8,11 +8,12 @@ import { Time_reportType } from 'src/Types';
 import Input from 'src/Components/Base/Input';
 import { statuses } from 'src/utils/lists';
 import { postNewTimeReport, updateTimeReportById } from 'src/API/timereport';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../Context/AuthProvider';
 import { Toast } from 'src/utils/toastGenerator';
 import { CacheContext } from '../Context/CacheProvider';
 import { StatusType } from 'src/Types';
+import Loader from 'src/Components/Base/Loader';
 interface TimereportAPI {
   data?: Array<Time_reportType>;
   errors?: Array<{ error: string }>;
@@ -47,29 +48,35 @@ const TimereportForm = ({
   timereport,
   isEditForm = true,
 }: TimereportProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
   const { updateTimereports } = useContext(CacheContext);
   const defaultValuesEdit = {
     status: timereport?.status || '',
   };
   const onSubmitAdd = async ({ to, from }: FormFieldTypesAdd) => {
+    setIsLoading(true);
     const timereportResponse: TimereportAPI = await postNewTimeReport({
       to: new Date(to),
       from: new Date(from),
       userId: user?.userId || '',
     });
+
     if (timereportResponse?.data) {
       renderToast(timereportResponse, 'Timereport has been added!!');
     } else {
       renderToast(timereportResponse);
     }
+    setIsLoading(false);
   };
   const onSubmitEdit = async ({ status }: FormFieldTypesEdit) => {
+    setIsLoading(true);
     if (statuses.some((currStatus) => currStatus.id === status)) {
       const timereportResponse: TimereportAPI = await updateTimeReportById({
         status: status as StatusType,
         timereportId: timereport?.id || '',
       });
+
       if (timereportResponse?.data) {
         renderToast(timereportResponse, 'Timereport has been updated!');
       } else {
@@ -82,6 +89,7 @@ const TimereportForm = ({
         isSuccess: false,
       });
     }
+    setIsLoading(false);
   };
 
   const renderToast = (rolesResponse: TimereportAPI, message?: string) => {
@@ -118,7 +126,7 @@ const TimereportForm = ({
           <Heading className="mb-[24px]" type="H3" content="Edit timereport" />
           <Select required options={statuses} name="status" label="Status:" />
           <Button type="submit" variant="addButton">
-            Edit
+            {!isLoading ? 'Edit' : <Loader />}
           </Button>
         </Form>
       ) : (
@@ -140,7 +148,7 @@ const TimereportForm = ({
             type="submit"
             variant="addButton"
           >
-            Add
+            {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
       )}

@@ -7,13 +7,14 @@ import Heading from 'src/Components/Base/Heading';
 import { LeaveType, StatusType } from 'src/Types';
 import Input from 'src/Components/Base/Input';
 import { statuses } from 'src/utils/lists';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../Context/AuthProvider';
 import { CacheContext } from '../Context/CacheProvider';
 import { Toast } from 'src/utils/toastGenerator';
 import { postNewLeave, updateLeaveById } from 'src/API/leave';
 import { leavesList } from 'src/utils/lists';
 import { Type_of_leaveType } from 'src/Types';
+import Loader from 'src/Components/Base/Loader';
 interface LeaveProps {
   handleOnClick: () => void;
   leave?: LeaveType;
@@ -47,12 +48,14 @@ const defaultValuesAdd = {
 };
 
 const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const defaultValuesEdit = {
     status: leave?.status || '',
   };
   const { user } = useContext(AuthContext);
   const { updateLeaves } = useContext(CacheContext);
   const onSubmitEdit = async ({ status }: FormFieldTypesEdit) => {
+    setIsLoading(true);
     const leaveResponse: LeaveAPI = await updateLeaveById({
       status: status as StatusType,
       leaveId: leave?.id || '',
@@ -62,8 +65,10 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
     } else {
       renderToast(leaveResponse);
     }
+    setIsLoading(false);
   };
   const onSubmitAdd = async ({ to, from, type }: FormFieldTypesAdd) => {
+    setIsLoading(true);
     const leaveResponse: LeaveAPI = await postNewLeave({
       type: type as Type_of_leaveType,
       to: new Date(to),
@@ -75,6 +80,7 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
     } else {
       renderToast(leaveResponse);
     }
+    setIsLoading(false);
   };
   const renderToast = (leaveResponse: LeaveAPI, message?: string) => {
     if (leaveResponse?.data && message) {
@@ -109,7 +115,7 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
           <Heading className="mb-[24px]" type="H3" content="Edit leave" />
           <Select required options={statuses} name="status" label="Status:" />
           <Button type="submit" variant="addButton">
-            Edit
+            {!isLoading ? 'Edit' : <Loader />}
           </Button>
         </Form>
       ) : (
@@ -132,7 +138,7 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
             type="submit"
             variant="addButton"
           >
-            Add
+            {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
       )}

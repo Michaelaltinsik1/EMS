@@ -7,10 +7,11 @@ import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { DepartmentType } from 'src/Types';
 import { countries } from 'src/utils/lists';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { CacheContext } from '../Context/CacheProvider';
 import { Toast } from 'src/utils/toastGenerator';
 import { createNewDepartment, updateDepartmentById } from 'src/API/department';
+import Loader from 'src/Components/Base/Loader';
 
 interface DepartmentProps {
   handleOnClick: () => void;
@@ -68,6 +69,7 @@ const DepartmentForm = ({
   department,
   isEditForm = true,
 }: DepartmentProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const defaultValuesEdit = {
     name: department?.name || '',
     budget: department?.budget || '',
@@ -83,6 +85,7 @@ const DepartmentForm = ({
     country,
     zip,
   }: FormFieldTypesEdit) => {
+    setIsLoading(true);
     const leaveResponse: DepartmentsAPI = await updateDepartmentById({
       name,
       budget: Number(budget),
@@ -96,8 +99,10 @@ const DepartmentForm = ({
     } else {
       renderToast(leaveResponse);
     }
+    setIsLoading(false);
   };
   const onSubmitAdd = async ({ name, budget }: FormFieldTypesAdd) => {
+    setIsLoading(true);
     const leaveResponse: DepartmentsAPI = await createNewDepartment({
       name,
       budget: Number(budget),
@@ -107,6 +112,7 @@ const DepartmentForm = ({
     } else {
       renderToast(leaveResponse);
     }
+    setIsLoading(false);
   };
   const renderToast = (
     departmentResponse: DepartmentsAPI,
@@ -154,7 +160,7 @@ const DepartmentForm = ({
           <Input required type="text" name="city" label="City: " />
           <Input required type="number" name="zip" label="Zip code:" />
           <Button type="submit" variant="addButton">
-            Edit
+            {!isLoading ? 'Edit' : <Loader />}
           </Button>
         </Form>
       ) : (
@@ -171,7 +177,7 @@ const DepartmentForm = ({
             type="submit"
             variant="addButton"
           >
-            Add
+            {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
       )}

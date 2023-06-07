@@ -11,7 +11,8 @@ import { postNewNotice, updateNoticeById } from 'src/API/notice';
 import { Toast } from 'src/utils/toastGenerator';
 import { CacheContext } from '../Context/CacheProvider';
 import { AuthContext } from '../Context/AuthProvider';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import Loader from 'src/Components/Base/Loader';
 
 interface NoticeProps {
   handleOnClick: () => void;
@@ -47,12 +48,14 @@ const NoticeForm = ({
   notice,
   isEditForm = true,
 }: NoticeProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const defaultValuesEdit = {
     status: notice?.status || '',
   };
   const { updateNotices } = useContext(CacheContext);
   const { user } = useContext(AuthContext);
   const onSubmitEdit = async ({ status }: FormFieldTypesEdit) => {
+    setIsLoading(true);
     if (statuses.some((currStatus) => currStatus.id === status) && notice) {
       const noticeResponse: NoticeAPI = await updateNoticeById({
         status: status as StatusType,
@@ -70,8 +73,10 @@ const NoticeForm = ({
         isSuccess: false,
       });
     }
+    setIsLoading(false);
   };
   const onSubmitAdd = async ({ description }: FormFieldTypesAdd) => {
+    setIsLoading(true);
     const noticeResponse: NoticeAPI = await postNewNotice({
       description,
       userId: user?.userId || '',
@@ -81,6 +86,7 @@ const NoticeForm = ({
     } else {
       renderToast(noticeResponse);
     }
+    setIsLoading(false);
   };
 
   const renderToast = (rolesResponse: NoticeAPI, message?: string) => {
@@ -116,7 +122,7 @@ const NoticeForm = ({
           <Heading className="mb-[24px]" type="H3" content="Edit notice" />
           <Select required options={statuses} name="status" label="Status:" />
           <Button type="submit" variant="addButton">
-            Edit
+            {!isLoading ? 'Edit' : <Loader />}
           </Button>
         </Form>
       ) : (
@@ -133,7 +139,7 @@ const NoticeForm = ({
             type="submit"
             variant="addButton"
           >
-            Add
+            {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
       )}

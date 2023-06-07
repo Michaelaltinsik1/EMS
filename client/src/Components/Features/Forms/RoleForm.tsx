@@ -8,7 +8,8 @@ import { RoleType } from 'src/Types';
 import { postNewRole, updateRoleById } from 'src/API/role';
 import { Toast } from 'src/utils/toastGenerator';
 import { CacheContext } from '../Context/CacheProvider';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
+import Loader from 'src/Components/Base/Loader';
 interface RoleProps {
   handleOnClick: () => void;
   role?: RoleType;
@@ -39,20 +40,19 @@ interface FormFieldTypes {
   name: string;
 }
 const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { updateRoles } = useContext(CacheContext);
   const defaultValuesEdit = {
     name: role?.name || '',
   };
   const onSubmit = async ({ name }: FormFieldTypes) => {
-    console.log('Name: ', name);
+    setIsLoading(true);
+
     let roleResponse: RolesAPI | null = null;
     if (isEditForm) {
-      // Handle edit form network request
       roleResponse = await updateRoleById({ name, roleId: role?.id || '' });
     } else {
-      // Handle add form network request
       roleResponse = await postNewRole(name);
-      console.log('Role: ', role);
     }
     if (roleResponse?.data) {
       updateRoles(null);
@@ -70,6 +70,7 @@ const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
         );
       }
     }
+    setIsLoading(false);
   };
   return (
     <Modal handleOnClick={handleOnClick}>
@@ -86,8 +87,9 @@ const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
           <Heading className="mb-[24px]" type="H3" content="Add role" />
         )}
         <Input required type="text" name="name" label="Name:" />
+
         <Button className="desktop:self-end" type="submit" variant="addButton">
-          {isEditForm ? 'Edit' : 'Add'}
+          {isLoading ? <Loader /> : isEditForm ? 'Edit' : 'Add'}
         </Button>
       </Form>
     </Modal>
