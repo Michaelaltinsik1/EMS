@@ -14,6 +14,7 @@ interface RoleProps {
   handleOnClick: () => void;
   role?: RoleType;
   isEditForm?: boolean;
+  setIsFormOpen: (newValue: boolean) => void;
 }
 interface RolesAPI {
   data?: RoleType;
@@ -39,7 +40,12 @@ const defaultValuesAdd = {
 interface FormFieldTypes {
   name: string;
 }
-const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
+const RoleForm = ({
+  handleOnClick,
+  role,
+  isEditForm = true,
+  setIsFormOpen,
+}: RoleProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { updateRoles } = useContext(CacheContext);
   const defaultValuesEdit = {
@@ -71,6 +77,7 @@ const RoleForm = ({ handleOnClick, role, isEditForm = true }: RoleProps) => {
       }
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
   return (
     <Modal handleOnClick={handleOnClick}>

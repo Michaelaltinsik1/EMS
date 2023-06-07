@@ -15,6 +15,7 @@ interface ProjectProps {
   handleOnClick: () => void;
   project?: ProjectType;
   isEditForm?: boolean;
+  setIsFormOpen: (newValue: boolean) => void;
 }
 interface ProjectAPI {
   data?: Array<ProjectType>;
@@ -56,6 +57,7 @@ const ProjectForm = ({
   handleOnClick,
   project,
   isEditForm = true,
+  setIsFormOpen,
 }: ProjectProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const defaultValuesEdit = {
@@ -65,6 +67,7 @@ const ProjectForm = ({
     description: project?.description || '',
   };
   const { updateProjects } = useContext(CacheContext);
+
   const onSubmit = async ({
     name,
     start,
@@ -116,6 +119,7 @@ const ProjectForm = ({
       );
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
 
   return (

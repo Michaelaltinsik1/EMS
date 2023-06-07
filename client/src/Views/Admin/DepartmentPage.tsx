@@ -72,7 +72,11 @@ const DepartmentPageAdmin = () => {
         )}
       </div>
       {isFormOpen && (
-        <DepartmentForm isEditForm={false} handleOnClick={toggleForm} />
+        <DepartmentForm
+          setIsFormOpen={setIsFormOpen}
+          isEditForm={false}
+          handleOnClick={toggleForm}
+        />
       )}
     </>
   );

@@ -78,7 +78,11 @@ const NoticePageAdmin = () => {
         )}
       </div>
       {isFormOpen && (
-        <NoticeForm isEditForm={false} handleOnClick={toggleForm} />
+        <NoticeForm
+          setIsFormOpen={setIsFormOpen}
+          isEditForm={false}
+          handleOnClick={toggleForm}
+        />
       )}
     </>
   );

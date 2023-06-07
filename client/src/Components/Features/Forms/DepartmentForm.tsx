@@ -17,6 +17,7 @@ interface DepartmentProps {
   handleOnClick: () => void;
   department?: DepartmentType;
   isEditForm?: boolean;
+  setIsFormOpen: (newValue: boolean) => void;
 }
 interface FormFieldTypesEdit extends FormFieldTypesAdd {
   country: string;
@@ -68,6 +69,7 @@ const DepartmentForm = ({
   handleOnClick,
   department,
   isEditForm = true,
+  setIsFormOpen,
 }: DepartmentProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const defaultValuesEdit = {
@@ -100,6 +102,7 @@ const DepartmentForm = ({
       renderToast(leaveResponse);
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
   const onSubmitAdd = async ({ name, budget }: FormFieldTypesAdd) => {
     setIsLoading(true);
@@ -113,6 +116,7 @@ const DepartmentForm = ({
       renderToast(leaveResponse);
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
   const renderToast = (
     departmentResponse: DepartmentsAPI,

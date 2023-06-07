@@ -25,6 +25,7 @@ interface EmployeeFormProps {
   handleOnClick: () => void;
   user?: UserType;
   isEditForm?: boolean;
+  setIsFormOpen: (newValue: boolean) => void;
 }
 
 const validationSchemaEdit = yup.object({
@@ -116,6 +117,7 @@ const EmployeeForm = ({
   handleOnClick,
   user,
   isEditForm = true,
+  setIsFormOpen,
 }: EmployeeFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
@@ -184,6 +186,7 @@ const EmployeeForm = ({
       renderToast(employeeResponse);
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
 
   const onSubmitAdd = async ({
@@ -224,6 +227,7 @@ const EmployeeForm = ({
       renderToast(employeeResponse);
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
 
   const renderToast = (employeeResponse: EmployeeAPI, message?: string) => {

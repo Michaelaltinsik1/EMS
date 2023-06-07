@@ -22,6 +22,7 @@ interface TimereportProps {
   handleOnClick: () => void;
   timereport?: Time_reportType;
   isEditForm?: boolean;
+  setIsFormOpen: (newValue: boolean) => void;
 }
 
 interface FormFieldTypesEdit {
@@ -47,6 +48,7 @@ const TimereportForm = ({
   handleOnClick,
   timereport,
   isEditForm = true,
+  setIsFormOpen,
 }: TimereportProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
@@ -68,6 +70,7 @@ const TimereportForm = ({
       renderToast(timereportResponse);
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
   const onSubmitEdit = async ({ status }: FormFieldTypesEdit) => {
     setIsLoading(true);
@@ -90,6 +93,7 @@ const TimereportForm = ({
       });
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
 
   const renderToast = (rolesResponse: TimereportAPI, message?: string) => {

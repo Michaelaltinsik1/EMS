@@ -68,7 +68,11 @@ const EmployeePageAdmin = () => {
         )}
       </div>
       {isFormOpen && (
-        <EmployeeForm isEditForm={false} handleOnClick={toggleForm} />
+        <EmployeeForm
+          setIsFormOpen={setIsFormOpen}
+          isEditForm={false}
+          handleOnClick={toggleForm}
+        />
       )}
     </>
   );

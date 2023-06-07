@@ -88,7 +88,11 @@ const ProjectPage = () => {
       </div>
 
       {isFormOpen && (
-        <ProjectForm isEditForm={false} handleOnClick={toggleForm} />
+        <ProjectForm
+          setIsFormOpen={setIsFormOpen}
+          isEditForm={false}
+          handleOnClick={toggleForm}
+        />
       )}
     </>
   );

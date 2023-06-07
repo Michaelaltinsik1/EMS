@@ -75,7 +75,11 @@ const LeavePageAdmin = () => {
       </div>
 
       {isFormOpen && (
-        <LeaveForm isEditForm={false} handleOnClick={toggleForm} />
+        <LeaveForm
+          setIsFormOpen={setIsFormOpen}
+          isEditForm={false}
+          handleOnClick={toggleForm}
+        />
       )}
     </>
   );

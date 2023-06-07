@@ -76,7 +76,11 @@ const TimeReportPageAdmin = () => {
               />
             )}
             {isFormOpen && (
-              <TimereportForm isEditForm={false} handleOnClick={toggleForm} />
+              <TimereportForm
+                setIsFormOpen={setIsFormOpen}
+                isEditForm={false}
+                handleOnClick={toggleForm}
+              />
             )}
           </>
         ) : (

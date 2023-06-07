@@ -83,7 +83,11 @@ const TimeReportPage = () => {
           </div>
         )}
         {isFormOpen && (
-          <TimereportForm isEditForm={false} handleOnClick={toggleForm} />
+          <TimereportForm
+            setIsFormOpen={setIsFormOpen}
+            isEditForm={false}
+            handleOnClick={toggleForm}
+          />
         )}
       </div>
     </>

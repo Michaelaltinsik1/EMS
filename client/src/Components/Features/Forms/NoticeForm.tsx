@@ -18,6 +18,7 @@ interface NoticeProps {
   handleOnClick: () => void;
   notice?: NoticeType;
   isEditForm?: boolean;
+  setIsFormOpen: (newValue: boolean) => void;
 }
 interface NoticeAPI {
   data?: Array<NoticeType>;
@@ -47,6 +48,7 @@ const NoticeForm = ({
   handleOnClick,
   notice,
   isEditForm = true,
+  setIsFormOpen,
 }: NoticeProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const defaultValuesEdit = {
@@ -74,6 +76,7 @@ const NoticeForm = ({
       });
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
   const onSubmitAdd = async ({ description }: FormFieldTypesAdd) => {
     setIsLoading(true);
@@ -87,6 +90,7 @@ const NoticeForm = ({
       renderToast(noticeResponse);
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
 
   const renderToast = (rolesResponse: NoticeAPI, message?: string) => {

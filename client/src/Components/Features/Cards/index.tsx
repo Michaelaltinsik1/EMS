@@ -76,7 +76,11 @@ const Card = ({
             clickHandler={toggleForm}
           />
           {isFormOpen && (
-            <EmployeeForm user={user} handleOnClick={toggleForm} />
+            <EmployeeForm
+              setIsFormOpen={setIsFormOpen}
+              user={user}
+              handleOnClick={toggleForm}
+            />
           )}
           {isRemoveModalOpen && (
             <RemoveModal
@@ -100,6 +104,7 @@ const Card = ({
           />
           {isFormOpen && (
             <DepartmentForm
+              setIsFormOpen={setIsFormOpen}
               department={department}
               handleOnClick={toggleForm}
             />
@@ -125,7 +130,13 @@ const Card = ({
             theme={theme}
             clickHandler={toggleForm}
           />
-          {isFormOpen && <LeaveForm leave={leave} handleOnClick={toggleForm} />}
+          {isFormOpen && (
+            <LeaveForm
+              setIsFormOpen={setIsFormOpen}
+              leave={leave}
+              handleOnClick={toggleForm}
+            />
+          )}
           {isRemoveModalOpen && (
             <RemoveModal
               id={leave.id}
@@ -147,7 +158,11 @@ const Card = ({
             clickHandler={toggleForm}
           />
           {isFormOpen && (
-            <ProjectForm project={project} handleOnClick={toggleForm} />
+            <ProjectForm
+              setIsFormOpen={setIsFormOpen}
+              project={project}
+              handleOnClick={toggleForm}
+            />
           )}
           {isRemoveModalOpen && (
             <RemoveModal
@@ -169,7 +184,13 @@ const Card = ({
             theme={theme}
             clickHandler={toggleForm}
           />
-          {isFormOpen && <RoleForm role={role} handleOnClick={toggleForm} />}
+          {isFormOpen && (
+            <RoleForm
+              setIsFormOpen={setIsFormOpen}
+              role={role}
+              handleOnClick={toggleForm}
+            />
+          )}
           {isRemoveModalOpen && (
             <RemoveModal
               id={role.id}
@@ -195,6 +216,7 @@ const Card = ({
             <TimereportForm
               timereport={timereport}
               handleOnClick={toggleForm}
+              setIsFormOpen={setIsFormOpen}
             />
           )}
           {isRemoveModalOpen && (
@@ -218,7 +240,11 @@ const Card = ({
             clickHandler={toggleForm}
           />
           {isFormOpen && (
-            <NoticeForm notice={notice} handleOnClick={toggleForm} />
+            <NoticeForm
+              setIsFormOpen={setIsFormOpen}
+              notice={notice}
+              handleOnClick={toggleForm}
+            />
           )}
           {isRemoveModalOpen && (
             <RemoveModal

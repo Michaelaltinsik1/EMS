@@ -66,7 +66,13 @@ const RolePageAdmin = () => {
           </div>
         )}
       </div>
-      {isFormOpen && <RoleForm isEditForm={false} handleOnClick={toggleForm} />}
+      {isFormOpen && (
+        <RoleForm
+          setIsFormOpen={setIsFormOpen}
+          isEditForm={false}
+          handleOnClick={toggleForm}
+        />
+      )}
     </>
   );
 };

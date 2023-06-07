@@ -19,6 +19,7 @@ interface LeaveProps {
   handleOnClick: () => void;
   leave?: LeaveType;
   isEditForm?: boolean;
+  setIsFormOpen: (newValue: boolean) => void;
 }
 interface LeaveAPI {
   data?: LeaveType;
@@ -47,7 +48,12 @@ const defaultValuesAdd = {
   to: '',
 };
 
-const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
+const LeaveForm = ({
+  handleOnClick,
+  leave,
+  isEditForm = true,
+  setIsFormOpen,
+}: LeaveProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const defaultValuesEdit = {
     status: leave?.status || '',
@@ -66,6 +72,7 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
       renderToast(leaveResponse);
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
   const onSubmitAdd = async ({ to, from, type }: FormFieldTypesAdd) => {
     setIsLoading(true);
@@ -81,6 +88,7 @@ const LeaveForm = ({ handleOnClick, leave, isEditForm = true }: LeaveProps) => {
       renderToast(leaveResponse);
     }
     setIsLoading(false);
+    setIsFormOpen(false);
   };
   const renderToast = (leaveResponse: LeaveAPI, message?: string) => {
     if (leaveResponse?.data && message) {
