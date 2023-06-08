@@ -20,9 +20,9 @@ import {
   NoticeType,
 } from 'src/Types';
 import { CacheContext } from './Context/CacheProvider';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Toast } from 'src/utils/toastGenerator';
-
+import Loader from '../Base/Loader';
 interface APIResult<T> {
   data?: Array<T>;
   errors?: Array<{ error: string }>;
@@ -32,6 +32,7 @@ interface RemoveModalProps {
   handleOnClick: () => void;
   id: string;
   name?: string;
+  setIsFormOpen: (newValue: boolean) => void;
 }
 
 const RemoveModal = ({
@@ -39,7 +40,9 @@ const RemoveModal = ({
   handleOnClick,
   id,
   name = '',
+  setIsFormOpen,
 }: RemoveModalProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const {
     updateProjects,
     updateLeaves,
@@ -50,6 +53,7 @@ const RemoveModal = ({
     updateTimereports,
   } = useContext(CacheContext);
   const handleRemove = async () => {
+    setIsLoading(true);
     switch (Entity) {
       case Entities.PROJECT: {
         const removedProject: APIResult<ProjectType> = await deleteProjectById(
@@ -64,6 +68,8 @@ const RemoveModal = ({
         } else if (removedProject?.errors) {
           handleErrorToast(removedProject?.errors);
         }
+        setIsLoading(false);
+        setIsFormOpen(false);
         return;
       }
       case Entities.EMPLOYEE: {
@@ -77,6 +83,8 @@ const RemoveModal = ({
         } else if (removedEmployee?.errors) {
           handleErrorToast(removedEmployee?.errors);
         }
+        setIsLoading(false);
+        setIsFormOpen(false);
         return;
       }
       case Entities.LEAVE: {
@@ -90,6 +98,8 @@ const RemoveModal = ({
         } else if (removedLeave?.errors) {
           handleErrorToast(removedLeave?.errors);
         }
+        setIsLoading(false);
+        setIsFormOpen(false);
         return;
       }
       case Entities.ROLE: {
@@ -103,6 +113,8 @@ const RemoveModal = ({
         } else if (removedRole?.errors) {
           handleErrorToast(removedRole?.errors);
         }
+        setIsLoading(false);
+        setIsFormOpen(false);
         return;
       }
       case Entities.TIMEREPORT: {
@@ -119,6 +131,8 @@ const RemoveModal = ({
         } else if (removedTimereport?.errors) {
           handleErrorToast(removedTimereport?.errors);
         }
+        setIsLoading(false);
+        setIsFormOpen(false);
         return;
       }
       case Entities.DEPARTMENT: {
@@ -133,6 +147,8 @@ const RemoveModal = ({
         } else if (removedDepartment?.errors) {
           handleErrorToast(removedDepartment?.errors);
         }
+        setIsLoading(false);
+        setIsFormOpen(false);
         return;
       }
       case Entities.NOTICE: {
@@ -146,6 +162,8 @@ const RemoveModal = ({
         } else if (removedNotice?.errors) {
           handleErrorToast(removedNotice?.errors);
         }
+        setIsLoading(false);
+        setIsFormOpen(false);
         return;
       }
       default: {
@@ -189,7 +207,7 @@ const RemoveModal = ({
         type="button"
         variant="confirmRemoveButton"
       >
-        Remove {Entity.toLocaleLowerCase()}
+        {!isLoading ? `Remove ${Entity.toLocaleLowerCase()}` : <Loader />}
       </Button>
     </Modal>
   );

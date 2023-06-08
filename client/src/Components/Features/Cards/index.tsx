@@ -84,6 +84,7 @@ const Card = ({
           )}
           {isRemoveModalOpen && (
             <RemoveModal
+              setIsFormOpen={setIsFormOpen}
               id={user.id}
               name={user.firstName + ' ' + user.lastName}
               handleOnClick={toggleRemoveModal}
@@ -111,6 +112,7 @@ const Card = ({
           )}
           {isRemoveModalOpen && (
             <RemoveModal
+              setIsFormOpen={setIsFormOpen}
               id={department.id}
               name={department.name}
               handleOnClick={toggleRemoveModal}
@@ -139,6 +141,7 @@ const Card = ({
           )}
           {isRemoveModalOpen && (
             <RemoveModal
+              setIsFormOpen={setIsFormOpen}
               id={leave.id}
               handleOnClick={toggleRemoveModal}
               Entity={Entities.LEAVE}
@@ -166,6 +169,7 @@ const Card = ({
           )}
           {isRemoveModalOpen && (
             <RemoveModal
+              setIsFormOpen={setIsFormOpen}
               id={project.id}
               name={project.name}
               handleOnClick={toggleRemoveModal}
@@ -193,6 +197,7 @@ const Card = ({
           )}
           {isRemoveModalOpen && (
             <RemoveModal
+              setIsFormOpen={setIsFormOpen}
               id={role.id}
               name={role.name}
               handleOnClick={toggleRemoveModal}
@@ -222,6 +227,7 @@ const Card = ({
           {isRemoveModalOpen && (
             <RemoveModal
               id={timereport.id}
+              setIsFormOpen={setIsFormOpen}
               handleOnClick={toggleRemoveModal}
               Entity={Entities.TIMEREPORT}
             />
@@ -248,6 +254,7 @@ const Card = ({
           )}
           {isRemoveModalOpen && (
             <RemoveModal
+              setIsFormOpen={setIsFormOpen}
               id={notice.id}
               handleOnClick={toggleRemoveModal}
               Entity={Entities.NOTICE}
