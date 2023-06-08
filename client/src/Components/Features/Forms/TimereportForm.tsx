@@ -14,6 +14,10 @@ import { Toast } from 'src/utils/toastGenerator';
 import { CacheContext } from '../Context/CacheProvider';
 import { StatusType } from 'src/Types';
 import Loader from 'src/Components/Base/Loader';
+import { useBreakpoint } from '../hooks/useBreakpoint';
+import RemoveModal from '../RemoveModal';
+import { Entities } from 'src/Types/enums';
+
 interface TimereportAPI {
   data?: Array<Time_reportType>;
   errors?: Array<{ error: string }>;
@@ -51,6 +55,11 @@ const TimereportForm = ({
   setIsFormOpen,
 }: TimereportProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRemoveModal, setIsRemoveModal] = useState<boolean>(false);
+  const closeRemoveModal = () => {
+    setIsRemoveModal(false);
+  };
+  const { isMobile } = useBreakpoint();
   const { user } = useContext(AuthContext);
   const { updateTimereports } = useContext(CacheContext);
   const defaultValuesEdit = {
@@ -129,9 +138,28 @@ const TimereportForm = ({
         >
           <Heading className="mb-[24px]" type="H3" content="Edit timereport" />
           <Select required options={statuses} name="status" label="Status:" />
-          <Button type="submit" variant="addButton">
-            {!isLoading ? 'Edit' : <Loader />}
-          </Button>
+
+          <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
+            <Button
+              className="desktop:ml-4 order-2"
+              type="submit"
+              variant="addButton"
+            >
+              {!isLoading ? 'Edit' : <Loader />}
+            </Button>
+            {!isMobile ? (
+              <Button
+                onClick={() => setIsRemoveModal(true)}
+                className="desktop:mr-4 order-1 tablet:mb-[24px] desktop:mb-0"
+                type="button"
+                variant="removeButton"
+              >
+                remove
+              </Button>
+            ) : (
+              <></>
+            )}
+          </div>
         </Form>
       ) : (
         <Form
@@ -155,6 +183,14 @@ const TimereportForm = ({
             {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
+      )}
+      {isRemoveModal && (
+        <RemoveModal
+          Entity={Entities.TIMEREPORT}
+          handleOnClick={closeRemoveModal}
+          id={timereport?.id || ''}
+          setIsFormOpen={setIsFormOpen}
+        />
       )}
     </Modal>
   );

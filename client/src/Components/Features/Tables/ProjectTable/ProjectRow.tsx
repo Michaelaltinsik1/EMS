@@ -33,14 +33,16 @@ const ProjectRow = ({ project, theme }: rowProps) => {
           {project.deadline.toString().split('T')[0]}
         </TableItem>
         <TableItem type="tableData">{project.description || ''}</TableItem>
+        {isFormOpen && (
+          <TableItem type="tableData">
+            <ProjectForm
+              setIsFormOpen={setIsFormOpen}
+              project={project}
+              handleOnClick={toggleForm}
+            />
+          </TableItem>
+        )}
       </tr>
-      {isFormOpen && (
-        <ProjectForm
-          setIsFormOpen={setIsFormOpen}
-          project={project}
-          handleOnClick={toggleForm}
-        />
-      )}
     </>
   );
 };

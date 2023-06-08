@@ -3,6 +3,7 @@ import { ReactNode, useContext } from 'react';
 import { Theme } from 'src/Types/enums';
 import Icon from '../Base/Icon';
 import Overlay from './Overlay';
+
 interface ModalProps {
   children: ReactNode | ReactNode[];
   handleOnClick: () => void;

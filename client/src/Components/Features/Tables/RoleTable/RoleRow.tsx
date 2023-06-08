@@ -27,14 +27,16 @@ const RoleRow = ({ role, theme }: rowProps) => {
         <TableItem type="tableData">
           {role.created_at.toString().split('T')[0]}
         </TableItem>
+        {isFormOpen && (
+          <TableItem type="tableData">
+            <RoleForm
+              setIsFormOpen={setIsFormOpen}
+              role={role}
+              handleOnClick={toggleForm}
+            />
+          </TableItem>
+        )}
       </tr>
-      {isFormOpen && (
-        <RoleForm
-          setIsFormOpen={setIsFormOpen}
-          role={role}
-          handleOnClick={toggleForm}
-        />
-      )}
     </>
   );
 };

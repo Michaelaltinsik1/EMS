@@ -38,78 +38,103 @@ const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
 
   const renderTableContent = () => {
     if (data && type === TaskTypes.USER) {
+      const employees = data as Array<UserType>;
       return (
         <>
           <EmployeeHeader theme={theme} />
-          {data.map((user) => {
-            return <EmployeeRow theme={theme} user={user as UserType} />;
-          })}
+          <tbody>
+            {employees.map((user) => {
+              return <EmployeeRow theme={theme} user={user} key={user.id} />;
+            })}
+          </tbody>
         </>
       );
     } else if (data && type === TaskTypes.DEPARTMENT) {
+      const departments = data as Array<DepartmentType>;
       return (
         <>
           <DepartmentHeader theme={theme} />
-          {data.map((department) => {
-            return (
-              <DepartmentRow
-                theme={theme}
-                department={department as DepartmentType}
-              />
-            );
-          })}
+          <tbody>
+            {departments.map((department) => {
+              return (
+                <DepartmentRow
+                  theme={theme}
+                  department={department}
+                  key={department.id}
+                />
+              );
+            })}
+          </tbody>
         </>
       );
     } else if (data && permission && type === TaskTypes.LEAVE) {
+      const leaves = data as Array<LeaveType>;
       return (
         <>
           <LeaveHeader theme={theme} />
-          {data.map((leave) => {
-            return <LeaveRow theme={theme} leave={leave as LeaveType} />;
-          })}
+          <tbody>
+            {leaves.map((leave) => {
+              return <LeaveRow theme={theme} leave={leave} key={leave.id} />;
+            })}
+          </tbody>
         </>
       );
     } else if (data && permission && type === TaskTypes.PROJECT) {
+      const projects = data as Array<ProjectType>;
       return (
         <>
           <ProjectHeader theme={theme} />
-          {data.map((project) => {
-            return (
-              <ProjectRow theme={theme} project={project as ProjectType} />
-            );
-          })}
+          <tbody>
+            {projects.map((project) => {
+              return (
+                <ProjectRow theme={theme} project={project} key={project.id} />
+              );
+            })}
+          </tbody>
         </>
       );
     } else if (data && type === TaskTypes.ROLE) {
+      const roles = data as Array<RoleType>;
       return (
         <>
           <RoleHeader theme={theme} />
-          {data.map((role) => {
-            return <RoleRow theme={theme} role={role as RoleType} />;
-          })}
+          <tbody>
+            {roles.map((role) => {
+              return <RoleRow theme={theme} role={role} key={role.id} />;
+            })}
+          </tbody>
         </>
       );
     } else if (data && permission && type === TaskTypes.TIMEREPORT) {
+      const timereports = data as Array<Time_reportType>;
       return (
         <>
           <TimereportHeader theme={theme} />
-          {data.map((timereport) => {
-            return (
-              <TimereportRow
-                theme={theme}
-                timereport={timereport as Time_reportType}
-              />
-            );
-          })}
+          <tbody>
+            {timereports.map((timereport) => {
+              return (
+                <TimereportRow
+                  theme={theme}
+                  timereport={timereport}
+                  key={timereport.id}
+                />
+              );
+            })}
+          </tbody>
         </>
       );
     } else if (data && permission && type === TaskTypes.NOTICE) {
+      const notices = data as Array<NoticeType>;
       return (
         <>
           <NoticeHeader theme={theme} />
-          {data.map((notice) => {
-            return <NoticeRow theme={theme} notice={notice as NoticeType} />;
-          })}
+          <tbody>
+            {notices.map((notice) => {
+              return (
+                <NoticeRow theme={theme} notice={notice} key={notice.id} />
+              );
+            })}
+          </tbody>
         </>
       );
     } else {

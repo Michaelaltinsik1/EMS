@@ -12,6 +12,9 @@ import { CacheContext } from '../Context/CacheProvider';
 import { Toast } from 'src/utils/toastGenerator';
 import { createNewDepartment, updateDepartmentById } from 'src/API/department';
 import Loader from 'src/Components/Base/Loader';
+import { useBreakpoint } from '../hooks/useBreakpoint';
+import RemoveModal from '../RemoveModal';
+import { Entities } from 'src/Types/enums';
 
 interface DepartmentProps {
   handleOnClick: () => void;
@@ -72,6 +75,10 @@ const DepartmentForm = ({
   setIsFormOpen,
 }: DepartmentProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRemoveModal, setIsRemoveModal] = useState<boolean>(false);
+  const closeRemoveModal = () => {
+    setIsRemoveModal(false);
+  };
   const defaultValuesEdit = {
     name: department?.name || '',
     budget: department?.budget || '',
@@ -80,6 +87,7 @@ const DepartmentForm = ({
     zip: department?.addresses?.zip || '',
   };
   const { updateDepartments } = useContext(CacheContext);
+  const { isMobile } = useBreakpoint();
   const onSubmitEdit = async ({
     name,
     budget,
@@ -163,9 +171,27 @@ const DepartmentForm = ({
           />
           <Input required type="text" name="city" label="City: " />
           <Input required type="number" name="zip" label="Zip code:" />
-          <Button type="submit" variant="addButton">
-            {!isLoading ? 'Edit' : <Loader />}
-          </Button>
+          <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
+            <Button
+              className="desktop:ml-4 order-2 "
+              type="submit"
+              variant="addButton"
+            >
+              {!isLoading ? 'Edit' : <Loader />}
+            </Button>
+            {!isMobile ? (
+              <Button
+                onClick={() => setIsRemoveModal(true)}
+                className="desktop:mr-4 order-1 tablet:mb-[24px] desktop:mb-0"
+                type="button"
+                variant="removeButton"
+              >
+                remove
+              </Button>
+            ) : (
+              <></>
+            )}
+          </div>
         </Form>
       ) : (
         <Form
@@ -184,6 +210,15 @@ const DepartmentForm = ({
             {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
+      )}
+      {isRemoveModal && (
+        <RemoveModal
+          Entity={Entities.DEPARTMENT}
+          name={department?.name}
+          handleOnClick={closeRemoveModal}
+          id={department?.id || ''}
+          setIsFormOpen={setIsFormOpen}
+        />
       )}
     </Modal>
   );

@@ -10,6 +10,10 @@ import { Toast } from 'src/utils/toastGenerator';
 import { CacheContext } from '../Context/CacheProvider';
 import { useContext, useState } from 'react';
 import Loader from 'src/Components/Base/Loader';
+import { useBreakpoint } from '../hooks/useBreakpoint';
+import RemoveModal from '../RemoveModal';
+import { Entities } from 'src/Types/enums';
+
 interface RoleProps {
   handleOnClick: () => void;
   role?: RoleType;
@@ -47,6 +51,11 @@ const RoleForm = ({
   setIsFormOpen,
 }: RoleProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRemoveModal, setIsRemoveModal] = useState<boolean>(false);
+  const closeRemoveModal = () => {
+    setIsRemoveModal(false);
+  };
+  const { isMobile } = useBreakpoint();
   const { updateRoles } = useContext(CacheContext);
   const defaultValuesEdit = {
     name: role?.name || '',
@@ -94,11 +103,38 @@ const RoleForm = ({
           <Heading className="mb-[24px]" type="H3" content="Add role" />
         )}
         <Input required type="text" name="name" label="Name:" />
-
-        <Button className="desktop:self-end" type="submit" variant="addButton">
-          {isLoading ? <Loader /> : isEditForm ? 'Edit' : 'Add'}
-        </Button>
+        <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
+          <Button
+            className="desktop:ml-4 order-2"
+            type="submit"
+            variant="addButton"
+          >
+            {/* {!isLoading ? 'Edit' : <Loader />} */}
+            {isLoading ? <Loader /> : isEditForm ? 'Edit' : 'Add'}
+          </Button>
+          {!isMobile && isEditForm ? (
+            <Button
+              onClick={() => setIsRemoveModal(true)}
+              className="desktop:mr-4 order-1 tablet:mb-[24px] desktop:mb-0"
+              type="button"
+              variant="removeButton"
+            >
+              remove
+            </Button>
+          ) : (
+            <></>
+          )}
+        </div>
       </Form>
+      {isRemoveModal && (
+        <RemoveModal
+          Entity={Entities.ROLE}
+          name={role?.name}
+          handleOnClick={closeRemoveModal}
+          id={role?.id || ''}
+          setIsFormOpen={setIsFormOpen}
+        />
+      )}
     </Modal>
   );
 };

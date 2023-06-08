@@ -52,14 +52,16 @@ const EmployeeRow = ({ user, theme }: rowProps) => {
         <TableItem type="tableData">
           {capitalizeFirstLetter(user.permission.toLocaleLowerCase())}
         </TableItem>
+        {isFormOpen && (
+          <TableItem type="tableData">
+            <EmployeeForm
+              setIsFormOpen={setIsFormOpen}
+              user={user}
+              handleOnClick={toggleForm}
+            />
+          </TableItem>
+        )}
       </tr>
-      {isFormOpen && (
-        <EmployeeForm
-          setIsFormOpen={setIsFormOpen}
-          user={user}
-          handleOnClick={toggleForm}
-        />
-      )}
     </>
   );
 };

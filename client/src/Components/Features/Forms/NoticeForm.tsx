@@ -13,6 +13,9 @@ import { CacheContext } from '../Context/CacheProvider';
 import { AuthContext } from '../Context/AuthProvider';
 import { useContext, useState } from 'react';
 import Loader from 'src/Components/Base/Loader';
+import { useBreakpoint } from '../hooks/useBreakpoint';
+import RemoveModal from '../RemoveModal';
+import { Entities } from 'src/Types/enums';
 
 interface NoticeProps {
   handleOnClick: () => void;
@@ -51,6 +54,11 @@ const NoticeForm = ({
   setIsFormOpen,
 }: NoticeProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRemoveModal, setIsRemoveModal] = useState<boolean>(false);
+  const closeRemoveModal = () => {
+    setIsRemoveModal(false);
+  };
+  const { isMobile } = useBreakpoint();
   const defaultValuesEdit = {
     status: notice?.status || '',
   };
@@ -125,9 +133,27 @@ const NoticeForm = ({
         >
           <Heading className="mb-[24px]" type="H3" content="Edit notice" />
           <Select required options={statuses} name="status" label="Status:" />
-          <Button type="submit" variant="addButton">
-            {!isLoading ? 'Edit' : <Loader />}
-          </Button>
+          <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
+            <Button
+              className="desktop:ml-4 order-2"
+              type="submit"
+              variant="addButton"
+            >
+              {!isLoading ? 'Edit' : <Loader />}
+            </Button>
+            {!isMobile ? (
+              <Button
+                onClick={() => setIsRemoveModal(true)}
+                className="desktop:mr-4 order-1 tablet:mb-[24px] desktop:mb-0"
+                type="button"
+                variant="removeButton"
+              >
+                remove
+              </Button>
+            ) : (
+              <></>
+            )}
+          </div>
         </Form>
       ) : (
         <Form
@@ -146,6 +172,14 @@ const NoticeForm = ({
             {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
+      )}
+      {isRemoveModal && (
+        <RemoveModal
+          Entity={Entities.NOTICE}
+          handleOnClick={closeRemoveModal}
+          id={notice?.id || ''}
+          setIsFormOpen={setIsFormOpen}
+        />
       )}
     </Modal>
   );

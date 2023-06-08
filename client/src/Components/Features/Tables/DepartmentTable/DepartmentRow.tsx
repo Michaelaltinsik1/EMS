@@ -13,6 +13,7 @@ const DepartmentRow = ({ department, theme }: rowProps) => {
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
+
   const { isTablet } = useBreakpoint();
   let address: string = '';
   if (
@@ -39,14 +40,16 @@ const DepartmentRow = ({ department, theme }: rowProps) => {
           {department.created_at.toString().split('T')[0]}
         </TableItem>
         <TableItem type="tableData">{address || ''}</TableItem>
+        {isFormOpen && (
+          <TableItem type="tableData">
+            <DepartmentForm
+              setIsFormOpen={setIsFormOpen}
+              department={department}
+              handleOnClick={toggleForm}
+            />
+          </TableItem>
+        )}
       </tr>
-      {isFormOpen && (
-        <DepartmentForm
-          setIsFormOpen={setIsFormOpen}
-          department={department}
-          handleOnClick={toggleForm}
-        />
-      )}
     </>
   );
 };

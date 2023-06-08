@@ -47,11 +47,13 @@ const LeaveRow = ({ leave, theme }: rowProps) => {
           {capitalizeFirstLetter(leave.status.toLocaleLowerCase())}
         </TableItem>
         {isFormOpen && (
-          <LeaveForm
-            setIsFormOpen={setIsFormOpen}
-            leave={leave}
-            handleOnClick={toggleForm}
-          />
+          <TableItem type="tableData">
+            <LeaveForm
+              setIsFormOpen={setIsFormOpen}
+              leave={leave}
+              handleOnClick={toggleForm}
+            />
+          </TableItem>
         )}
       </tr>
     </>

@@ -15,6 +15,9 @@ import { permissions } from 'src/utils/lists';
 import { createNewUser, updateUserById } from 'src/API/user';
 import { Toast } from 'src/utils/toastGenerator';
 import Loader from 'src/Components/Base/Loader';
+import { useBreakpoint } from '../hooks/useBreakpoint';
+import RemoveModal from '../RemoveModal';
+import { Entities } from 'src/Types/enums';
 
 interface EmployeeAPI {
   token?: string;
@@ -120,6 +123,11 @@ const EmployeeForm = ({
   setIsFormOpen,
 }: EmployeeFormProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRemoveModal, setIsRemoveModal] = useState<boolean>(false);
+  const closeRemoveModal = () => {
+    setIsRemoveModal(false);
+  };
+  const { isMobile } = useBreakpoint();
   const {
     roles,
     updateRoles,
@@ -308,9 +316,27 @@ const EmployeeForm = ({
           />
           <Input required type="text" name="city" label="City: " />
           <Input required type="number" name="zip" label="Zip code:" />
-          <Button type="submit" variant="addButton">
-            {!isLoading ? 'Edit' : <Loader />}
-          </Button>
+          <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
+            <Button
+              className="desktop:ml-4 order-2"
+              type="submit"
+              variant="addButton"
+            >
+              {!isLoading ? 'Edit' : <Loader />}
+            </Button>
+            {!isMobile ? (
+              <Button
+                onClick={() => setIsRemoveModal(true)}
+                className="desktop:mr-4 order-1 tablet:mb-[24px] desktop:mb-0"
+                type="button"
+                variant="removeButton"
+              >
+                remove
+              </Button>
+            ) : (
+              <></>
+            )}
+          </div>
         </Form>
       ) : (
         <Form
@@ -371,6 +397,15 @@ const EmployeeForm = ({
             {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
+      )}
+      {isRemoveModal && (
+        <RemoveModal
+          Entity={Entities.EMPLOYEE}
+          name={user?.firstName + ' ' + user?.lastName}
+          handleOnClick={closeRemoveModal}
+          id={user?.id || ''}
+          setIsFormOpen={setIsFormOpen}
+        />
       )}
     </Modal>
   );

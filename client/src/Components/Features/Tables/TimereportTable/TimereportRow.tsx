@@ -48,14 +48,16 @@ const TimereportRow = ({ timereport, theme }: rowProps) => {
         <TableItem type="tableData">
           {capitalizeFirstLetter(timereport.status.toLocaleLowerCase())}
         </TableItem>
+        {isFormOpen && (
+          <TableItem type="tableData">
+            <TimereportForm
+              setIsFormOpen={setIsFormOpen}
+              timereport={timereport}
+              handleOnClick={toggleForm}
+            />
+          </TableItem>
+        )}
       </tr>
-      {isFormOpen && (
-        <TimereportForm
-          setIsFormOpen={setIsFormOpen}
-          timereport={timereport}
-          handleOnClick={toggleForm}
-        />
-      )}
     </>
   );
 };

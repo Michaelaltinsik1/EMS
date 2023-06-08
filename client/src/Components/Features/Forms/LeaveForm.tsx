@@ -15,6 +15,10 @@ import { postNewLeave, updateLeaveById } from 'src/API/leave';
 import { leavesList } from 'src/utils/lists';
 import { Type_of_leaveType } from 'src/Types';
 import Loader from 'src/Components/Base/Loader';
+import { useBreakpoint } from '../hooks/useBreakpoint';
+import RemoveModal from '../RemoveModal';
+import { Entities } from 'src/Types/enums';
+
 interface LeaveProps {
   handleOnClick: () => void;
   leave?: LeaveType;
@@ -55,6 +59,11 @@ const LeaveForm = ({
   setIsFormOpen,
 }: LeaveProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRemoveModal, setIsRemoveModal] = useState<boolean>(false);
+  const closeRemoveModal = () => {
+    setIsRemoveModal(false);
+  };
+  const { isMobile } = useBreakpoint();
   const defaultValuesEdit = {
     status: leave?.status || '',
   };
@@ -122,9 +131,27 @@ const LeaveForm = ({
         >
           <Heading className="mb-[24px]" type="H3" content="Edit leave" />
           <Select required options={statuses} name="status" label="Status:" />
-          <Button type="submit" variant="addButton">
-            {!isLoading ? 'Edit' : <Loader />}
-          </Button>
+          <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
+            <Button
+              className="desktop:ml-4 order-2"
+              type="submit"
+              variant="addButton"
+            >
+              {!isLoading ? 'Edit' : <Loader />}
+            </Button>
+            {!isMobile ? (
+              <Button
+                onClick={() => setIsRemoveModal(true)}
+                className="desktop:mr-4 order-1 tablet:mb-[24px] desktop:mb-0"
+                type="button"
+                variant="removeButton"
+              >
+                remove
+              </Button>
+            ) : (
+              <></>
+            )}
+          </div>
         </Form>
       ) : (
         <Form
@@ -149,6 +176,14 @@ const LeaveForm = ({
             {!isLoading ? 'Add' : <Loader />}
           </Button>
         </Form>
+      )}
+      {isRemoveModal && (
+        <RemoveModal
+          Entity={Entities.LEAVE}
+          handleOnClick={closeRemoveModal}
+          id={leave?.id || ''}
+          setIsFormOpen={setIsFormOpen}
+        />
       )}
     </Modal>
   );

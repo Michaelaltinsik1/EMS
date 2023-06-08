@@ -36,14 +36,16 @@ const NoticeRow = ({ notice, theme }: rowProps) => {
         <TableItem type="tableData">
           {capitalizeFirstLetter(notice.status.toLocaleLowerCase())}
         </TableItem>
+        {isFormOpen && (
+          <TableItem type="tableData">
+            <NoticeForm
+              setIsFormOpen={setIsFormOpen}
+              notice={notice}
+              handleOnClick={toggleForm}
+            />
+          </TableItem>
+        )}
       </tr>
-      {isFormOpen && (
-        <NoticeForm
-          setIsFormOpen={setIsFormOpen}
-          notice={notice}
-          handleOnClick={toggleForm}
-        />
-      )}
     </>
   );
 };

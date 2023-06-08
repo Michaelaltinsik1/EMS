@@ -59,6 +59,7 @@ const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
         <nav className="flex flex-col mt-[32px] mb-[64px]">
           {menuOptions.map((menuOption) => (
             <Link
+              key={menuOption.url}
               className={`text-H2Mobile desktopEdgeCases:text-H2 py-4 px-10 desktop:px-[64px]   ${
                 theme === Theme.LIGHT
                   ? 'text-gray-900 hover:text-blue-400'
