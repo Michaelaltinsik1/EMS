@@ -6,11 +6,12 @@ import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { PermissionType, Time_reportType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
-import { Toast } from 'src/utils/toastGenerator';
+
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import TimereportForm from 'src/Components/Features/Forms/TimereportForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface TimereportAPI {
   data?: Array<Time_reportType>;
   errors?: Array<{ error: string }>;
@@ -33,19 +34,7 @@ const TimeReportPage = () => {
       console.log('Timereport: ', timereports);
       if (timereportsReponse?.data) {
         updateTimereports(timereportsReponse.data);
-        //Toast({ message: 'Success', id: 'GetTimereportsByIdToastSuccess' });
       }
-      // else {
-      //   if (timereportsReponse?.errors) {
-      //     timereportsReponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetTimereportsByIdToastError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (timereports === null) {
       getTimeReports();
@@ -58,7 +47,11 @@ const TimeReportPage = () => {
         buttonContent="Add timereport"
       />
       <div className="p-4">
-        <h1>Time report page</h1>
+        <Heading
+          className="mb-4 desktop:mb-6"
+          type="H2"
+          content="Timereports"
+        />
         {timereports ? (
           <>
             {isMobile ? (

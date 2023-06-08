@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { getUsers } from 'src/API/user';
 import { UserType } from 'src/Types';
-import { Toast } from 'src/utils/toastGenerator';
+
 import Card from 'src/Components/Features/Cards';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import Table from 'src/Components/Features/Tables';
@@ -10,6 +10,7 @@ import Contentmanagement from 'src/Components/Features/ContentManagement';
 import EmployeeForm from 'src/Components/Features/Forms/EmployeeForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface EmployeeAPI {
   data?: Array<UserType>;
   errors?: Array<{ error: string }>;
@@ -26,19 +27,7 @@ const EmployeePageAdmin = () => {
       const employeeResponse: EmployeeAPI = await getUsers();
       if (employeeResponse?.data) {
         updateEmployees(employeeResponse.data);
-        //Toast({ message: 'Success', id: 'GetAllEmployeesToastSuccess' });
       }
-      // else {
-      //   if (employeeResponse?.errors) {
-      //     employeeResponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetAllEmployeesToastError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (employees === null) {
       getAllUsers();
@@ -51,8 +40,9 @@ const EmployeePageAdmin = () => {
         toggleAddForm={toggleForm}
         buttonContent="Add employee"
       />
+      {/* <div className="p-4 desktop:px-[56px] desktop:py-[32px] xlDesktop:px-[80px] xlDesktop:py-[56px]"> */}
       <div className="p-4">
-        <h1>Admin Department page</h1>
+        <Heading className="mb-4 desktop:mb-6" type="H2" content="Employees" />
         {employees ? (
           <>
             {isMobile ? (

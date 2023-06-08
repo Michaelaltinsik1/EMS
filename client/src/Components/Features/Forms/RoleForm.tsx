@@ -13,6 +13,7 @@ import Loader from 'src/Components/Base/Loader';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import RemoveModal from '../RemoveModal';
 import { Entities } from 'src/Types/enums';
+import { ThemeContext } from '../Context/ThemeProvider';
 
 interface RoleProps {
   handleOnClick: () => void;
@@ -57,6 +58,7 @@ const RoleForm = ({
   };
   const { isMobile } = useBreakpoint();
   const { updateRoles } = useContext(CacheContext);
+  const { theme } = useContext(ThemeContext);
   const defaultValuesEdit = {
     name: role?.name || '',
   };
@@ -71,7 +73,11 @@ const RoleForm = ({
     }
     if (roleResponse?.data) {
       updateRoles(null);
-      Toast({ message: 'Role has been added', id: 'GetAllRolesToast' });
+      Toast({
+        message: 'Role has been added',
+        id: 'GetAllRolesToast',
+        theme: theme,
+      });
     } else {
       console.log(roleResponse?.errors);
       if (roleResponse?.errors) {
@@ -81,6 +87,7 @@ const RoleForm = ({
             message: errorMessage?.error || errorMessage?.msg || '',
             id: 'PostRoleErrorToast',
             isSuccess: false,
+            theme: theme,
           })
         );
       }
@@ -109,7 +116,6 @@ const RoleForm = ({
             type="submit"
             variant="addButton"
           >
-            {/* {!isLoading ? 'Edit' : <Loader />} */}
             {isLoading ? <Loader /> : isEditForm ? 'Edit' : 'Add'}
           </Button>
           {!isMobile && isEditForm ? (

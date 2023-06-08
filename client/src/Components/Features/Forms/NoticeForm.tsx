@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import Modal from '../Modal';
 import Heading from 'src/Components/Base/Heading';
 import { NoticeType, StatusType } from 'src/Types';
-import Input from 'src/Components/Base/Input';
+import TextArea from 'src/Components/Base/TextArea';
 import { statuses } from 'src/utils/lists';
 import { postNewNotice, updateNoticeById } from 'src/API/notice';
 import { Toast } from 'src/utils/toastGenerator';
@@ -16,6 +16,7 @@ import Loader from 'src/Components/Base/Loader';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import RemoveModal from '../RemoveModal';
 import { Entities } from 'src/Types/enums';
+import { ThemeContext } from '../Context/ThemeProvider';
 
 interface NoticeProps {
   handleOnClick: () => void;
@@ -63,6 +64,7 @@ const NoticeForm = ({
     status: notice?.status || '',
   };
   const { updateNotices } = useContext(CacheContext);
+  const { theme } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
   const onSubmitEdit = async ({ status }: FormFieldTypesEdit) => {
     setIsLoading(true);
@@ -81,6 +83,7 @@ const NoticeForm = ({
         message: 'Invalid Status',
         id: 'NoticeToastError',
         isSuccess: false,
+        theme: theme,
       });
     }
     setIsLoading(false);
@@ -104,7 +107,7 @@ const NoticeForm = ({
   const renderToast = (rolesResponse: NoticeAPI, message?: string) => {
     if (rolesResponse?.data && message) {
       updateNotices(null);
-      Toast({ message, id: 'NoticeToastSuccess' });
+      Toast({ message, id: 'NoticeToastSuccess', theme: theme });
     } else {
       if (rolesResponse?.errors) {
         rolesResponse?.errors.map((errorMessage) =>
@@ -112,6 +115,7 @@ const NoticeForm = ({
             message: errorMessage.error,
             id: 'NoticeToastError',
             isSuccess: false,
+            theme: theme,
           })
         );
       } else {
@@ -119,6 +123,7 @@ const NoticeForm = ({
           message: 'Internal server error!',
           id: 'NoticeToastError',
           isSuccess: false,
+          theme: theme,
         });
       }
     }
@@ -162,8 +167,7 @@ const NoticeForm = ({
           onSubmit={onSubmitAdd}
         >
           <Heading className="mb-[24px]" type="H3" content="Add notice" />
-          {/* Add text area here later */}
-          <Input required type="text" name="description" label="Description:" />
+          <TextArea name="description" label="Description:" />
           <Button
             className="desktop:self-end"
             type="submit"

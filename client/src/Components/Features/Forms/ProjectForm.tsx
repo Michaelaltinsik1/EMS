@@ -14,6 +14,8 @@ import Loader from 'src/Components/Base/Loader';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import RemoveModal from '../RemoveModal';
 import { Entities } from 'src/Types/enums';
+import TextArea from 'src/Components/Base/TextArea';
+import { ThemeContext } from '../Context/ThemeProvider';
 
 interface ProjectProps {
   handleOnClick: () => void;
@@ -23,7 +25,7 @@ interface ProjectProps {
 }
 interface ProjectAPI {
   data?: Array<ProjectType>;
-  errors?: Array<{ error: string }>;
+  errors?: Array<{ error?: string; msg?: string }>;
 }
 interface FormFieldTypes {
   name: string;
@@ -76,7 +78,7 @@ const ProjectForm = ({
     description: project?.description || '',
   };
   const { updateProjects } = useContext(CacheContext);
-
+  const { theme } = useContext(ThemeContext);
   const onSubmit = async ({
     name,
     start,
@@ -99,6 +101,7 @@ const ProjectForm = ({
         Toast({
           message: 'Role has been updated!',
           id: 'postProjectToastSuccess',
+          theme: theme,
         });
       }
     } else {
@@ -114,16 +117,17 @@ const ProjectForm = ({
         Toast({
           message: 'Role has been added!',
           id: 'postProjectToastSuccess',
+          theme: theme,
         });
       }
     }
     if (roleResponse?.errors) {
       roleResponse?.errors.map((errorMessage) =>
         Toast({
-          //message: errorMessage?.error || errorMessage?.msg || '',
-          message: 'Error',
+          message: errorMessage?.error || errorMessage?.msg || '',
           id: 'postProjectToastError',
           isSuccess: false,
+          theme: theme,
         })
       );
     }
@@ -148,15 +152,13 @@ const ProjectForm = ({
         <Input required type="text" name="name" label="Name:" />
         <Input required type="date" name="start" label="Start date:" />
         <Input required type="date" name="deadline" label="Deadline:" />
-        {/* Text area fix needed */}
-        <Input type="text" name="description" label="Description:" />
+        <TextArea name="description" label="Description:" />
         <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
           <Button
             className="desktop:ml-4 order-2"
             type="submit"
             variant="addButton"
           >
-            {/* {!isLoading ? 'Edit' : <Loader />} */}
             {isLoading ? <Loader /> : isEditForm ? 'Edit' : 'Add'}
           </Button>
           {!isMobile && isEditForm ? (

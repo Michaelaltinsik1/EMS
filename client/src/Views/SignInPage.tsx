@@ -11,7 +11,6 @@ import { Theme } from 'src/Types/enums';
 import Button from 'src/Components/Base/Button';
 import Form from 'src/Components/Base/Form';
 import * as yup from 'yup';
-import Loader from 'src/Components/Base/Loader';
 
 const validationSchema = yup.object({
   email: yup.string().email('Invalid formate').required('Email is required'),
@@ -58,6 +57,7 @@ const SignInPage = () => {
         message: 'Invalid credentials!',
         id: 'Sign-in-toast-id',
         isSuccess: false,
+        theme: theme,
       });
     }
 

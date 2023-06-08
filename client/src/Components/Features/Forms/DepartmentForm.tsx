@@ -15,6 +15,7 @@ import Loader from 'src/Components/Base/Loader';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import RemoveModal from '../RemoveModal';
 import { Entities } from 'src/Types/enums';
+import { ThemeContext } from '../Context/ThemeProvider';
 
 interface DepartmentProps {
   handleOnClick: () => void;
@@ -87,6 +88,7 @@ const DepartmentForm = ({
     zip: department?.addresses?.zip || '',
   };
   const { updateDepartments } = useContext(CacheContext);
+  const { theme } = useContext(ThemeContext);
   const { isMobile } = useBreakpoint();
   const onSubmitEdit = async ({
     name,
@@ -132,7 +134,7 @@ const DepartmentForm = ({
   ) => {
     if (departmentResponse?.data && message) {
       updateDepartments(null);
-      Toast({ message, id: 'departmentToastSuccess' });
+      Toast({ message, id: 'departmentToastSuccess', theme: theme });
     } else {
       if (departmentResponse?.errors) {
         console.log(departmentResponse?.errors);
@@ -141,6 +143,7 @@ const DepartmentForm = ({
             message: errorMessage.error,
             id: 'departmentToastError',
             isSuccess: false,
+            theme: theme,
           })
         );
       } else {
@@ -148,6 +151,7 @@ const DepartmentForm = ({
           message: 'Internal server error!',
           id: 'departmentToastError',
           isSuccess: false,
+          theme: theme,
         });
       }
     }

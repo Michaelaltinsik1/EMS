@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getUsers } from 'src/API/user';
+import Heading from 'src/Components/Base/Heading';
 import { UserType } from 'src/Types';
 
 const DashBoardPage = () => {
@@ -16,7 +17,7 @@ const DashBoardPage = () => {
   console.log(users);
   return (
     <div className="p-4">
-      <h1>Employee Dashboard</h1>
+      <Heading className="mb-4 desktop:mb-6" type="H2" content="Dashboard" />
       <p>Users:</p>
       {users.map((user) => (
         <div key={user.id}>

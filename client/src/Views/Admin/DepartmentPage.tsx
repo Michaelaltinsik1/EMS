@@ -9,8 +9,8 @@ import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { DepartmentType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
-import { Toast } from 'src/utils/toastGenerator';
-
+import Heading from 'src/Components/Base/Heading';
+import Paragraph from 'src/Components/Base/Paragrapgh';
 interface DepartmentsAPI {
   data?: Array<DepartmentType>;
   errors?: Array<{ error: string }>;
@@ -18,6 +18,7 @@ interface DepartmentsAPI {
 
 const DepartmentPageAdmin = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { departments, updateDepartments } = useContext(CacheContext);
   const { isMobile } = useBreakpoint();
   const toggleForm = () => {
@@ -25,23 +26,12 @@ const DepartmentPageAdmin = () => {
   };
   useEffect(() => {
     const getDepartments = async () => {
+      setIsLoading(true);
       const departmentsResponse: DepartmentsAPI = await getAllDepartments();
       if (departmentsResponse?.data) {
         updateDepartments(departmentsResponse.data);
-        // Toast({ message: 'Success', id: 'GetAllDepartmentsToastSuccess' });
       }
-      // else {
-      //   console.log(departmentsResponse.errors);
-      //   if (departmentsResponse?.errors) {
-      //     departmentsResponse?.errors.map((errorMessage: { error: string }) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetAllDepartmentsToastError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
+      setIsLoading(false);
     };
     if (departments === null) {
       getDepartments();
@@ -54,8 +44,16 @@ const DepartmentPageAdmin = () => {
         buttonContent="Add department"
       />
       <div className="p-4">
-        <h1>Admin Department page</h1>
-        {departments ? (
+        <Heading
+          className="mb-4 desktop:mb-6"
+          type="H2"
+          content="Departments"
+        />
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
+        ) : departments ? (
           <>
             {isMobile ? (
               departments.map((department) => (
@@ -66,9 +64,7 @@ const DepartmentPageAdmin = () => {
             )}
           </>
         ) : (
-          <div className="flex items-center justify-center h-full mt-20">
-            <Loader isDotLoader={false} />
-          </div>
+          <Paragraph type="body" content="No departments found" />
         )}
       </div>
       {isFormOpen && (

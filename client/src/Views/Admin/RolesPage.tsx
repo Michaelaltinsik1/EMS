@@ -5,12 +5,13 @@ import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { RoleType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
-import { Toast } from 'src/utils/toastGenerator';
+
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import RoleForm from 'src/Components/Features/Forms/RoleForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import { useContext } from 'react';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface RolesAPI {
   data?: Array<RoleType>;
   errors?: Array<{ error: string }>;
@@ -28,20 +29,7 @@ const RolePageAdmin = () => {
       console.log('roles: ', roles);
       if (rolesResponse?.data) {
         updateRoles(rolesResponse.data);
-        //Toast({ message: 'Success', id: 'postRolesToastSuccess' });
       }
-      // else {
-      //   console.log(rolesResponse.errors);
-      //   if (rolesResponse?.errors) {
-      //     rolesResponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'postRolesToastError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (roles === null) {
       getRoles();
@@ -53,7 +41,7 @@ const RolePageAdmin = () => {
       <div className="p-4">
         {roles ? (
           <>
-            <h1>Admin Role page</h1>
+            <Heading className="mb-4 desktop:mb-6" type="H2" content="Roles" />
             {isMobile ? (
               roles.map((role) => <Card role={role} key={role.id} />)
             ) : (

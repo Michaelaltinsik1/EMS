@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
 import { NoticeType, PermissionType } from 'src/Types';
 import { getNoticeByUserId } from 'src/API/notice';
-import { Toast } from 'src/utils/toastGenerator';
 import Card from 'src/Components/Features/Cards';
 import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import NoticeForm from 'src/Components/Features/Forms/NoticeForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface NoticeAPI {
   data?: NoticeType;
   errors?: Array<{ error: string }>;
@@ -25,26 +25,12 @@ const NoticePage = () => {
   useEffect(() => {
     const getNotices = async () => {
       const noticeReponse: NoticeAPI = await getNoticeByUserId(userId);
-      // console.log('Notices: ', notice);
+
       if (noticeReponse?.data) {
-        // setNotice(notice.data);
         const tempArray: Array<NoticeType> = [];
         tempArray.push(noticeReponse.data);
         updateNotices(tempArray);
-        //Toast({ message: 'Success', id: 'GetNoticesByIdToastSuccess' });
       }
-      // else {
-      //   console.log(noticeReponse.errors);
-      //   if (noticeReponse?.errors) {
-      //     noticeReponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetNoticesByIdToastSuccessError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (notices === null) {
       getNotices();
@@ -57,7 +43,7 @@ const NoticePage = () => {
         buttonContent="Add notice"
       />
       <div className="p-4">
-        <h1>Notice page</h1>
+        <Heading className="mb-4 desktop:mb-6" type="H2" content="Notices" />
         {notices ? (
           <>
             {notices.map((notice) => (

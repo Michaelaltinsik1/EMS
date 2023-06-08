@@ -23,6 +23,7 @@ import { CacheContext } from './Context/CacheProvider';
 import { useContext, useState } from 'react';
 import { Toast } from 'src/utils/toastGenerator';
 import Loader from '../Base/Loader';
+import { ThemeContext } from './Context/ThemeProvider';
 interface APIResult<T> {
   data?: Array<T>;
   errors?: Array<{ error: string }>;
@@ -52,6 +53,7 @@ const RemoveModal = ({
     updateRoles,
     updateTimereports,
   } = useContext(CacheContext);
+  const { theme } = useContext(ThemeContext);
   const handleRemove = async () => {
     setIsLoading(true);
     switch (Entity) {
@@ -64,6 +66,7 @@ const RemoveModal = ({
           Toast({
             message: `${Entity} has been removed`,
             id: `${Entity}RemoveToastSuccess`,
+            theme: theme,
           });
         } else if (removedProject?.errors) {
           handleErrorToast(removedProject?.errors);
@@ -79,6 +82,7 @@ const RemoveModal = ({
           Toast({
             message: `${Entity} has been removed`,
             id: `${Entity}RemoveToastSuccess`,
+            theme: theme,
           });
         } else if (removedEmployee?.errors) {
           handleErrorToast(removedEmployee?.errors);
@@ -94,6 +98,7 @@ const RemoveModal = ({
           Toast({
             message: `${Entity} has been removed`,
             id: `${Entity}RemoveToastSuccess`,
+            theme: theme,
           });
         } else if (removedLeave?.errors) {
           handleErrorToast(removedLeave?.errors);
@@ -109,6 +114,7 @@ const RemoveModal = ({
           Toast({
             message: `${Entity} has been removed`,
             id: `${Entity}RemoveToastSuccess`,
+            theme: theme,
           });
         } else if (removedRole?.errors) {
           handleErrorToast(removedRole?.errors);
@@ -125,6 +131,7 @@ const RemoveModal = ({
           Toast({
             message: `${Entity} has been removed`,
             id: `${Entity}RemoveToastSuccess`,
+            theme: theme,
           });
         } else if (removedTimereport?.errors) {
           handleErrorToast(removedTimereport?.errors);
@@ -143,6 +150,7 @@ const RemoveModal = ({
           Toast({
             message: `${Entity} has been removed`,
             id: `${Entity}RemoveToastSuccess`,
+            theme: theme,
           });
         } else if (removedDepartment?.errors) {
           handleErrorToast(removedDepartment?.errors);
@@ -158,6 +166,7 @@ const RemoveModal = ({
           Toast({
             message: `${Entity} has been removed`,
             id: `${Entity}RemoveToastSuccess`,
+            theme: theme,
           });
         } else if (removedNotice?.errors) {
           handleErrorToast(removedNotice?.errors);
@@ -179,6 +188,7 @@ const RemoveModal = ({
           message: errorMessage.error,
           id: `${Entity}RemoveToastError`,
           isSuccess: false,
+          theme: theme,
         })
       );
     } else {
@@ -186,6 +196,7 @@ const RemoveModal = ({
         message: 'Internal server error!',
         id: `${Entity}RemoveToastError`,
         isSuccess: false,
+        theme: theme,
       });
     }
   };

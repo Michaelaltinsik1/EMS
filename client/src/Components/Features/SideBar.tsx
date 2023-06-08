@@ -23,7 +23,7 @@ const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
     <Overlay handleOnClick={toggleMenuState}>
       <aside
         onClick={(e) => e.stopPropagation()}
-        className={`z-[999] max-h-screen mb-9 absolute top-[0] w-screen flex flex-col tablet:max-w-[400px] desktop:min-h-fit tablet:right-0 ${
+        className={`z-[999] h-screen overflow-y-scroll mb-9 absolute top-[0] w-screen flex flex-col tablet:max-w-[400px] tablet:right-0 ${
           theme === Theme.LIGHT ? 'bg-gray-200' : 'bg-gray-800'
         }`}
       >
@@ -50,7 +50,7 @@ const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
         </div>
 
         <Button
-          className="mt-[32px] max-w-[140px] self-center "
+          className="mt-[32px] max-w-[140px] self-center min-h-[52px] "
           type="button"
           variant="removeButton"
         >

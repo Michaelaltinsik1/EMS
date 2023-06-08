@@ -6,17 +6,17 @@ import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { PermissionType, Time_reportType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
-import { Toast } from 'src/utils/toastGenerator';
+
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import TimereportForm from 'src/Components/Features/Forms/TimereportForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface TimereportAPI {
   data?: Array<Time_reportType>;
   errors?: Array<{ error: string }>;
 }
 const TimeReportPageAdmin = () => {
-  //const [timereports, setTimereports] = useState<Array<Time_reportType>>([]);
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
   const { timereports, updateTimereports } = useContext(CacheContext);
@@ -31,20 +31,7 @@ const TimeReportPageAdmin = () => {
       console.log('Timereport: ', timereports);
       if (timereportsResponse?.data) {
         updateTimereports(timereportsResponse.data);
-        // Toast({ message: 'Success', id: 'GetAllTimereportsToastSuccess' });
       }
-      // else {
-      //   console.log(timereportsResponse.errors);
-      //   if (timereportsResponse?.errors) {
-      //     timereportsResponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetAllTimereportsToastError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (timereports === null) {
       getTimeReports();
@@ -57,7 +44,11 @@ const TimeReportPageAdmin = () => {
         buttonContent="Add timereport"
       />
       <div className="p-4">
-        <h1>Admin Time report page</h1>
+        <Heading
+          className="mb-4 desktop:mb-6"
+          type="H2"
+          content="Timereports"
+        />
         {timereports ? (
           <>
             {isMobile ? (

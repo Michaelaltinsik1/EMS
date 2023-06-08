@@ -18,6 +18,7 @@ import Loader from 'src/Components/Base/Loader';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import RemoveModal from '../RemoveModal';
 import { Entities } from 'src/Types/enums';
+import { ThemeContext } from '../Context/ThemeProvider';
 
 interface EmployeeAPI {
   token?: string;
@@ -135,7 +136,7 @@ const EmployeeForm = ({
     updateDepartments,
     updateEmployees,
   } = useContext(CacheContext);
-
+  const { theme } = useContext(ThemeContext);
   useEffect(() => {
     const getRoles = async () => {
       const rolesResponse = await getAllRoles();
@@ -241,7 +242,7 @@ const EmployeeForm = ({
   const renderToast = (employeeResponse: EmployeeAPI, message?: string) => {
     if ((employeeResponse?.token || employeeResponse?.data) && message) {
       updateEmployees(null);
-      Toast({ message, id: 'postEmployeeToastSuccess' });
+      Toast({ message, id: 'postEmployeeToastSuccess', theme: theme });
     } else {
       if (employeeResponse?.errors) {
         employeeResponse?.errors.map((errorMessage) =>
@@ -249,6 +250,7 @@ const EmployeeForm = ({
             message: errorMessage.error,
             id: 'postEmployeeToastError',
             isSuccess: false,
+            theme: theme,
           })
         );
       } else {
@@ -256,6 +258,7 @@ const EmployeeForm = ({
           message: 'Internal server error!',
           id: 'NoticeToastError',
           isSuccess: false,
+          theme: theme,
         });
       }
     }

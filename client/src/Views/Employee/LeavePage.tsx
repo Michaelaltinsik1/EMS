@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { getLeavesByUserId } from 'src/API/leave';
 import Card from 'src/Components/Features/Cards';
 import { LeaveType, PermissionType } from 'src/Types';
-import { Toast } from 'src/utils/toastGenerator';
+
 import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
@@ -11,6 +11,7 @@ import Contentmanagement from 'src/Components/Features/ContentManagement';
 import LeaveForm from 'src/Components/Features/Forms/LeaveForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;
@@ -31,20 +32,7 @@ const LeavePage = () => {
       console.log('Leaves: ', leaves);
       if (leavesReponse?.data) {
         updateLeaves(leavesReponse.data);
-        //Toast({ message: 'Success', id: 'GetLeavesByIdToastSuccess' });
       }
-      // else {
-      //   console.log(leavesReponse.errors);
-      //   if (leavesReponse?.errors) {
-      //     leavesReponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetLeavesByIdToastSuccessError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (leaves === null) {
       getLeaves();
@@ -56,7 +44,7 @@ const LeavePage = () => {
       <div className="p-4">
         {leaves ? (
           <>
-            <h1>Leave</h1>
+            <Heading className="mb-4 desktop:mb-6" type="H2" content="Leaves" />
             {isMobile ? (
               leaves.map((leave) => (
                 <Card permission={permission} leave={leave} key={leave.id} />

@@ -17,6 +17,7 @@ import Loader from 'src/Components/Base/Loader';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import RemoveModal from '../RemoveModal';
 import { Entities } from 'src/Types/enums';
+import { ThemeContext } from '../Context/ThemeProvider';
 
 interface TimereportAPI {
   data?: Array<Time_reportType>;
@@ -62,6 +63,7 @@ const TimereportForm = ({
   const { isMobile } = useBreakpoint();
   const { user } = useContext(AuthContext);
   const { updateTimereports } = useContext(CacheContext);
+  const { theme } = useContext(ThemeContext);
   const defaultValuesEdit = {
     status: timereport?.status || '',
   };
@@ -99,6 +101,7 @@ const TimereportForm = ({
         message: 'Invalid Status',
         id: 'postTimereportToastError',
         isSuccess: false,
+        theme: theme,
       });
     }
     setIsLoading(false);
@@ -108,7 +111,7 @@ const TimereportForm = ({
   const renderToast = (rolesResponse: TimereportAPI, message?: string) => {
     if (rolesResponse?.data && message) {
       updateTimereports(null);
-      Toast({ message, id: 'postTimereportToastSuccess' });
+      Toast({ message, id: 'postTimereportToastSuccess', theme: theme });
     } else {
       if (rolesResponse?.errors) {
         rolesResponse?.errors.map((errorMessage) =>
@@ -116,6 +119,7 @@ const TimereportForm = ({
             message: errorMessage.error,
             id: 'postTimereportToastError',
             isSuccess: false,
+            theme: theme,
           })
         );
       } else {
@@ -123,6 +127,7 @@ const TimereportForm = ({
           message: 'Internal server error!',
           id: 'NoticeToastError',
           isSuccess: false,
+          theme: theme,
         });
       }
     }

@@ -6,11 +6,12 @@ import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { LeaveType, PermissionType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
-import { Toast } from 'src/utils/toastGenerator';
+
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import LeaveForm from 'src/Components/Features/Forms/LeaveForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;
@@ -29,20 +30,7 @@ const LeavePageAdmin = () => {
       const leavesReponse: LeaveAPI = await getAllLeaves();
       if (leavesReponse?.data) {
         updateLeaves(leavesReponse.data);
-        //Toast({ message: 'Success', id: 'GetAllLeavesToastSuccess' });
       }
-      // else {
-      //   console.log(leavesReponse.errors);
-      //   if (leavesReponse?.errors) {
-      //     leavesReponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetAllLeavesToastError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (leaves === null) {
       getLeaves();
@@ -52,7 +40,7 @@ const LeavePageAdmin = () => {
     <>
       <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add leave" />
       <div className="p-4">
-        <h1>Admin Leave</h1>
+        <Heading className="mb-4 desktop:mb-6" type="H2" content="Leaves" />
         {leaves ? (
           <>
             {isMobile ? (

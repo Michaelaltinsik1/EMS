@@ -7,11 +7,11 @@ import Table from 'src/Components/Features/Tables';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
 import { PermissionType, ProjectType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
-import { Toast } from 'src/utils/toastGenerator';
 import Contentmanagement from 'src/Components/Features/ContentManagement';
 import ProjectForm from 'src/Components/Features/Forms/ProjectForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface ProjectAPI {
   data?: Array<ProjectType>;
   errors?: Array<{ error: string }>;
@@ -34,20 +34,7 @@ const ProjectPage = () => {
 
       if (projectsResponse?.data) {
         updateProjects(projectsResponse.data);
-        //Toast({ message: 'Success', id: 'GetProjectsByIdToastSuccess' });
       }
-      // else {
-      //   console.log(projectsResponse.errors);
-      //   if (projectsResponse?.errors) {
-      //     projectsResponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetProjectsByIdToastError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (projects === null) {
       getProjects();
@@ -61,7 +48,7 @@ const ProjectPage = () => {
         showAddButton={false}
       />
       <div className="p-4">
-        <h1>Project</h1>
+        <Heading className="mb-4 desktop:mb-6" type="H2" content="Projects" />
         {projects ? (
           <>
             {isMobile ? (

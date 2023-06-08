@@ -18,6 +18,7 @@ import Loader from 'src/Components/Base/Loader';
 import { useBreakpoint } from '../hooks/useBreakpoint';
 import RemoveModal from '../RemoveModal';
 import { Entities } from 'src/Types/enums';
+import { ThemeContext } from '../Context/ThemeProvider';
 
 interface LeaveProps {
   handleOnClick: () => void;
@@ -69,6 +70,7 @@ const LeaveForm = ({
   };
   const { user } = useContext(AuthContext);
   const { updateLeaves } = useContext(CacheContext);
+  const { theme } = useContext(ThemeContext);
   const onSubmitEdit = async ({ status }: FormFieldTypesEdit) => {
     setIsLoading(true);
     const leaveResponse: LeaveAPI = await updateLeaveById({
@@ -102,7 +104,7 @@ const LeaveForm = ({
   const renderToast = (leaveResponse: LeaveAPI, message?: string) => {
     if (leaveResponse?.data && message) {
       updateLeaves(null);
-      Toast({ message, id: 'LeaveToastSuccess' });
+      Toast({ message, id: 'LeaveToastSuccess', theme: theme });
     } else {
       if (leaveResponse?.errors) {
         leaveResponse?.errors.map((errorMessage) =>
@@ -110,6 +112,7 @@ const LeaveForm = ({
             message: errorMessage.error,
             id: 'LeaveToastError',
             isSuccess: false,
+            theme: theme,
           })
         );
       } else {
@@ -117,6 +120,7 @@ const LeaveForm = ({
           message: 'Internal server error!',
           id: 'NoticeToastError',
           isSuccess: false,
+          theme: theme,
         });
       }
     }

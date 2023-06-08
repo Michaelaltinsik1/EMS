@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { NoticeType, PermissionType } from 'src/Types';
 import { getAllNotices } from 'src/API/notice';
-import { Toast } from 'src/utils/toastGenerator';
+
 import Card from 'src/Components/Features/Cards';
 import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import { useBreakpoint } from 'src/Components/Features/hooks/useBreakpoint';
@@ -11,6 +11,7 @@ import Contentmanagement from 'src/Components/Features/ContentManagement';
 import NoticeForm from 'src/Components/Features/Forms/NoticeForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
+import Heading from 'src/Components/Base/Heading';
 interface NoticeAPI {
   data?: Array<NoticeType>;
   errors?: Array<{ error: string }>;
@@ -30,20 +31,7 @@ const NoticePageAdmin = () => {
       console.log('Notices: ', notices);
       if (noticesReponse?.data) {
         updateNotices(noticesReponse.data);
-        //Toast({ message: 'Success', id: 'GetAllNoticesToastSuccess' });
       }
-      // else {
-      //   console.log(noticesReponse.errors);
-      //   if (noticesReponse?.errors) {
-      //     noticesReponse?.errors.map((errorMessage) =>
-      //       Toast({
-      //         message: errorMessage.error,
-      //         id: 'GetAllNoticesToastError',
-      //         isSuccess: false,
-      //       })
-      //     );
-      //   }
-      // }
     };
     if (notices === null) {
       getNotices();
@@ -56,7 +44,7 @@ const NoticePageAdmin = () => {
         buttonContent="Add notice"
       />
       <div className="p-4">
-        <h1>Admin Notice page</h1>
+        <Heading className="mb-4 desktop:mb-6" type="H2" content="Notices" />
         {notices ? (
           <>
             {isMobile ? (
