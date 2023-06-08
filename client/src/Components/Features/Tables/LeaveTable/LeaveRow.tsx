@@ -6,15 +6,22 @@ import {
   capitalizeFirstLetter,
   capitalizeFirstLetterRemoveUnderline,
 } from 'src/utils/functions';
+import { useState } from 'react';
+import LeaveForm from '../../Forms/LeaveForm';
 interface rowProps {
   leave: LeaveType;
   theme?: Theme;
 }
 const LeaveRow = ({ leave, theme }: rowProps) => {
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const toggleForm = () => {
+    setIsFormOpen((prevState) => !prevState);
+  };
   const { isTablet } = useBreakpoint();
   return (
     <>
       <tr
+        onClick={toggleForm}
         className={`[&>td]:py-4 border-b border-opacity-50 rounded-lg last-of-type:border-none cursor-pointer ${
           theme === Theme.LIGHT
             ? 'border-gray-900 hover:bg-gray-300 active:bg-gray-400'
@@ -39,6 +46,13 @@ const LeaveRow = ({ leave, theme }: rowProps) => {
         <TableItem type="tableData">
           {capitalizeFirstLetter(leave.status.toLocaleLowerCase())}
         </TableItem>
+        {isFormOpen && (
+          <LeaveForm
+            setIsFormOpen={setIsFormOpen}
+            leave={leave}
+            handleOnClick={toggleForm}
+          />
+        )}
       </tr>
     </>
   );

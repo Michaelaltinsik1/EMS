@@ -3,16 +3,22 @@ import { Time_reportType } from 'src/Types';
 import TableItem from 'src/Components/Base/TableItem';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
 import { capitalizeFirstLetter } from 'src/utils/functions';
-
+import { useState } from 'react';
+import TimereportForm from '../../Forms/TimereportForm';
 interface rowProps {
   timereport: Time_reportType;
   theme?: Theme;
 }
 const TimereportRow = ({ timereport, theme }: rowProps) => {
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const toggleForm = () => {
+    setIsFormOpen((prevState) => !prevState);
+  };
   const { isTablet } = useBreakpoint();
   return (
     <>
       <tr
+        onClick={toggleForm}
         className={`[&>td]:py-4 border-b border-opacity-50 rounded-lg last-of-type:border-none cursor-pointer ${
           theme === Theme.LIGHT
             ? 'border-gray-900 hover:bg-gray-300 active:bg-gray-400'
@@ -43,6 +49,13 @@ const TimereportRow = ({ timereport, theme }: rowProps) => {
           {capitalizeFirstLetter(timereport.status.toLocaleLowerCase())}
         </TableItem>
       </tr>
+      {isFormOpen && (
+        <TimereportForm
+          setIsFormOpen={setIsFormOpen}
+          timereport={timereport}
+          handleOnClick={toggleForm}
+        />
+      )}
     </>
   );
 };

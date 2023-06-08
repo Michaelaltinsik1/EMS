@@ -3,16 +3,23 @@ import { UserType } from 'src/Types';
 import TableItem from 'src/Components/Base/TableItem';
 import { useBreakpoint } from '../../hooks/useBreakpoint';
 import { capitalizeFirstLetter } from 'src/utils/functions';
+import EmployeeForm from '../../Forms/EmployeeForm';
+import { useState } from 'react';
 interface rowProps {
   user: UserType;
   theme?: Theme;
 }
 const EmployeeRow = ({ user, theme }: rowProps) => {
+  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const toggleForm = () => {
+    setIsFormOpen((prevState) => !prevState);
+  };
   const { isTablet, isDesktop, isDesktopEdgeCaseBreakpoint } = useBreakpoint();
-  console.log('user: ', user);
+
   return (
     <>
       <tr
+        onClick={toggleForm}
         className={`[&>td]:py-4 border-b border-opacity-50 cursor-pointer rounded-lg last-of-type:border-none  ${
           theme === Theme.LIGHT
             ? 'border-gray-900 hover:bg-gray-300 active:bg-gray-400'
@@ -46,6 +53,13 @@ const EmployeeRow = ({ user, theme }: rowProps) => {
           {capitalizeFirstLetter(user.permission.toLocaleLowerCase())}
         </TableItem>
       </tr>
+      {isFormOpen && (
+        <EmployeeForm
+          setIsFormOpen={setIsFormOpen}
+          user={user}
+          handleOnClick={toggleForm}
+        />
+      )}
     </>
   );
 };

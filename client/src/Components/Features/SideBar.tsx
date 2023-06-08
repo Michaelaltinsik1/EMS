@@ -22,6 +22,7 @@ const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
   return (
     <Overlay handleOnClick={toggleMenuState}>
       <aside
+        onClick={(e) => e.stopPropagation()}
         className={`z-[999] max-h-screen mb-9 absolute top-[0] w-screen flex flex-col tablet:max-w-[400px] desktop:min-h-fit tablet:right-0 ${
           theme === Theme.LIGHT ? 'bg-gray-200' : 'bg-gray-800'
         }`}
