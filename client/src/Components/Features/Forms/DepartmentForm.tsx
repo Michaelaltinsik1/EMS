@@ -137,7 +137,6 @@ const DepartmentForm = ({
       Toast({ message, id: 'departmentToastSuccess', theme: theme });
     } else {
       if (departmentResponse?.errors) {
-        console.log(departmentResponse?.errors);
         departmentResponse?.errors.map((errorMessage) =>
           Toast({
             message: errorMessage.error,

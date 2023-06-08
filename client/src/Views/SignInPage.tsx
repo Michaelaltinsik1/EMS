@@ -36,15 +36,14 @@ const SignInPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function handleSubmit(formFields: FormSubmitType) {
-    console.log('email: ', formFields.email);
-    console.log('password:', formFields.password);
-
     setIsLoading(true);
     const data = await signIn(formFields.email, formFields.password);
     if (data && data?.status === 200) {
       handleSignInPermissions({
         userId: data.value.id,
         permission: data.value.permission,
+        firstName: data.value.firstName,
+        lastName: data.value.lastName,
       });
       if (data.value.permission === 'ADMIN') {
         navigate('/dashboard/admin');
@@ -62,7 +61,6 @@ const SignInPage = () => {
     }
 
     setIsLoading(false);
-    console.log(data);
   }
 
   return (

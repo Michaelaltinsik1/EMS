@@ -22,7 +22,6 @@ const LeaveCardContent = ({
   clickHandlerRemove,
 }: CardProps) => {
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
-    console.log('tghe click');
     e.stopPropagation();
     clickHandler();
   };

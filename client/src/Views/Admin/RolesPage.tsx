@@ -12,12 +12,14 @@ import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import { useContext } from 'react';
 import Loader from 'src/Components/Base/Loader';
 import Heading from 'src/Components/Base/Heading';
+import Paragraph from 'src/Components/Base/Paragrapgh';
 interface RolesAPI {
   data?: Array<RoleType>;
   errors?: Array<{ error: string }>;
 }
 const RolePageAdmin = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { isMobile } = useBreakpoint();
   const { roles, updateRoles } = useContext(CacheContext);
   const toggleForm = () => {
@@ -25,11 +27,12 @@ const RolePageAdmin = () => {
   };
   useEffect(() => {
     const getRoles = async () => {
+      setIsLoading(true);
       const rolesResponse: RolesAPI = await getAllRoles();
-      console.log('roles: ', roles);
       if (rolesResponse?.data) {
         updateRoles(rolesResponse.data);
       }
+      setIsLoading(false);
     };
     if (roles === null) {
       getRoles();
@@ -39,9 +42,12 @@ const RolePageAdmin = () => {
     <>
       <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add role" />
       <div className="p-4">
-        {roles ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
+        ) : roles ? (
           <>
-            <Heading className="mb-4 desktop:mb-6" type="H2" content="Roles" />
             {isMobile ? (
               roles.map((role) => <Card role={role} key={role.id} />)
             ) : (
@@ -49,9 +55,7 @@ const RolePageAdmin = () => {
             )}
           </>
         ) : (
-          <div className="flex items-center justify-center h-full mt-20">
-            <Loader isDotLoader={false} />
-          </div>
+          <Paragraph type="body" content="No roles found" />
         )}
       </div>
       {isFormOpen && (

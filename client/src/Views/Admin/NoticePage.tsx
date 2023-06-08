@@ -12,12 +12,14 @@ import NoticeForm from 'src/Components/Features/Forms/NoticeForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
 import Heading from 'src/Components/Base/Heading';
+import Paragraph from 'src/Components/Base/Paragrapgh';
 interface NoticeAPI {
   data?: Array<NoticeType>;
   errors?: Array<{ error: string }>;
 }
 const NoticePageAdmin = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
   const { notices, updateNotices } = useContext(CacheContext);
   const permission = user?.permission as PermissionType;
@@ -27,11 +29,13 @@ const NoticePageAdmin = () => {
   };
   useEffect(() => {
     const getNotices = async () => {
+      setIsLoading(true);
       const noticesReponse: NoticeAPI = await getAllNotices();
-      console.log('Notices: ', notices);
+
       if (noticesReponse?.data) {
         updateNotices(noticesReponse.data);
       }
+      setIsLoading(false);
     };
     if (notices === null) {
       getNotices();
@@ -45,7 +49,12 @@ const NoticePageAdmin = () => {
       />
       <div className="p-4">
         <Heading className="mb-4 desktop:mb-6" type="H2" content="Notices" />
-        {notices ? (
+
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
+        ) : notices ? (
           <>
             {isMobile ? (
               notices.map((notice) => (
@@ -60,9 +69,7 @@ const NoticePageAdmin = () => {
             )}
           </>
         ) : (
-          <div className="flex items-center justify-center h-full mt-20">
-            <Loader isDotLoader={false} />
-          </div>
+          <Paragraph type="body" content="No notices found" />
         )}
       </div>
       {isFormOpen && (

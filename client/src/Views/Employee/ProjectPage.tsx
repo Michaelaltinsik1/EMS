@@ -12,12 +12,15 @@ import ProjectForm from 'src/Components/Features/Forms/ProjectForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
 import Heading from 'src/Components/Base/Heading';
+import Paragraph from 'src/Components/Base/Paragrapgh';
+
 interface ProjectAPI {
   data?: Array<ProjectType>;
   errors?: Array<{ error: string }>;
 }
 const ProjectPage = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
   const { projects, updateProjects } = useContext(CacheContext);
   const userId = user?.userId as string;
@@ -28,13 +31,14 @@ const ProjectPage = () => {
   };
   useEffect(() => {
     const getProjects = async () => {
+      setIsLoading(true);
       const projectsResponse: ProjectAPI = await getProjectsWithEmployeeID(
         userId
       );
-
       if (projectsResponse?.data) {
         updateProjects(projectsResponse.data);
       }
+      setIsLoading(false);
     };
     if (projects === null) {
       getProjects();
@@ -49,7 +53,12 @@ const ProjectPage = () => {
       />
       <div className="p-4">
         <Heading className="mb-4 desktop:mb-6" type="H2" content="Projects" />
-        {projects ? (
+
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
+        ) : projects ? (
           <>
             {isMobile ? (
               projects.map((project) => (
@@ -68,9 +77,7 @@ const ProjectPage = () => {
             )}
           </>
         ) : (
-          <div className="flex items-center justify-center h-full mt-20">
-            <Loader isDotLoader={false} />
-          </div>
+          <Paragraph type="body" content="No projects found" />
         )}
       </div>
 

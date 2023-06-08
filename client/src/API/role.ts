@@ -31,8 +31,6 @@ export async function getAllRoles() {
   return response;
 }
 export async function updateRoleById({ name, roleId }: updateRole) {
-  console.log('Name: ', name);
-  console.log('RoleId: ', roleId);
   const response = await axios
     .put(`/roles/${roleId}`, { name })
     .then((response) => {

@@ -182,7 +182,6 @@ const RemoveModal = ({
   };
   const handleErrorToast = (errors?: Array<{ error: string }>) => {
     if (errors) {
-      console.log(errors);
       errors.map((errorMessage) =>
         Toast({
           message: errorMessage.error,

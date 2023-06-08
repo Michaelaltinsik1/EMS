@@ -83,7 +83,6 @@ export const updateProjectById = async (
       //P2025 Record to update not found.
       //P2002 unique constraint failed.
       if (e.code === 'P2025' || e.code === 'P2002') {
-        console.log(e.code);
         e.type = ErrorTypes.INPUT;
       } else {
         e.type = ErrorTypes.SERVER;

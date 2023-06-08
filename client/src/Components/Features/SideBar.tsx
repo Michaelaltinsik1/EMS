@@ -8,15 +8,24 @@ import { Theme } from 'src/Types/enums';
 import Icon from '../Base/Icon';
 import ThemeButton from './ThemeButton';
 import Overlay from './Overlay';
+import { PermissionType } from 'src/Types';
+import { getEmployeeInitials } from 'src/utils/functions';
 interface MenuProps {
   menuOptions: Array<MenuOption>;
   toggleMenuState: () => void;
+  user: AuthUserType | null;
 }
 interface MenuOption {
   menuOption: string;
   url: string;
 }
-const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
+interface AuthUserType {
+  permission: PermissionType;
+  userId: string;
+  firstName: string;
+  lastName: string;
+}
+const SideBar = ({ menuOptions, toggleMenuState, user }: MenuProps) => {
   const { theme } = useContext(ThemeContext);
   const location = useLocation();
   return (
@@ -39,11 +48,23 @@ const SideBar = ({ menuOptions, toggleMenuState }: MenuProps) => {
           <div>
             <div className="flex items-center">
               <Icon name="Person" theme={theme} />
-              <Heading className="ml-2" type="H3" content="Micke" />
+              {user && (
+                <Heading
+                  className="ml-2"
+                  type="H3"
+                  content={getEmployeeInitials(user.firstName, user.lastName)}
+                />
+              )}
             </div>
             <div className="flex items-center">
               <Heading type="H3" content="Role: " />
-              <Paragraph className="ml-2" type="body" content="Admin" />
+              {user && (
+                <Paragraph
+                  className="ml-2"
+                  type="body"
+                  content={user.permission}
+                />
+              )}
             </div>
           </div>
           <ThemeButton />

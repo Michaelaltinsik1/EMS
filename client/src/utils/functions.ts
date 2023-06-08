@@ -65,3 +65,14 @@ export const getTimereportDateTime = (date: string) => {
   };
   return getFullDate();
 };
+
+export const getEmployeeInitials = (firstName: string, lastName: string) => {
+  let initials = '';
+  if (firstName.length > 0) {
+    initials += firstName.charAt(0);
+  }
+  if (lastName.length > 0) {
+    initials += lastName.charAt(0);
+  }
+  return initials;
+};

@@ -59,40 +59,6 @@ export const protectRoutes = (permissionType: PermissionType) => {
   };
 };
 
-// (req: Request, res: Response, next: NextFunction) => {
-//   const bearer = req.headers.authorization;
-
-//   if (!bearer) {
-//     res.status(401);
-//     res.send('401 Not authorized');
-//     return;
-//   }
-
-//   const [, token] = bearer.split(' ');
-//   if (!token) {
-//     res.status(401);
-//     res.send('401 Not authorized');
-//     return;
-//   }
-
-//   try {
-//     const payload = jwt.verify(token, process.env.JWT_SECRET);
-//     if (payload) {
-//       console.log('JWT data: ', payload);
-//       req.body.user = payload;
-//       //req.user = payload;
-//       console.log(payload);
-//       next();
-//     }
-//     return;
-//   } catch (e) {
-//     console.error(e);
-//     res.status(401);
-//     res.send('401 Not authorized');
-//     return;
-//   }
-// };
-
 export const comparePassword = (password: string, hashedPassword: string) => {
   return bcrypt.compare(password, hashedPassword);
 };

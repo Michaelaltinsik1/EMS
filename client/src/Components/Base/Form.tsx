@@ -25,7 +25,6 @@ const Form = ({
 
   const { handleSubmit } = methods;
   const getFormFields = () => {
-    console.log(methods.getValues());
     onSubmit(methods.getValues());
   };
 

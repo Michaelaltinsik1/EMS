@@ -7,6 +7,8 @@ interface AuthContextProps {
 interface AuthUserType {
   permission: PermissionType;
   userId: string;
+  firstName: string;
+  lastName: string;
 }
 interface AuthProviderProps {
   children: ReactNode | ReactNode[];

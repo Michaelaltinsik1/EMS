@@ -12,12 +12,14 @@ import LeaveForm from 'src/Components/Features/Forms/LeaveForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
 import Heading from 'src/Components/Base/Heading';
+import Paragraph from 'src/Components/Base/Paragrapgh';
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;
 }
 const LeavePageAdmin = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
@@ -27,10 +29,12 @@ const LeavePageAdmin = () => {
   const { isMobile } = useBreakpoint();
   useEffect(() => {
     const getLeaves = async () => {
+      setIsLoading(true);
       const leavesReponse: LeaveAPI = await getAllLeaves();
       if (leavesReponse?.data) {
         updateLeaves(leavesReponse.data);
       }
+      setIsLoading(false);
     };
     if (leaves === null) {
       getLeaves();
@@ -41,7 +45,11 @@ const LeavePageAdmin = () => {
       <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add leave" />
       <div className="p-4">
         <Heading className="mb-4 desktop:mb-6" type="H2" content="Leaves" />
-        {leaves ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
+        ) : leaves ? (
           <>
             {isMobile ? (
               leaves.map((leave) => (
@@ -56,9 +64,7 @@ const LeavePageAdmin = () => {
             )}
           </>
         ) : (
-          <div className="flex items-center justify-center h-full mt-20">
-            <Loader isDotLoader={false} />
-          </div>
+          <Paragraph type="body" content="No leaves found" />
         )}
       </div>
 

@@ -50,9 +50,6 @@ export async function updateDepartmentById({
   budget,
   departmentId,
 }: updateDepartmentType) {
-  console.log('Name: ', name);
-  console.log('budget: ', budget);
-  console.log('departmentId: ', departmentId);
   const response = await axios
     .put(`/departments/${departmentId}`, {
       name,

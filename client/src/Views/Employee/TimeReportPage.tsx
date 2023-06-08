@@ -12,12 +12,14 @@ import TimereportForm from 'src/Components/Features/Forms/TimereportForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import Loader from 'src/Components/Base/Loader';
 import Heading from 'src/Components/Base/Heading';
+import Paragraph from 'src/Components/Base/Paragrapgh';
 interface TimereportAPI {
   data?: Array<Time_reportType>;
   errors?: Array<{ error: string }>;
 }
 const TimeReportPage = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { user } = useContext(AuthContext);
   const { timereports, updateTimereports } = useContext(CacheContext);
   const userId = user?.userId as string;
@@ -28,13 +30,14 @@ const TimeReportPage = () => {
   };
   useEffect(() => {
     const getTimeReports = async () => {
+      setIsLoading(true);
       const timereportsReponse: TimereportAPI = await getTimeReportsByUserId(
         userId
       );
-      console.log('Timereport: ', timereports);
       if (timereportsReponse?.data) {
         updateTimereports(timereportsReponse.data);
       }
+      setIsLoading(false);
     };
     if (timereports === null) {
       getTimeReports();
@@ -52,7 +55,11 @@ const TimeReportPage = () => {
           type="H2"
           content="Timereports"
         />
-        {timereports ? (
+        {isLoading ? (
+          <div className="flex items-center justify-center h-full mt-20">
+            <Loader isDotLoader={false} />
+          </div>
+        ) : timereports ? (
           <>
             {isMobile ? (
               timereports.map((timereport) => (
@@ -71,10 +78,9 @@ const TimeReportPage = () => {
             )}
           </>
         ) : (
-          <div className="flex items-center justify-center h-full mt-20">
-            <Loader isDotLoader={false} />
-          </div>
+          <Paragraph type="body" content="No timereports found" />
         )}
+
         {isFormOpen && (
           <TimereportForm
             setIsFormOpen={setIsFormOpen}

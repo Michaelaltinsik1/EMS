@@ -79,9 +79,7 @@ const RoleForm = ({
         theme: theme,
       });
     } else {
-      console.log(roleResponse?.errors);
       if (roleResponse?.errors) {
-        console.log('an error happened');
         roleResponse?.errors.map((errorMessage) =>
           Toast({
             message: errorMessage?.error || errorMessage?.msg || '',

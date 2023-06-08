@@ -1,6 +1,6 @@
 import SideBar from './SideBar';
 import { Outlet, useLocation } from 'react-router-dom';
-import ThemeButton from './ThemeButton';
+
 import Header from './header';
 import { useEffect, useState } from 'react';
 import { ThemeContext } from '../Features/Context/ThemeProvider';
@@ -15,7 +15,6 @@ const AdminLayout = ({ isAdmin = false }: LayoutProps) => {
   const location = useLocation();
   const { theme } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
-  console.log('Auth user: ', user);
   const toggleMenuState = () => {
     setIsMenuOpen((prevState) => !prevState);
   };
@@ -30,11 +29,11 @@ const AdminLayout = ({ isAdmin = false }: LayoutProps) => {
       }`}
     >
       <Header toggleMenuState={toggleMenuState} isMenuOpen={isMenuOpen} />
-      {/* <ThemeButton /> */}
       {isAdmin && user?.permission === 'ADMIN'
         ? isMenuOpen && (
             <SideBar
               toggleMenuState={toggleMenuState}
+              user={user}
               menuOptions={[
                 { menuOption: 'Employees', url: '/employee/admin' },
                 { menuOption: 'Departments', url: '/department/admin' },
@@ -49,6 +48,7 @@ const AdminLayout = ({ isAdmin = false }: LayoutProps) => {
         : isMenuOpen && (
             <SideBar
               toggleMenuState={toggleMenuState}
+              user={user}
               menuOptions={[
                 { menuOption: 'My account', url: '/manageaccount' },
                 { menuOption: 'Leave', url: '/leave' },

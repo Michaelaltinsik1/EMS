@@ -14,19 +14,10 @@ const DashBoardPage = () => {
     };
     getAllUsers();
   }, []);
-  console.log(users);
+
   return (
     <div className="p-4">
       <Heading className="mb-4 desktop:mb-6" type="H2" content="Dashboard" />
-      <p>Users:</p>
-      {users.map((user) => (
-        <div key={user.id}>
-          <h2>{user.id}</h2>
-          <p>{user.lastName}</p>
-          <p>{user.roleId}</p>
-          <p>{user.permission}</p>
-        </div>
-      ))}
     </div>
   );
 };
