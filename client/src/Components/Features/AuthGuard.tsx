@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { PermissionType } from 'src/Types';
+
 interface AuthGuardProps {
   permission: 'ADMIN' | 'EMPLOYEE' | undefined;
   children: ReactNode | ReactNode[];

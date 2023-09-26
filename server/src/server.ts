@@ -11,16 +11,9 @@ import cookie from 'cookie';
 import cors from 'cors';
 
 import cookieParser from 'cookie-parser';
-import {
-  hashPassword,
-  protectRoutes,
-  comparePassword,
-  createJWT,
-} from './utils/auth';
+import { comparePassword, createJWT } from './utils/auth';
 import prisma from './db';
 import { body, validationResult } from 'express-validator';
-
-import { PermissionType } from './enums/enums';
 
 enum ErrorTypes {
   AUTH = 'Auth',
@@ -36,13 +29,6 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json()); //enables a client send the server json
 app.use(express.urlencoded({ extended: true })); // url query to object
-// app.get('/', (req: Request, res: Response) => {
-//   console.log('logg in');
-//   res.status(200);
-//   res.json({ message: 'Sign in please' });
-// });
-//app.use('/users/:userId/addresses', protectRoutes, addressRouter); //not needed
-//add middleware here to check if logged in
 
 export const signIn = async (
   req: Request,

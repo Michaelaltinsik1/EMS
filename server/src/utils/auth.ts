@@ -20,8 +20,6 @@ export const createJWT = (user: any) => {
 
 export const protectRoutes = (permissionType: PermissionType) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    //console.log('Header: ', req.cookies.JWT_ACCESS_TOKEN);
-    //const bearer = req.headers.authorization;
     const bearer = 'Bearer ' + req.cookies?.JWT_ACCESS_TOKEN;
 
     if (!bearer) {

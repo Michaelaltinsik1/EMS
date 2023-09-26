@@ -36,12 +36,6 @@ const EmployeeRow = ({ user, theme }: rowProps) => {
             <TableItem type="tableData">{user?.id}</TableItem>
           ))}
         {!isTablet && <TableItem type="tableData">{user.email}</TableItem>}
-        {isTablet ||
-          (isDesktopEdgeCaseBreakpoint && isDesktop && (
-            <TableItem type="tableData">
-              {user.created_at.toString().split('T')[0]}
-            </TableItem>
-          ))}
         {!isTablet && (
           <TableItem type="tableData">
             {user.created_at.toString().split('T')[0]}

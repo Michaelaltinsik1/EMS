@@ -22,16 +22,17 @@ const Header = ({ toggleMenuState, isMenuOpen }: HeaderProps) => {
   };
   return (
     <header
-      className={`px-4 py-2 max-h-[64px] desktop:max-h-[160px] flex justify-between items-center desktop:py-[40px] desktop:px-[64px] ${
+      className={`p-4 max-h-[100px] desktop:max-h-[160px] flex justify-between items-center desktop:py-[40px] desktop:px-[64px] ${
         theme === Theme.LIGHT ? 'bg-gray-200' : 'bg-gray-800'
       }`}
     >
       <img
-        className="w-[40px] h-[40px] desktop:w-[80px] desktop:h-[80px]"
+        className=" w-[40px] h-[40px] desktop:w-[80px] desktop:h-[80px] cursor-pointer desktop:p-2 desktop:hover:bg-gray-300 desktop:rounded-full"
         onClick={handleNavigation}
         src={Logo}
         alt="EMS logo"
       />
+
       <Heading className="max-w-[400px] text-center " type="H1" content="EMS" />
       <div className="max-w-[52px]">
         {isMenuOpen ? (
