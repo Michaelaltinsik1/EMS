@@ -4,12 +4,15 @@ import Paragraph from '../Base/Paragrapgh';
 import Heading from '../Base/Heading';
 import { useContext } from 'react';
 import { ThemeContext } from './Context/ThemeProvider';
+import { AuthContext } from './Context/AuthProvider';
 import { Theme } from 'src/Types/enums';
 import Icon from '../Base/Icon';
 import ThemeButton from './ThemeButton';
 import Overlay from './Overlay';
 import { PermissionType } from 'src/Types';
 import { getEmployeeInitials } from 'src/utils/functions';
+import { useNavigate } from 'react-router-dom';
+
 interface MenuProps {
   menuOptions: Array<MenuOption>;
   toggleMenuState: () => void;
@@ -26,8 +29,16 @@ interface AuthUserType {
   lastName: string;
 }
 const SideBar = ({ menuOptions, toggleMenuState, user }: MenuProps) => {
+  const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
+  const { handleSignInPermissions } = useContext(AuthContext);
   const location = useLocation();
+
+  const handleSignOut = () => {
+    handleSignInPermissions(null);
+    navigate('/');
+  };
+
   return (
     <Overlay handleOnClick={toggleMenuState}>
       <aside
@@ -71,6 +82,7 @@ const SideBar = ({ menuOptions, toggleMenuState, user }: MenuProps) => {
         </div>
 
         <Button
+          onClick={handleSignOut}
           className="mt-[32px] max-w-[140px] self-center min-h-[52px] "
           type="button"
           variant="removeButton"

@@ -1,6 +1,6 @@
 import SideBar from './SideBar';
 import { Outlet, useLocation } from 'react-router-dom';
-import ThemeButton from './ThemeButton';
+
 import Header from './header';
 import { useEffect, useState } from 'react';
 import { ThemeContext } from '../Features/Context/ThemeProvider';
