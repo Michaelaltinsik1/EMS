@@ -43,6 +43,7 @@ const Layout = ({ isAdmin = false }: LayoutProps) => {
                 user={user}
                 toggleMenuState={toggleMenuState}
                 menuOptions={[
+                  { menuOption: 'My account', url: '/manageaccount/admin' },
                   { menuOption: 'Employees', url: '/employee/admin' },
                   { menuOption: 'Departments', url: '/department/admin' },
                   { menuOption: 'Leaves', url: '/leave/admin' },

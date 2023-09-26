@@ -1,14 +1,11 @@
-import Heading from 'src/Components/Base/Heading';
-
+import ManageAccount from 'src/Components/Features/ManageAccount';
 const ManageAccountPageAdmin = () => {
   return (
-    <div className="p-4">
-      <Heading
-        className="mb-4 desktop:mb-6"
-        type="H2"
-        content="Manage account"
-      />
-    </div>
+    <>
+      <div className="p-4 tablet:p-[40px] desktop:py-[64px] desktop:px-[40px]">
+        <ManageAccount />
+      </div>
+    </>
   );
 };
 export default ManageAccountPageAdmin;

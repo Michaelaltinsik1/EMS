@@ -129,7 +129,7 @@ const ChangeAddressForm = ({
           type="submit"
           variant="addButton"
         >
-          {!isLoading ? 'Edit' : <Loader />}
+          {!isLoading ? 'Update' : <Loader />}
         </Button>
       </Form>
     </Modal>
