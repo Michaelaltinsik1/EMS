@@ -15,12 +15,14 @@ interface CacheContextProps {
   leaves: Array<LeaveType> | null;
   projects: Array<ProjectType> | null;
   employees: Array<UserType> | null;
+  employee: UserType | null;
   timereports: Array<Time_reportType> | null;
   notices: Array<NoticeType> | null;
   updateRoles: (role: Array<RoleType> | null) => void;
   updateDepartments: (role: Array<DepartmentType> | null) => void;
   updateLeaves: (leaves: Array<LeaveType> | null) => void;
   updateProjects: (projects: Array<ProjectType> | null) => void;
+  updateEmployee: (employee: UserType | null) => void;
   updateEmployees: (employees: Array<UserType> | null) => void;
   updateTimereports: (timereports: Array<Time_reportType> | null) => void;
   updateNotices: (notices: Array<NoticeType> | null) => void;
@@ -35,6 +37,7 @@ export const CacheContext = createContext<CacheContextProps>({
   leaves: null,
   projects: null,
   employees: null,
+  employee: null,
   timereports: null,
   notices: null,
   updateRoles: (role: Array<RoleType> | null) => {},
@@ -42,6 +45,7 @@ export const CacheContext = createContext<CacheContextProps>({
   updateLeaves: (leaves: Array<LeaveType> | null) => {},
   updateProjects: (projects: Array<ProjectType> | null) => {},
   updateEmployees: (employees: Array<UserType> | null) => {},
+  updateEmployee: (employee: UserType | null) => {},
   updateTimereports: (timereports: Array<Time_reportType> | null) => {},
   updateNotices: (notices: Array<NoticeType> | null) => {},
 });
@@ -54,6 +58,7 @@ export const CacheProvider = ({ children }: cacheProviderProps) => {
   const [leaves, setLeaves] = useState<Array<LeaveType> | null>(null);
   const [projects, setProjects] = useState<Array<ProjectType> | null>(null);
   const [employees, setEmployees] = useState<Array<UserType> | null>(null);
+  const [employee, setEmployee] = useState<UserType | null>(null);
   const [timereports, setTimereports] = useState<Array<Time_reportType> | null>(
     null
   );
@@ -80,6 +85,9 @@ export const CacheProvider = ({ children }: cacheProviderProps) => {
   const updateNotices = (notices: Array<NoticeType> | null) => {
     setNotices(notices);
   };
+  const updateEmployee = (employee: UserType | null) => {
+    setEmployee(employee);
+  };
   return (
     <CacheContext.Provider
       value={{
@@ -97,6 +105,8 @@ export const CacheProvider = ({ children }: cacheProviderProps) => {
         updateTimereports,
         notices,
         updateNotices,
+        employee,
+        updateEmployee,
       }}
     >
       {children}

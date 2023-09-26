@@ -137,6 +137,7 @@ export const getUserById = async (
           },
           addresses: {
             select: {
+              id: true,
               city: true,
               country: true,
               zip: true,

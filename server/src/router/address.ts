@@ -172,19 +172,19 @@ router.put(
   body('country')
     .isString()
     .isLength({ min: 2, max: 255 })
-    .withMessage('Invalid input'),
+    .withMessage('Invalid country'),
   body('city')
     .isString()
     .isLength({ min: 2, max: 255 })
-    .withMessage('Invalid input'),
+    .withMessage('Invalid city'),
   body('zip')
     .isString()
     .isLength({ min: 2, max: 255 })
-    .withMessage('Invalid input'),
+    .withMessage('Invalid zip'),
   body('street')
     .isString()
     .isLength({ min: 2, max: 255 })
-    .withMessage('Invalid input'),
+    .withMessage('Invalid street'),
   protectRoutes(PermissionType.EMPLOYEE),
   updateUserAddressById
 );

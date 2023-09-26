@@ -7,9 +7,10 @@ interface CreateAddress {
   country: string;
   city: string;
   zip: string;
+  street: string;
 }
 interface UpdateAddress extends CreateAddress {
-  userId: string;
+  id: string;
 }
 
 export async function getAddresses() {
@@ -52,10 +53,11 @@ export async function updateUserAddressById({
   city,
   country,
   zip,
-  userId,
+  street,
+  id,
 }: UpdateAddress) {
   const response = await axios
-    .put(`/addresses`, { city, country, zip, userId })
+    .put(`/addresses`, { city, country, zip, street, id })
     .then((response) => {
       return response.data;
     })
