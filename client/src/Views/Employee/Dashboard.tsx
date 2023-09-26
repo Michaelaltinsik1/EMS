@@ -7,10 +7,10 @@ const DashBoardPage = () => {
   const [users, setUsers] = useState<Array<UserType>>([]);
   useEffect(() => {
     const getAllUsers = async () => {
-      const users = await getUsers();
-      if (users.status === 200) {
-        setUsers(users.value);
-      }
+      // const users = await getUsers();
+      // if (users.status === 200) {
+      //   setUsers(users.value);
+      // }
     };
     getAllUsers();
   }, []);

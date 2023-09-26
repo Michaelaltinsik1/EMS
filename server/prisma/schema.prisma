@@ -81,6 +81,7 @@ model Address {
   country      String      @db.VarChar(255)
   city         String      @db.VarChar(255)
   zip          String      @db.VarChar(255)
+  street       String?     @db.VarChar(255)
   department   Department? @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   departmentId String?     @unique
   Users        User[]

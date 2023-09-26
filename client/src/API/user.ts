@@ -20,6 +20,7 @@ interface UpdateUser {
   country: string;
   city: string;
   zip: string;
+  street: string;
   userId?: string;
 }
 
@@ -57,8 +58,17 @@ export async function deleteUserById(userId: string) {
   return response;
 }
 
-//Does not exist?
-export async function getUserById() {}
+export async function getUserById(userId: string) {
+  const response = await axios
+    .get(`/users/${userId}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
 
 export async function createNewUser({
   firstName,
@@ -109,6 +119,7 @@ export async function updateUserById({
   country,
   zip,
   city,
+  street,
   userId,
 }: UpdateUser) {
   const response = await axios
@@ -122,6 +133,7 @@ export async function updateUserById({
       addressId,
       country,
       zip,
+      street,
       city,
       id: userId,
     })

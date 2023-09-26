@@ -48,6 +48,7 @@ export const createNewUser = async (
               country: req.body.country,
               city: req.body.city,
               zip: req.body.zip,
+              street: req.body.street,
             },
           },
         },
@@ -102,7 +103,55 @@ export const getAllUsers = async (
     next(e);
   }
 };
-
+export const getUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty() || req.body.errors) {
+    res.status(400);
+    let errorMessages = errors.array();
+    if (req.body.errors) {
+      errorMessages.push(req.body.errors);
+    }
+    res.json({ errors: errorMessages });
+  } else {
+    try {
+      const user = await prisma.user.findUnique({
+        where: {
+          id: req.params.id,
+        },
+        select: {
+          email: true,
+          salary: true,
+          role: {
+            select: {
+              name: true,
+            },
+          },
+          department: {
+            select: {
+              name: true,
+            },
+          },
+          addresses: {
+            select: {
+              city: true,
+              country: true,
+              zip: true,
+              street: true,
+            },
+          },
+        },
+      });
+      res.json({ data: user });
+    } catch (e) {
+      e.type = ErrorTypes.SERVER;
+      next(e);
+    }
+  }
+};
 //Check if email is string and not empty
 // export const signIn = async (req: Request, res: Response) => {
 //   const user = await prisma.user.findUnique({
@@ -162,12 +211,14 @@ export const updateUserById = async (
                 city: req.body.city,
                 zip: req.body.zip,
                 id: req.params.id,
+                street: req.body.street,
               },
               update: {
                 country: req.body.country,
                 city: req.body.city,
                 zip: req.body.zip,
                 id: req.params.id,
+                street: req.body.street,
               },
             },
           },
@@ -333,6 +384,7 @@ export const getProjectsByUserId = async (
 };
 
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllUsers);
+router.get('/:id', protectRoutes(PermissionType.EMPLOYEE), getUserById);
 router.get(
   '/:userId',
   protectRoutes(PermissionType.EMPLOYEE),
@@ -366,6 +418,10 @@ router.put(
     .isLength({ min: 2, max: 255 })
     .withMessage('Must be at least 2 characters long'),
   body('zip')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Must be at least 2 characters long'),
+  body('street')
     .isString()
     .isLength({ min: 2, max: 255 })
     .withMessage('Must be at least 2 characters long'),
@@ -437,6 +493,10 @@ router.post(
     .isString()
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid input'),
+  body('street')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Must be at least 2 characters long'),
   validatePermission,
   protectRoutes(PermissionType.ADMIN),
   createNewUser

@@ -53,6 +53,10 @@ const validationSchemaEdit = yup.object({
     .string()
     .required('Zip is a required field')
     .matches(/^\s?\d{5}\s?$/, 'Invalid zip code'),
+  street: yup
+    .string()
+    .required('Street is a required field')
+    .min(2, 'Requires atleast 2 characters'),
 });
 
 const validationSchemaAdd = yup.object({
@@ -86,6 +90,10 @@ const validationSchemaAdd = yup.object({
     .string()
     .required('Zip is a required field')
     .matches(/^\s?\d{5}\s?$/, 'Invalid zip code'),
+  street: yup
+    .string()
+    .required('Street is a required field')
+    .min(2, 'Requires atleast 2 characters'),
 });
 const defaultValuesAdd = {
   name: '',
@@ -99,6 +107,7 @@ const defaultValuesAdd = {
   country: '',
   city: '',
   zip: '',
+  street: '',
 };
 
 interface FormFieldTypesEdit {
@@ -110,6 +119,7 @@ interface FormFieldTypesEdit {
   country: string;
   city: string;
   zip: string;
+  street: string;
 }
 interface FormFieldTypesAdd extends FormFieldTypesEdit {
   email: string;
@@ -167,6 +177,7 @@ const EmployeeForm = ({
     country,
     city,
     zip,
+    street,
   }: FormFieldTypesEdit) => {
     const splitedName = name.split(' ');
     const firstName = splitedName.shift() || '';
@@ -187,6 +198,7 @@ const EmployeeForm = ({
       country,
       zip,
       city,
+      street,
       userId: user?.id,
     });
     if (employeeResponse?.token || employeeResponse?.data) {
@@ -207,6 +219,7 @@ const EmployeeForm = ({
     country,
     city,
     zip,
+    street,
     email,
     password,
     birth,
@@ -225,6 +238,7 @@ const EmployeeForm = ({
       country,
       zip,
       city,
+      street,
       email,
       password,
       date_of_birth: birth,
@@ -273,6 +287,7 @@ const EmployeeForm = ({
     country: '',
     city: '',
     zip: '',
+    street: '',
   };
   return (
     <Modal className="overflow-y-scroll" handleOnClick={handleOnClick}>
@@ -319,6 +334,7 @@ const EmployeeForm = ({
           />
           <Input required type="text" name="city" label="City: " />
           <Input required type="number" name="zip" label="Zip code:" />
+          <Input required type="text" name="street" label="Street: " />
           <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
             <Button
               className="desktop:ml-4 order-2"
@@ -392,6 +408,7 @@ const EmployeeForm = ({
           />
           <Input required type="text" name="city" label="City: " />
           <Input required type="number" name="zip" label="Zip code:" />
+          <Input required type="text" name="street" label="Street: " />
           <Button
             className="desktop:self-end"
             type="submit"

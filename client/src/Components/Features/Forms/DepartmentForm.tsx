@@ -27,6 +27,7 @@ interface FormFieldTypesEdit extends FormFieldTypesAdd {
   country: string;
   city: string;
   zip: string;
+  street: string;
 }
 interface FormFieldTypesAdd {
   name: string;
@@ -54,6 +55,7 @@ const validationSchemaEdit = yup.object({
     .string()
     .required('Zip is a required field')
     .matches(/^\s?\d{5}\s?$/, 'Invalid zip code'),
+  street: yup.string().required('Street is a required field'),
 });
 
 const validationSchemaAdd = yup.object({
@@ -86,6 +88,7 @@ const DepartmentForm = ({
     country: department?.addresses?.country || '',
     city: department?.addresses?.city || '',
     zip: department?.addresses?.zip || '',
+    street: department?.addresses?.street || '',
   };
   const { updateDepartments } = useContext(CacheContext);
   const { theme } = useContext(ThemeContext);
@@ -96,6 +99,7 @@ const DepartmentForm = ({
     city,
     country,
     zip,
+    street,
   }: FormFieldTypesEdit) => {
     setIsLoading(true);
     const leaveResponse: DepartmentsAPI = await updateDepartmentById({
@@ -104,6 +108,7 @@ const DepartmentForm = ({
       city,
       country,
       zip,
+      street,
       departmentId: department?.id || '',
     });
     if (leaveResponse?.data) {
@@ -174,6 +179,7 @@ const DepartmentForm = ({
           />
           <Input required type="text" name="city" label="City: " />
           <Input required type="number" name="zip" label="Zip code:" />
+          <Input required type="text" name="street" label="Street:" />
           <div className=" tablet:flex tablet:flex-col desktop:flex-row desktop:justify-end">
             <Button
               className="desktop:ml-4 order-2 "

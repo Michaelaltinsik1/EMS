@@ -6,6 +6,7 @@ axios.defaults.withCredentials = true;
 interface updateDepartmentType extends createDepartmentType {
   country: string;
   zip: string;
+  street: string;
   city: string;
   departmentId: string;
 }
@@ -46,6 +47,7 @@ export async function updateDepartmentById({
   city,
   country,
   zip,
+  street,
   name,
   budget,
   departmentId,
@@ -57,6 +59,7 @@ export async function updateDepartmentById({
       city,
       country,
       zip,
+      street,
     })
     .then((response) => {
       return response.data;

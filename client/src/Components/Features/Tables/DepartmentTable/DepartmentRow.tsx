@@ -21,7 +21,7 @@ const DepartmentRow = ({ department, theme }: rowProps) => {
     department?.addresses?.city &&
     department?.addresses?.country
   ) {
-    address = `${department?.addresses?.zip} ${department?.addresses?.city} ${department?.addresses?.country}`;
+    address = `${department?.addresses?.street} ${department?.addresses?.zip} ${department?.addresses?.city} ${department?.addresses?.country}`;
   }
   return (
     <>

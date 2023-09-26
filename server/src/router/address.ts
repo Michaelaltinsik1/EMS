@@ -77,6 +77,7 @@ export const postNewAddress = async (
           country: req.body.country,
           city: req.body.city,
           zip: req.body.zip,
+          street: req.body.street,
         },
         include: {
           department: true,
@@ -114,6 +115,7 @@ export const updateUserAddressById = async (
           country: req.body.country,
           city: req.body.city,
           zip: req.body.zip,
+          street: req.body.street,
         },
       });
       res.json({ data: address });
@@ -179,6 +181,10 @@ router.put(
     .isString()
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid input'),
+  body('street')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
   protectRoutes(PermissionType.EMPLOYEE),
   updateUserAddressById
 );
@@ -193,6 +199,10 @@ router.post(
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid input'),
   body('zip')
+    .isString()
+    .isLength({ min: 2, max: 255 })
+    .withMessage('Invalid input'),
+  body('street')
     .isString()
     .isLength({ min: 2, max: 255 })
     .withMessage('Invalid input'),

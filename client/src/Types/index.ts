@@ -20,7 +20,13 @@ type UserIncludeTypes = {
   department?: {
     name?: string;
   };
-  addresses?: Array<{ id: string }>;
+  addresses?: Array<{
+    id: string;
+    zip?: string;
+    city?: string;
+    country?: string;
+    street?: string;
+  }>;
 };
 
 type DepartmentIncludeTypes = {
@@ -29,6 +35,7 @@ type DepartmentIncludeTypes = {
     country: string;
     city: string;
     zip: string;
+    street?: string;
     departmentId?: string;
   };
 };
