@@ -17,9 +17,15 @@ const AdminLayout = ({ isAdmin = false }: LayoutProps) => {
   const { user } = useContext(AuthContext);
   const toggleMenuState = () => {
     setIsMenuOpen((prevState) => !prevState);
+    if (isMenuOpen) {
+      document.body.classList.remove('disableScroll');
+    } else {
+      document.body.classList.add('disableScroll');
+    }
   };
   useEffect(() => {
     setIsMenuOpen(false);
+    document.body.classList.remove('disableScroll');
   }, [location]);
 
   return (
