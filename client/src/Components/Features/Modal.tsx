@@ -22,7 +22,7 @@ const Modal = ({ children, handleOnClick, className = '' }: ModalProps) => {
       <Overlay handleOnClick={handleOnClick}>
         <div
           onClick={(e) => closeOnClick(e)}
-          className={`box-border z-[1000] rounded-[16px] mx-4 px-[16px] py-[24px] tablet:mx-[56px] max-h-[calc(100%-32px)] 
+          className={`overflow-y-scroll box-border z-[1000] rounded-[16px] mx-4 px-[16px] py-[24px] tablet:mx-[56px] max-h-[calc(100%-32px)] 
         tabletEdgeCases:max-w-[828px] tabletEdgeCases:mx-auto tabletEdgeCases:px-[64px] tabletEdgeCases:py-[32px] mt-4  ${
           theme === Theme.LIGHT
             ? 'bg-gray-200 shadow-lightShadow'

@@ -290,7 +290,7 @@ const EmployeeForm = ({
     street: '',
   };
   return (
-    <Modal className="overflow-y-scroll" handleOnClick={handleOnClick}>
+    <Modal handleOnClick={handleOnClick}>
       {isEditForm ? (
         <Form
           defaultValues={defaultValuesEdit}
