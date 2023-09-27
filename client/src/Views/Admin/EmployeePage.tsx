@@ -44,7 +44,6 @@ const EmployeePageAdmin = () => {
         toggleAddForm={toggleForm}
         buttonContent="Add employee"
       />
-      {/* <div className="p-4 desktop:px-[56px] desktop:py-[32px] xlDesktop:px-[80px] xlDesktop:py-[56px]"> */}
       <div className="p-4">
         <Heading className="mb-4 desktop:mb-6" type="H2" content="Employees" />
         {isLoading ? (

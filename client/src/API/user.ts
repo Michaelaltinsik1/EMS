@@ -70,6 +70,30 @@ export async function getUserById(userId: string) {
   return response;
 }
 
+export async function getSingleUserCountsById(id: string) {
+  const response = await axios
+    .get(`/users/count/${id}`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
+
+export async function getCounts() {
+  const response = await axios
+    .get(`/users/counts/all`)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((e) => {
+      return e?.response?.data;
+    });
+  return response;
+}
+
 export async function createNewUser({
   firstName,
   lastName,

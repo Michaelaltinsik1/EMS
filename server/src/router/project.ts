@@ -56,6 +56,27 @@ export const getAllProjects = async (
   }
 };
 
+// export const getProjectCountByUserId = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const user = await prisma.user.findUnique({
+//       where: {
+//         id: req.params.userId,
+//       },
+//       select: {
+//         projects: true,
+//       },
+//     });
+//     res.json({ data: user.projects.length });
+//   } catch (e) {
+//     e.type = ErrorTypes.SERVER;
+//     next(e);
+//   }
+// };
+
 export const updateProjectById = async (
   req: Request,
   res: Response,
@@ -179,6 +200,11 @@ router.get(
   protectRoutes(PermissionType.EMPLOYEE),
   getProjectsWithEmployeeID
 );
+// router.get(
+//   '/users/count/:userId',
+//   protectRoutes(PermissionType.EMPLOYEE),
+//   getProjectCountByUserId
+// );
 router.put(
   '/:id',
   body('name')

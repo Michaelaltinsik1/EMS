@@ -153,6 +153,37 @@ export const getUserById = async (
     }
   }
 };
+
+export const getAllCounts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userCount = await prisma.user.count();
+    const departmentCount = await prisma.department.count();
+    const leaveCount = await prisma.leave.count();
+    const projectsCount = await prisma.project.count();
+    const rolesCount = await prisma.role.count();
+    const timeReportsCount = await prisma.time_report.count();
+    const noticesCount = await prisma.notice.count();
+    res.json({
+      data: {
+        userCount,
+        departmentCount,
+        leaveCount,
+        projectsCount,
+        rolesCount,
+        timeReportsCount,
+        noticesCount,
+      },
+    });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
+};
+
 //Check if email is string and not empty
 // export const signIn = async (req: Request, res: Response) => {
 //   const user = await prisma.user.findUnique({
@@ -359,6 +390,33 @@ export const changePassword = async (
   }
 };
 
+export const getCountsByUserId = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.params.userId,
+      },
+      select: {
+        projects: true,
+        time_reports: true,
+      },
+    });
+    res.json({
+      data: {
+        projectCount: user.projects.length,
+        timereportCount: user.time_reports.length,
+      },
+    });
+  } catch (e) {
+    e.type = ErrorTypes.SERVER;
+    next(e);
+  }
+};
+
 export const getProjectsByUserId = async (
   req: Request,
   res: Response,
@@ -391,6 +449,12 @@ router.get(
   protectRoutes(PermissionType.EMPLOYEE),
   getProjectsByUserId
 );
+router.get(
+  '/count/:userId',
+  protectRoutes(PermissionType.EMPLOYEE),
+  getCountsByUserId
+);
+router.get('/counts/all', protectRoutes(PermissionType.ADMIN), getAllCounts);
 router.put(
   '/',
   body('id').isUUID().withMessage('Invalid id'),
