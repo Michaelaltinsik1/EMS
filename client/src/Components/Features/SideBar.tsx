@@ -36,7 +36,6 @@ const SideBar = ({ menuOptions, toggleMenuState, user }: MenuProps) => {
 
   const handleSignOut = () => {
     handleSignInPermissions(null);
-    document.body.classList.remove('disableScroll');
     navigate('/');
   };
 

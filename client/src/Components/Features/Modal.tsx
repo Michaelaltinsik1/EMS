@@ -1,5 +1,5 @@
 import { ThemeContext } from '../Features/Context/ThemeProvider';
-import { ReactNode, useContext, useEffect } from 'react';
+import { ReactNode, useContext } from 'react';
 import { Theme } from 'src/Types/enums';
 import Icon from '../Base/Icon';
 import Overlay from './Overlay';
@@ -11,10 +11,8 @@ interface ModalProps {
 }
 const Modal = ({ children, handleOnClick, className = '' }: ModalProps) => {
   const { theme } = useContext(ThemeContext);
-  document.body.classList.add('disableScroll');
   const closeOnClick = (e: any) => {
     e.stopPropagation();
-    document.body.classList.remove('disableScroll');
   };
 
   return (

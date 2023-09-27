@@ -11,7 +11,6 @@ const Overlay = ({ handleOnClick, children }: OverlayProps) => {
   const clickHandler = (e: any) => {
     e.stopPropagation();
     handleOnClick();
-    document.body.classList.remove('disableScroll');
   };
   return (
     <div

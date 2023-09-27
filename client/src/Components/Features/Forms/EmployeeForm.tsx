@@ -133,6 +133,7 @@ const EmployeeForm = ({
   isEditForm = true,
   setIsFormOpen,
 }: EmployeeFormProps) => {
+  console.log('User: ', user);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isRemoveModal, setIsRemoveModal] = useState<boolean>(false);
   const closeRemoveModal = () => {
@@ -282,13 +283,26 @@ const EmployeeForm = ({
     name: (user?.firstName || '') + ' ' + (user?.lastName || ''),
     salary: user?.salary || '',
     permission: user?.permission || '',
-    department: user?.department || '',
-    role: user?.role || '',
-    country: '',
-    city: '',
-    zip: '',
-    street: '',
+    department: user?.departmentId || '',
+    role: user?.role && user.roleId ? user.roleId : '',
+    country:
+      user?.addresses && user?.addresses.length > 0
+        ? user?.addresses[0].country
+        : '',
+    city:
+      user?.addresses && user?.addresses.length > 0
+        ? user?.addresses[0].city
+        : '',
+    zip:
+      user?.addresses && user?.addresses.length > 0
+        ? user?.addresses[0].zip
+        : '',
+    street:
+      user?.addresses && user?.addresses.length > 0
+        ? user?.addresses[0].street
+        : '',
   };
+  console.log('edit: ', defaultValuesEdit);
   return (
     <Modal handleOnClick={handleOnClick}>
       {isEditForm ? (
