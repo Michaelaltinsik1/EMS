@@ -24,7 +24,7 @@ const AdminLayout = ({ isAdmin = false }: LayoutProps) => {
 
   return (
     <main
-      className={`min-h-screen ${
+      className={`min-h-screen flex flex-col ${
         theme === Theme.LIGHT ? 'bg-gray-100' : 'bg-gray-700'
       }`}
     >

@@ -27,7 +27,7 @@ const Layout = ({ isAdmin = false }: LayoutProps) => {
   return (
     <AuthGuard permission={user?.permission}>
       <main
-        className={`min-h-screen ${
+        className={`min-h-screen flex flex-col ${
           theme === Theme.LIGHT ? 'bg-gray-100' : 'bg-gray-700'
         }`}
       >

@@ -1,3 +1,5 @@
+export const ELEMENTSPERPAGE = 10;
+
 export function capitalizeFirstLetter(string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -75,4 +77,8 @@ export const getEmployeeInitials = (firstName: string, lastName: string) => {
     initials += lastName.charAt(0);
   }
   return initials;
+};
+
+export const calculateTotalPages = (totalElements: number): number => {
+  return Math.ceil(totalElements / ELEMENTSPERPAGE);
 };

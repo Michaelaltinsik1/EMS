@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { getAllDepartments } from 'src/API/department';
 import Loader from 'src/Components/Base/Loader';
 import Card from 'src/Components/Features/Cards';
@@ -11,6 +11,9 @@ import { DepartmentType } from 'src/Types';
 import { TaskTypes } from 'src/utils/enum';
 import Heading from 'src/Components/Base/Heading';
 import Paragraph from 'src/Components/Base/Paragrapgh';
+import { calculateTotalPages } from 'src/utils/functions';
+import { ELEMENTSPERPAGE } from 'src/utils/functions';
+import Pagination from 'src/Components/Features/Pagination';
 interface DepartmentsAPI {
   data?: Array<DepartmentType>;
   errors?: Array<{ error: string }>;
@@ -20,7 +23,13 @@ const DepartmentPageAdmin = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { departments, updateDepartments } = useContext(CacheContext);
+  const pages = useRef(0);
+  pages.current = calculateTotalPages(departments?.length || 0);
+  const [currPage, setCurrPage] = useState(1);
   const { isMobile } = useBreakpoint();
+  const lastIndex = Number(ELEMENTSPERPAGE) * Number(currPage);
+  const firstIndex = Number(lastIndex) - Number(ELEMENTSPERPAGE);
+  const temporalDepartments = departments?.slice(firstIndex, lastIndex);
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
@@ -43,7 +52,7 @@ const DepartmentPageAdmin = () => {
         toggleAddForm={toggleForm}
         buttonContent="Add department"
       />
-      <div className="p-4">
+      <div className="p-4 flex-1 flex flex-col">
         <Heading
           className="mb-4 desktop:mb-6"
           type="H2"
@@ -53,14 +62,21 @@ const DepartmentPageAdmin = () => {
           <div className="flex items-center justify-center h-full mt-20">
             <Loader isDotLoader={false} />
           </div>
-        ) : departments ? (
+        ) : temporalDepartments ? (
           <>
             {isMobile ? (
-              departments.map((department) => (
+              temporalDepartments.map((department) => (
                 <Card department={department} key={department.id} />
               ))
             ) : (
-              <Table type={TaskTypes.DEPARTMENT} data={departments} />
+              <Table type={TaskTypes.DEPARTMENT} data={temporalDepartments} />
+            )}
+            {pages.current > 0 && (
+              <Pagination
+                currPage={currPage}
+                totalPages={pages.current}
+                setCurrPage={setCurrPage}
+              />
             )}
           </>
         ) : (

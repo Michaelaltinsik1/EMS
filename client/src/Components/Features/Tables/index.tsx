@@ -143,7 +143,7 @@ const Table = <T extends unknown>({ permission, data, type }: CardProps<T>) => {
   };
   return (
     <table
-      className={`w-full border-spacing-5 hidden tablet:table table-fixed rounded-lg rounded-b-none ${
+      className={`w-full border-spacing-5 hidden tablet:table table-fixed rounded-lg rounded-b-none mb-6 ${
         theme === Theme.LIGHT ? 'shadow-lightShadow' : 'shadow-darkShadow'
       }`}
     >
