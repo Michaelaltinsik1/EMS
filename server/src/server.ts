@@ -26,7 +26,7 @@ enum ErrorTypes {
 // };
 
 const corsOptions = {
-  origin: 'https://ems-f5ro.vercel.app/',
+  origin: 'https://ems-f5ro.vercel.app',
   credentials: true,
 };
 
