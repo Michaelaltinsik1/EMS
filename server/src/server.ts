@@ -20,10 +20,16 @@ enum ErrorTypes {
   INPUT = 'Input',
   SERVER = 'Server',
 }
+// const corsOptions = {
+//   origin: 'http://localhost:3000',
+//   credentials: true,
+// };
+
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: 'https://ems-f5ro.vercel.app/',
   credentials: true,
 };
+
 const app = express();
 app.use(cors(corsOptions));
 app.use(cookieParser());

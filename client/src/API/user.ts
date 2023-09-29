@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { PermissionType } from 'src/Types';
-axios.defaults.baseURL = 'http://localhost:4000/';
+// axios.defaults.baseURL = 'http://localhost:4000/';
+axios.defaults.baseURL = 'https://ems-t05h.onrender.com/';
 axios.defaults.withCredentials = true;
 
 interface CreateUser extends UpdateUser {
