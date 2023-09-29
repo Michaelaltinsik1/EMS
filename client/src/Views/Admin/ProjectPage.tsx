@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from 'react';
+import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { getAllProjects } from 'src/API/project';
 import { AuthContext } from 'src/Components/Features/Context/AuthProvider';
 import Card from 'src/Components/Features/Cards';
@@ -16,6 +16,7 @@ import Paragraph from 'src/Components/Base/Paragrapgh';
 import { calculateTotalPages } from 'src/utils/functions';
 import { ELEMENTSPERPAGE } from 'src/utils/functions';
 import Pagination from 'src/Components/Features/Pagination';
+import { EntityTypes, FilterType } from 'src/Components/Features/Filter';
 interface ProjectAPI {
   data?: Array<ProjectType>;
   errors?: Array<{ error: string }>;
@@ -28,11 +29,15 @@ const ProjectPageAdmin = () => {
   const pages = useRef(0);
   pages.current = calculateTotalPages(projects?.length || 0);
   const [currPage, setCurrPage] = useState(1);
+  const [temporaryStorage, setTemporaryStorage] = useState<
+    ProjectType[] | null
+  >(projects);
   const lastIndex = Number(ELEMENTSPERPAGE) * Number(currPage);
   const firstIndex = Number(lastIndex) - Number(ELEMENTSPERPAGE);
-  const temporalProjects = projects?.slice(firstIndex, lastIndex);
+  const temporalProjects = temporaryStorage?.slice(firstIndex, lastIndex);
   const permission = user?.permission as PermissionType;
   const { isMobile } = useBreakpoint();
+  const [filters, setFilters] = useState<FilterType>({});
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
@@ -49,11 +54,41 @@ const ProjectPageAdmin = () => {
       getProjects();
     }
   }, [projects, updateProjects]);
+
+  const handleFilter = useCallback(() => {
+    const values = projects?.filter((project) => {
+      // Initialize a variable to track whether the employee meets all criteria
+      let meetsAllCriteria = true;
+      // Loop through the criteria object
+      for (const key in filters) {
+        if (filters.hasOwnProperty(key)) {
+          if (
+            key === 'filterByName' &&
+            !project.name
+              .toLowerCase()
+              .includes(filters?.filterByName?.toLowerCase() || '')
+          ) {
+            meetsAllCriteria = false;
+          }
+        }
+      }
+      // If the employee meets all criteria, include them in the filtered result
+      return meetsAllCriteria;
+    });
+    if (values) {
+      setTemporaryStorage(values);
+    }
+  }, [filters, projects]);
+  useEffect(() => {
+    handleFilter();
+  }, [handleFilter]);
   return (
     <>
       <Contentmanagement
         toggleAddForm={toggleForm}
         buttonContent="Add project"
+        setFilters={setFilters}
+        entity={EntityTypes.PROJECT}
       />
       <div className="p-4 flex-1 flex flex-col">
         <Heading className="mb-4 desktop:mb-6" type="H2" content="Projects" />

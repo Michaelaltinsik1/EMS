@@ -27,7 +27,11 @@ const Header = ({ toggleMenuState, isMenuOpen }: HeaderProps) => {
       }`}
     >
       <img
-        className=" w-[40px] h-[40px] desktop:w-[80px] desktop:h-[80px] cursor-pointer desktop:p-2 desktop:hover:bg-gray-300 desktop:rounded-full"
+        className={`w-[40px] h-[40px] desktop:w-[80px] desktop:h-[80px] cursor-pointer desktop:p-2 ${
+          theme === Theme.LIGHT
+            ? 'desktop:hover:bg-gray-300'
+            : 'desktop:hover:bg-gray-900'
+        } desktop:rounded-full`}
         onClick={handleNavigation}
         src={Logo}
         alt="EMS logo"

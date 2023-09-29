@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { getAllDepartments } from 'src/API/department';
 import Loader from 'src/Components/Base/Loader';
 import Card from 'src/Components/Features/Cards';
@@ -14,7 +14,8 @@ import Paragraph from 'src/Components/Base/Paragrapgh';
 import { calculateTotalPages } from 'src/utils/functions';
 import { ELEMENTSPERPAGE } from 'src/utils/functions';
 import Pagination from 'src/Components/Features/Pagination';
-interface DepartmentsAPI {
+import { EntityTypes, FilterType } from 'src/Components/Features/Filter';
+export interface DepartmentsAPI {
   data?: Array<DepartmentType>;
   errors?: Array<{ error: string }>;
 }
@@ -27,9 +28,13 @@ const DepartmentPageAdmin = () => {
   pages.current = calculateTotalPages(departments?.length || 0);
   const [currPage, setCurrPage] = useState(1);
   const { isMobile } = useBreakpoint();
+  const [temporaryStorage, setTemporaryStorage] = useState<
+    DepartmentType[] | null
+  >(departments);
   const lastIndex = Number(ELEMENTSPERPAGE) * Number(currPage);
   const firstIndex = Number(lastIndex) - Number(ELEMENTSPERPAGE);
-  const temporalDepartments = departments?.slice(firstIndex, lastIndex);
+  const temporalDepartments = temporaryStorage?.slice(firstIndex, lastIndex);
+  const [filters, setFilters] = useState<FilterType>({});
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
@@ -46,11 +51,61 @@ const DepartmentPageAdmin = () => {
       getDepartments();
     }
   }, [departments, updateDepartments]);
+
+  const handleFilter = useCallback(() => {
+    const values = departments?.filter((departments) => {
+      // Initialize a variable to track whether the employee meets all criteria
+      let meetsAllCriteria = true;
+      // Loop through the criteria object
+      for (const key in filters) {
+        if (filters.hasOwnProperty(key)) {
+          // Check if the employee's property matches the dynamic criteria
+          if (key as keyof FilterType) {
+            if (
+              key === 'filterByName' &&
+              !departments.name
+                .toLowerCase()
+                .includes(filters?.filterByName?.toLowerCase() || '')
+            ) {
+              meetsAllCriteria = false;
+            }
+            if (
+              key === 'filterByBudget' &&
+              filters?.filterByBudget &&
+              departments?.budget < filters?.filterByBudget
+            ) {
+              meetsAllCriteria = false;
+            }
+
+            if (
+              key === 'filterByDepartment' &&
+              departments?.name.toLowerCase() !==
+                filters?.filterByDepartment?.toLowerCase()
+            ) {
+              meetsAllCriteria = false;
+            }
+          }
+        }
+      }
+
+      // If the employee meets all criteria, include them in the filtered result
+      return meetsAllCriteria;
+    });
+    if (values) {
+      setTemporaryStorage(values);
+    }
+  }, [filters, departments]);
+  useEffect(() => {
+    handleFilter();
+  }, [handleFilter]);
+
   return (
     <>
       <Contentmanagement
         toggleAddForm={toggleForm}
         buttonContent="Add department"
+        setFilters={setFilters}
+        entity={EntityTypes.DEPARTMENT}
       />
       <div className="p-4 flex-1 flex flex-col">
         <Heading

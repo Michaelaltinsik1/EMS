@@ -76,6 +76,7 @@ module.exports = {
       tablet: '769px',
       tabletEdgeCases: '1000px',
       desktop: '1201px',
+      edgeCaseFilter: { min: '1201px', max: '1350px' },
       desktopEdgeCases: '1800px',
       xlDesktop: '2560px',
     },

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { getAllRoles } from 'src/API/role';
 import Card from 'src/Components/Features/Cards';
 import Table from 'src/Components/Features/Tables';
@@ -11,12 +11,12 @@ import RoleForm from 'src/Components/Features/Forms/RoleForm';
 import { CacheContext } from 'src/Components/Features/Context/CacheProvider';
 import { useContext } from 'react';
 import Loader from 'src/Components/Base/Loader';
-import Heading from 'src/Components/Base/Heading';
 import Paragraph from 'src/Components/Base/Paragrapgh';
 import { ELEMENTSPERPAGE } from 'src/utils/functions';
 import { calculateTotalPages } from 'src/utils/functions';
 import Pagination from 'src/Components/Features/Pagination';
-interface RolesAPI {
+import { EntityTypes, FilterType } from 'src/Components/Features/Filter';
+export interface RolesAPI {
   data?: Array<RoleType>;
   errors?: Array<{ error: string }>;
 }
@@ -31,10 +31,13 @@ const RolePageAdmin = () => {
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
-
+  const [temporaryStorage, setTemporaryStorage] = useState<RoleType[] | null>(
+    roles
+  );
   const lastIndex = Number(ELEMENTSPERPAGE) * Number(currPage);
   const firstIndex = Number(lastIndex) - Number(ELEMENTSPERPAGE);
-  const temporalroles = roles?.slice(firstIndex, lastIndex);
+  const temporalroles = temporaryStorage?.slice(firstIndex, lastIndex);
+  const [filters, setFilters] = useState<FilterType>({});
   useEffect(() => {
     const getRoles = async () => {
       setIsLoading(true);
@@ -48,9 +51,41 @@ const RolePageAdmin = () => {
       getRoles();
     }
   }, [roles, updateRoles]);
+
+  const handleFilter = useCallback(() => {
+    const values = roles?.filter((role) => {
+      // Initialize a variable to track whether the employee meets all criteria
+      let meetsAllCriteria = true;
+      // Loop through the criteria object
+      for (const key in filters) {
+        if (filters.hasOwnProperty(key)) {
+          if (
+            key === 'filterByRole' &&
+            role.name.toLowerCase() !== filters?.filterByRole?.toLowerCase()
+          ) {
+            meetsAllCriteria = false;
+          }
+        }
+      }
+
+      // If the employee meets all criteria, include them in the filtered result
+      return meetsAllCriteria;
+    });
+    if (values) {
+      setTemporaryStorage(values);
+    }
+  }, [filters, roles]);
+  useEffect(() => {
+    handleFilter();
+  }, [handleFilter]);
   return (
     <>
-      <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add role" />
+      <Contentmanagement
+        toggleAddForm={toggleForm}
+        buttonContent="Add role"
+        entity={EntityTypes.ROLE}
+        setFilters={setFilters}
+      />
       <div className="p-4 flex-1 flex flex-col">
         {isLoading ? (
           <div className="flex items-center justify-center h-full mt-20">

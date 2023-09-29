@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from 'react';
+import { useContext, useEffect, useState, useRef, useCallback } from 'react';
 import { getLeavesByUserId } from 'src/API/leave';
 import Card from 'src/Components/Features/Cards';
 import { LeaveType, PermissionType } from 'src/Types';
@@ -16,6 +16,7 @@ import Paragraph from 'src/Components/Base/Paragrapgh';
 import { calculateTotalPages } from 'src/utils/functions';
 import { ELEMENTSPERPAGE } from 'src/utils/functions';
 import Pagination from 'src/Components/Features/Pagination';
+import { EntityTypes, FilterType } from 'src/Components/Features/Filter';
 interface LeaveAPI {
   data?: Array<LeaveType>;
   errors?: Array<{ error: string }>;
@@ -28,12 +29,16 @@ const LeavePage = () => {
   const pages = useRef(0);
   pages.current = calculateTotalPages(leaves?.length || 0);
   const [currPage, setCurrPage] = useState(1);
+  const [temporaryStorage, setTemporaryStorage] = useState<LeaveType[] | null>(
+    leaves
+  );
   const lastIndex = Number(ELEMENTSPERPAGE) * Number(currPage);
   const firstIndex = Number(lastIndex) - Number(ELEMENTSPERPAGE);
-  const temporalLeaves = leaves?.slice(firstIndex, lastIndex);
+  const temporalLeaves = temporaryStorage?.slice(firstIndex, lastIndex);
   const userId = user?.userId as string;
   const permission = user?.permission as PermissionType;
   const { isMobile } = useBreakpoint();
+  const [filters, setFilters] = useState<FilterType>({});
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
@@ -50,9 +55,48 @@ const LeavePage = () => {
       getLeaves();
     }
   }, [leaves, updateLeaves, userId]);
+  const handleFilter = useCallback(() => {
+    const values = leaves?.filter((leave) => {
+      // Initialize a variable to track whether the employee meets all criteria
+      let meetsAllCriteria = true;
+      // Loop through the criteria object
+      for (const key in filters) {
+        if (filters.hasOwnProperty(key)) {
+          if (
+            key === 'filterByLeave' &&
+            filters?.filterByLeave &&
+            leave?.type_of_leave !== filters?.filterByLeave
+          ) {
+            meetsAllCriteria = false;
+          }
+          if (
+            key === 'filterByStatus' &&
+            filters?.filterByStatus &&
+            leave?.status !== filters?.filterByStatus
+          ) {
+            meetsAllCriteria = false;
+          }
+        }
+      }
+
+      // If the employee meets all criteria, include them in the filtered result
+      return meetsAllCriteria;
+    });
+    if (values) {
+      setTemporaryStorage(values);
+    }
+  }, [filters, leaves]);
+  useEffect(() => {
+    handleFilter();
+  }, [handleFilter]);
   return (
     <>
-      <Contentmanagement toggleAddForm={toggleForm} buttonContent="Add leave" />
+      <Contentmanagement
+        toggleAddForm={toggleForm}
+        buttonContent="Add leave"
+        entity={EntityTypes.LEAVE}
+        setFilters={setFilters}
+      />
       <div className="p-4 flex-1 flex flex-col">
         <Heading className="mb-4 desktop:mb-6" type="H2" content="Leaves" />
         {isLoading ? (

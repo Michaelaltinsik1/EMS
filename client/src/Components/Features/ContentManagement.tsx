@@ -3,16 +3,20 @@ import Button from '../Base/Button';
 import { useContext } from 'react';
 import { ThemeContext } from './Context/ThemeProvider';
 import { Theme } from 'src/Types/enums';
-
+import { EntityTypes } from './Filter';
 interface ContentmanagementProps {
   buttonContent: string;
   showAddButton?: boolean;
   toggleAddForm?: () => void;
+  setFilters?: (value: any) => void;
+  entity?: EntityTypes;
 }
 const Contentmanagement = ({
   buttonContent,
   showAddButton = true,
+  setFilters,
   toggleAddForm,
+  entity,
 }: ContentmanagementProps) => {
   const { theme } = useContext(ThemeContext);
   return (
@@ -21,7 +25,7 @@ const Contentmanagement = ({
         theme === Theme.LIGHT ? 'bg-gray-200 ' : 'bg-gray-800'
       }`}
     >
-      <Filter theme={theme} />
+      <Filter theme={theme} setFilters={setFilters} entity={entity} />
       {showAddButton && (
         <Button
           onClick={toggleAddForm}

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { getUsers } from 'src/API/user';
 import { UserType } from 'src/Types';
 
@@ -15,7 +15,8 @@ import Paragraph from 'src/Components/Base/Paragrapgh';
 import { calculateTotalPages } from 'src/utils/functions';
 import { ELEMENTSPERPAGE } from 'src/utils/functions';
 import Pagination from 'src/Components/Features/Pagination';
-
+import { FilterType } from 'src/Components/Features/Filter';
+import { EntityTypes } from 'src/Components/Features/Filter';
 interface EmployeeAPI {
   data?: Array<UserType>;
   errors?: Array<{ error: string }>;
@@ -24,12 +25,16 @@ const EmployeePageAdmin = () => {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { employees, updateEmployees } = useContext(CacheContext);
+  const [temporaryStorage, setTemporaryStorage] = useState<UserType[] | null>(
+    employees
+  );
+  const [filters, setFilters] = useState<FilterType>({});
   const pages = useRef(0);
   pages.current = calculateTotalPages(employees?.length || 0);
   const [currPage, setCurrPage] = useState(1);
   const lastIndex = Number(ELEMENTSPERPAGE) * Number(currPage);
   const firstIndex = Number(lastIndex) - Number(ELEMENTSPERPAGE);
-  const temporalEmployees = employees?.slice(firstIndex, lastIndex);
+  const temporalEmployees = temporaryStorage?.slice(firstIndex, lastIndex);
   const toggleForm = () => {
     setIsFormOpen((prevState) => !prevState);
   };
@@ -48,11 +53,88 @@ const EmployeePageAdmin = () => {
     }
   }, [employees, updateEmployees]);
 
+  // const handleFilter = useCallback(() => {
+  //   if (filters && employees && Object.keys(filters).includes('filterByName')) {
+  //     setTemporaryStorage(
+  //       employees?.filter((employee) => {
+  //         if (employee && filters.filterByName) {
+  //           const fullName = employee.firstName + ' ' + employee.lastName;
+  //           return fullName
+  //             .toLowerCase()
+  //             .includes(filters.filterByName.toLowerCase());
+  //         }
+  //         return false;
+  //       })
+  //     );
+  //   } else {
+  //     setTemporaryStorage(employees);
+  //   }
+  // }, [filters, employees]);
+
+  const handleFilter = useCallback(() => {
+    const values = employees?.filter((employee) => {
+      // Initialize a variable to track whether the employee meets all criteria
+      let meetsAllCriteria = true;
+      // Loop through the criteria object
+      for (const key in filters) {
+        if (filters.hasOwnProperty(key)) {
+          // Check if the employee's property matches the dynamic criteria
+          if (key as keyof FilterType) {
+            if (
+              key === 'filterByName' &&
+              !(employee.firstName + ' ' + employee.lastName)
+                .toLowerCase()
+                .includes(filters?.filterByName?.toLowerCase() || '')
+            ) {
+              meetsAllCriteria = false;
+            }
+
+            if (
+              key === 'filterByPermission' &&
+              employee.permission.toLowerCase() !==
+                filters?.filterByPermission?.toLowerCase()
+            ) {
+              meetsAllCriteria = false;
+            }
+            if (
+              key === 'filterByRole' &&
+              employee?.role?.name &&
+              employee?.role?.name.toLowerCase() !==
+                filters?.filterByRole?.toLowerCase()
+            ) {
+              meetsAllCriteria = false;
+            }
+
+            if (
+              key === 'filterByDepartment' &&
+              employee?.department?.name &&
+              employee?.department?.name.toLowerCase() !==
+                filters?.filterByDepartment?.toLowerCase()
+            ) {
+              meetsAllCriteria = false;
+            }
+          }
+        }
+      }
+
+      // If the employee meets all criteria, include them in the filtered result
+      return meetsAllCriteria;
+    });
+    if (values) {
+      setTemporaryStorage(values);
+    }
+  }, [filters, employees]);
+  useEffect(() => {
+    handleFilter();
+  }, [handleFilter]);
+
   return (
     <>
       <Contentmanagement
         toggleAddForm={toggleForm}
         buttonContent="Add employee"
+        setFilters={setFilters}
+        entity={EntityTypes.EMPLOYEE}
       />
       <div className="p-4 flex-1 flex flex-col">
         <Heading className="mb-4 desktop:mb-6" type="H2" content="Employees" />
