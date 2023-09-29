@@ -184,29 +184,6 @@ export const getAllCounts = async (
   }
 };
 
-//Check if email is string and not empty
-// export const signIn = async (req: Request, res: Response) => {
-//   const user = await prisma.user.findUnique({
-//     where: {
-//       email: req.body.email,
-//     },
-//     include: {
-//       projects: true,
-//       time_reports: true,
-//       leaves: true,
-//       addresses: true,
-//     },
-//   });
-//   const isValid = await comparePassword(req.body.password, user.password);
-//   if (!isValid) {
-//     res.status(401);
-//     res.json({ error: 'Password is invalid' });
-//     return;
-//   }
-// };
-
-//export const getUserByEmail = async (req: Request, res: Response) => {}; //maybe not needed signin?
-
 export const updateUserById = async (
   req: Request,
   res: Response,
@@ -254,18 +231,6 @@ export const updateUserById = async (
               },
             },
           },
-          // addresses: {
-          //   update: {
-          //     where: {
-          //       id: req.body.addressId,
-          //     },
-          //     data: {
-          //       country: req.body.country,
-          //       city: req.body.city,
-          //       zip: req.body.zip,
-          //     },
-          //   },
-          // },
         },
       });
       res.json({ data: user });
@@ -467,13 +432,10 @@ router.put(
     .isLength({ min: 3, max: 100 })
     .withMessage('Invalid last name'),
   body('salary').isInt().withMessage('Invalid salary'),
-  // body('date_of_birth')
-  //   .isString()
-  //   .isLength({ min: 10, max: 40 })
-  //   .withMessage('Invalid To date'),
+
   body('roleId').isUUID().withMessage('Invalid id'),
   body('departmentId').isUUID().withMessage('Invalid id'),
-  // body('addressId').isUUID().withMessage('Invalid id'),
+
   body('country')
     .isString()
     .isLength({ min: 2, max: 255 })

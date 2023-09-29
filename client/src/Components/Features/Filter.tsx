@@ -315,7 +315,6 @@ const Filter = ({ theme, setFilters, entity }: FilterProps) => {
     );
   };
   const onReset = () => {
-    console.log('reset');
     setFilterState({
       filterByName: '',
       filterByRole: '',

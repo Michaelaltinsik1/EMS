@@ -2,9 +2,7 @@ import axios from 'axios';
 
 axios.defaults.baseURL = 'http://localhost:4000/';
 axios.defaults.withCredentials = true;
-/*export function saveToken(token: string) {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-}*/
+
 export async function signIn(email: string, password: string) {
   const user = await axios
     .post('/', { email, password })

@@ -14,7 +14,6 @@ enum ErrorTypes {
   INPUT = 'Input',
   SERVER = 'Server',
 }
-// router.use(validateStatus);
 
 export const getAllLeaves = async (
   req: Request,

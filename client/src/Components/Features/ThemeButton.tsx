@@ -13,7 +13,6 @@ const ThemeButton = () => {
       } p-1 box-content items-center justify-between rounded-[32px]`}
       onClick={toggleTheme}
     >
-      {/* {theme === 'light' ? 'Switch to Dark Theme' : 'Switch to Light Theme'} */}
       {theme === 'light' ? (
         <Icon
           className="w-[32px] h-[32px] ml-2 order-1"

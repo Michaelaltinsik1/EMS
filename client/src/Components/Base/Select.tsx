@@ -6,7 +6,6 @@ import { Theme } from 'src/Types/enums';
  * Add type guard to check for type
  */
 interface SelectProps {
-  //options: Array<{ id: string; name: string }>;
   options: Array<string> | Array<{ id: string; name: string }>;
   label: string;
   name: string;
@@ -39,10 +38,6 @@ const Select = ({
   }
 
   const { theme } = useContext(ThemeContext);
-  // const defaultValue =
-  //   options.length > 0 && isCustomObject(options[0])
-  //     ? options[0]?.id
-  //     : options[0];
 
   return (
     <>
@@ -77,7 +72,6 @@ const Select = ({
                   value={option.id}
                 >
                   {option.name}
-                  {/* <Icon name="Expand" theme={theme} /> */}
                 </option>
               );
             } else {
@@ -90,7 +84,6 @@ const Select = ({
                   value={option}
                 >
                   {option}
-                  {/* <Icon name="Expand" theme={theme} /> */}
                 </option>
               );
             }

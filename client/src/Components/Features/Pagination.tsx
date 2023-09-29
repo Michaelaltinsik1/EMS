@@ -14,9 +14,6 @@ const Pagination = ({ currPage, totalPages, setCurrPage }: PaginationType) => {
   const changePage = (newPage: number) => {
     setCurrPage(newPage);
   };
-  // ${
-  //   theme === Theme.LIGHT ? 'text-gray-900' : 'text-gray-100'
-  // }
   const renderPagination = () => {
     const pages = [];
     for (let i = 1; i <= totalPages; i++) {

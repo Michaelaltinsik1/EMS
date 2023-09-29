@@ -53,24 +53,6 @@ const EmployeePageAdmin = () => {
     }
   }, [employees, updateEmployees]);
 
-  // const handleFilter = useCallback(() => {
-  //   if (filters && employees && Object.keys(filters).includes('filterByName')) {
-  //     setTemporaryStorage(
-  //       employees?.filter((employee) => {
-  //         if (employee && filters.filterByName) {
-  //           const fullName = employee.firstName + ' ' + employee.lastName;
-  //           return fullName
-  //             .toLowerCase()
-  //             .includes(filters.filterByName.toLowerCase());
-  //         }
-  //         return false;
-  //       })
-  //     );
-  //   } else {
-  //     setTemporaryStorage(employees);
-  //   }
-  // }, [filters, employees]);
-
   const handleFilter = useCallback(() => {
     const values = employees?.filter((employee) => {
       // Initialize a variable to track whether the employee meets all criteria

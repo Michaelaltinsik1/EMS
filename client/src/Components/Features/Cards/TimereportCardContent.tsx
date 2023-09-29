@@ -72,7 +72,6 @@ const TimereportCardContent = ({
           />
           <Paragraph
             type="body"
-            //content={timereport.created_at.toString().split('T')[0]}
             content={getTimereportDateTime(timereport.created_at.toString())}
           />
           <Paragraph className="mt-4 mb-1" type="bodySmall" content="From: " />

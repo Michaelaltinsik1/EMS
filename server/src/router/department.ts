@@ -68,9 +68,6 @@ export const getAllDepartments = async (
   }
 };
 
-/**
- * Might need validation for address change
- */
 export const updateDepartmentById = async (
   req: Request,
   res: Response,
@@ -186,11 +183,4 @@ router.delete(
   deleteDepartmentById
 );
 
-// router.post('/', (req, res) => {
-//   res.json({ message: 'post department' });
-// });
-
-// router.get('/:id', (req, res) => {
-//   res.json({ message: 'get department by id' });
-// });
 export default router;

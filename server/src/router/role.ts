@@ -121,9 +121,7 @@ export const deleteRoleById = async (
     next(e);
   }
 };
-// router.get('/', (req, res) => {
-//   res.json({ message: 'get all role' });
-// });
+
 router.get('/', protectRoutes(PermissionType.ADMIN), getAllRoles);
 router.put(
   '/:id',
@@ -145,7 +143,4 @@ router.post(
 );
 router.delete('/:id', protectRoutes(PermissionType.ADMIN), deleteRoleById);
 
-// router.get('/:id', (req, res) => {
-//   res.json({ message: 'get role by id' });
-// });
 export default router;

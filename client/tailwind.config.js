@@ -43,8 +43,7 @@ module.exports = {
       'green-500': '#4caf50',
       'green-600': '#43a047',
     },
-    // Roboto 100, 400, 700
-    // Open-sans 400, 700
+
     fontFamily: {
       heading: ['Roboto', 'sans-serif'],
       body: ['Open Sans', 'sans-serif'],
