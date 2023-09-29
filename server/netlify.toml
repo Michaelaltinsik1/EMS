@@ -1,6 +1,0 @@
-[build]
-  base = "/"
-  functions = "server" 
-
-[dev]
-  command = "npm run start" 
