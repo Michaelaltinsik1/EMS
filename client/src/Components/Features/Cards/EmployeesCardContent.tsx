@@ -4,8 +4,8 @@ import Icon from 'src/Components/Base/Icon';
 import { Theme } from 'src/Types/enums';
 import { UserType } from 'src/Types';
 import Button from 'src/Components/Base/Button';
-import EmployeeForm from '../Forms/EmployeeForm';
-import { useState } from 'react';
+
+//import { useState } from 'react';
 import { MouseEvent } from 'react';
 interface CardProps {
   user: UserType;
@@ -21,7 +21,7 @@ const EmployeeCardContent = ({
   clickHandler,
   clickHandlerRemove,
 }: CardProps) => {
-  const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
+  //const [, setIsFormOpen] = useState<boolean>(false);
   const handleOnClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     clickHandler();
@@ -30,9 +30,9 @@ const EmployeeCardContent = ({
     e.stopPropagation();
     clickHandlerRemove();
   };
-  const toggleForm = () => {
-    setIsFormOpen((prevState) => !prevState);
-  };
+  // const toggleForm = () => {
+  //   setIsFormOpen((prevState) => !prevState);
+  // };
   return (
     <>
       <Heading

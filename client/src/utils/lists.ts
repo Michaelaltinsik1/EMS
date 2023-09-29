@@ -1,4 +1,3 @@
-import { Type_of_leaveType } from 'src/Types';
 export const countries = [
   'Denmark',
   'Estonia',
