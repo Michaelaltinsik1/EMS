@@ -1,0 +1,12 @@
+[build]
+  base = "/client"
+  publish = "build" 
+  command = "npm install && npm run build" 
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "npm start" # Replace with your development server command
