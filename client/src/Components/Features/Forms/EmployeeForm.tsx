@@ -224,6 +224,7 @@ const EmployeeForm = ({
     password,
     birth,
   }: FormFieldTypesAdd) => {
+    console.log(street);
     const splitedName = name.split(' ');
     const firstName = splitedName.shift() || '';
     const lastName = splitedName.join(' ');
