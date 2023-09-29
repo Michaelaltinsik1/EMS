@@ -72,7 +72,8 @@ export const signIn = async (
             httpOnly: true,
             maxAge: 8 * 60 * 60,
             path: '/',
-            sameSite: 'lax',
+            sameSite: 'none',
+            secure: 'true',
           })
         );
 
