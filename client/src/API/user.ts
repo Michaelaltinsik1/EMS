@@ -108,6 +108,7 @@ export async function createNewUser({
   country,
   zip,
   city,
+  street,
 }: CreateUser) {
   const response = await axios
     .post(`/users`, {
@@ -123,6 +124,7 @@ export async function createNewUser({
       country,
       zip,
       city,
+      street,
     })
     .then((response) => {
       return response.data;
