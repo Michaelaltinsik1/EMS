@@ -1,0 +1,11 @@
+[build]
+  publish = "client/build" # Path to the React app build output directory
+  functions = "server" # Path to the server directory
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "yarn start" # Replace with your development server command
