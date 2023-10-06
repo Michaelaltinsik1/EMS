@@ -13,4 +13,4 @@ When I finished the figma design, I started thinking about how the backend itsel
 Some npm packages that I used on the frontend side were React Hook Form and Yup for form validation and React Toastify for notification. On the backend I also used various npm packages like bcrypt, express-validator and jsonwebtoken to handle authentication, authorization and validation on the server.
 
 <div><a href="https://www.figma.com/file/nCApMsvQzBwVZZkt1CA9dQ/Employee-management-system?type=design&node-id=0%3A1&mode=design&t=6q8p1G0Cme9mvMAp-1" target="_blank" rel="noreferrer">Check out Figma here </a></div>
-<div><a href="https://www.youtube.com/watch?v=-Y0XxFhMRpA" target="_blank" rel="noreferrer">Site overview </a></div>
+<div><a href="https://puutarhuri-kari-alppi.vercel.app/" target="_blank" rel="noreferrer">Site overview </a></div>
